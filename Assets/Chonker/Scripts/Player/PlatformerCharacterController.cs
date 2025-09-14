@@ -5,19 +5,21 @@ using UnityEngine;
 public class PlatformerCharacterController : MonoBehaviour
 {
     private Rigidbody2D rigidbody2D;
-    private CapsuleCollider2D capsuleCollider2D;
+    private BoxCollider2D boxCollider2D;
     private PlatformerPlayerComponentContainer  platformerPlayerComponentContainer;
     private bool jumpRequested;
     private Vector2 currentVelocity;
+
+    [SerializeField] private float _boxColliderHeight = 1;
+    [SerializeField] private float _boxColliderWidth = 1;
     [SerializeField] private float jumpForce = 10;
     private void Awake() {
         rigidbody2D = GetComponent<Rigidbody2D>();
-        capsuleCollider2D = GetComponent<CapsuleCollider2D>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
         platformerPlayerComponentContainer.GetComponentInChildren<PlatformerPlayerComponentContainer>();
     }
 
     private void Update() {
-
         if (platformerPlayerComponentContainer.InputMovementWrapper.WasJumpPressedThisFrame()) {
             jumpRequested = true;
         }
@@ -31,5 +33,10 @@ public class PlatformerCharacterController : MonoBehaviour
 
         Vector2 currentMovement = platformerPlayerComponentContainer.InputMovementWrapper.ReadMovementInput();
         rigidbody2D.linearVelocity = currentMovement;
+    }
+
+    private void OnValidate() {
+        boxCollider2D = GetComponent<BoxCollider2D>();
+        boxCollider2D.size = new Vector2(_boxColliderWidth, _boxColliderHeight);
     }
 }
