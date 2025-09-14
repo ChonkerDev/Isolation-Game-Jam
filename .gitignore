@@ -1,0 +1,46 @@
+# Unity generated
+[Ll]ibrary/
+[Tt]emp/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Oo]bj/
+[Mm]emoryCaptures/
+
+# VS / Rider
+.vs/
+*.csproj
+*.sln
+*.user
+*.unityproj
+*.pidb
+*.svd
+*.pdb
+*.mdb
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Packages
+# Keep "Packages/manifest.json" + "Packages/packages-lock.json"
+Packages/com.unity.ide.rider/
+Packages/com.unity.ide.visualstudio/
+
+# Addressables
+/ServerData/
+
+# Crash reports
+sysinfo.txt
+UserSettings/EditorUserSettings.asset
+UserSettings/EditorUserSettings.asset
+UserSettings/EditorUserSettings.asset
+[Uu]serSettings/
+
+External/
+External.meta
+TextMesh Pro
+TextMesh Pro.meta
+TMPEffects/
+TMPEffects.meta
