@@ -2,29 +2,25 @@
 
 namespace Chonker.Scripts.Player.States {
     public class GroundMovementState : PlatformerPlayerMovementState {
-        private bool jumpRequested;
 
         public override void Initialize() {
             base.Initialize();
         }
 
         public override void OnUpdate() {
-            if (inputMovementWrapper.WasJumpPressedThisFrame() && PlatformerPlayerState.NumJumpsAvailable > 0) {
-                jumpRequested = true;
-            }
+            inputMovementWrapper.jumpInputManager.CheckForJumpInput();
         }
 
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
-            if (jumpRequested && PlatformerPlayerState.NumJumpsAvailable > 0) {
-                jumpRequested = false;
-                currentVelocity += Vector2.up * PlatformerPlayerPhysicsConfig.JumpForce;
+            if (inputMovementWrapper.jumpInputManager.ConsumeJumpInput() && PlatformerPlayerState.NumJumpsAvailable > 0) {
+                ApplyJump(ref currentVelocity);
                 PlatformerPlayerState.DecrementNumJumps();
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
                 return;
             }
             
-            Vector2 currentMovement = componentContainer.InputMovementWrapper.ReadMovementInput();
-            float targetSpeed = currentMovement.x * PlatformerPlayerPhysicsConfig.MaxMovementSpeed;
+            float currentMovementInput = componentContainer.InputMovementWrapper.ReadHorizontalMovementInput();
+            float targetSpeed = currentMovementInput * PlatformerPlayerPhysicsConfig.MaxMovementSpeed;
             float speedDif = targetSpeed - currentVelocity.x;
 
             float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? PlatformerPlayerPhysicsConfig.GroundAcceleration : PlatformerPlayerPhysicsConfig.GroundDeceleration;

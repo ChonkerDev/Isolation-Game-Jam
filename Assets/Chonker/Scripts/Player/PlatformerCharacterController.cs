@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Chonker.Scripts.Player;
 using Chonker.Scripts.Player.States;
 using UnityEngine;
@@ -13,12 +14,14 @@ public class PlatformerCharacterController : MonoBehaviour {
 
     [SerializeField] private float _boxColliderHeight = 1;
     [SerializeField] private float _boxColliderWidth = 1;
-
-
+    
     [SerializeField] private bool ReportGroundedState;
     private LayerMask ObstacleMask;
 
     private PlatformerPlayerMovementStateManager platformerPlayerMovementStateManager;
+    
+    public float CurrentGravity { get; private set; }
+    private Coroutine gravityCoroutine;
 
     private void Awake() {
         rigidbody2D = GetComponentInParent<Rigidbody2D>();
@@ -28,6 +31,7 @@ public class PlatformerCharacterController : MonoBehaviour {
 
     private void Start() {
         ObstacleMask = LayerMask.GetMask("Obstacle");
+        CurrentGravity = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.GravityRate;
     }
 
     private void Update() {
@@ -38,7 +42,7 @@ public class PlatformerCharacterController : MonoBehaviour {
     private void FixedUpdate() {
         Vector2 currentVelocity = rigidbody2D.linearVelocity;
         float probeBuffer = .1f;
-        float distanceCheck = rigidbody2D.linearVelocity.y * Time.fixedDeltaTime + probeBuffer;
+        float distanceCheck = -rigidbody2D.linearVelocity.y * Time.fixedDeltaTime + probeBuffer;
         CurrentGroundHit = probeGround(distanceCheck);
         platformerPlayerMovementStateManager.GetCurrentState().OnFixedUpdate(ref currentVelocity);
         rigidbody2D.linearVelocity = currentVelocity;
@@ -49,6 +53,30 @@ public class PlatformerCharacterController : MonoBehaviour {
         position += boxCollider2D.offset;
         return Physics2D.BoxCast(position, boxCollider2D.size, 0, Vector2.down, distance,
             ObstacleMask);
+    }
+
+    public void ApplyHighJumpGravityForDuration() {
+        if (gravityCoroutine != null) {
+            StopCoroutine(gravityCoroutine);
+        } 
+        gravityCoroutine = StartCoroutine(applyGravityForHighJumpI());
+    }
+
+    private IEnumerator applyGravityForHighJumpI() {
+        float timer = 1;
+        while (timer > 0) {
+            if (platformerPlayerComponentContainer.InputMovementWrapper.jumpInputManager.IsJumpHeld) {
+                CurrentGravity = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.HighJumpGravityRate;
+            }
+            else {
+                CurrentGravity = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.GravityRate;
+            }
+            float time = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.JumpPower / CurrentGravity;
+            timer -= Time.deltaTime / time;
+            yield return null;
+        }
+        CurrentGravity = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.GravityRate;
+        gravityCoroutine = null;
     }
 
     private void OnValidate() {

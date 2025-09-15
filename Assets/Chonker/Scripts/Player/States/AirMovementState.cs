@@ -2,7 +2,6 @@
 
 namespace Chonker.Scripts.Player.States {
     public class AirMovementState : PlatformerPlayerMovementState {
-        private bool jumpRequested;
         private float coyoteTimeTimer;
         private bool coyoteTimeActive;
 
@@ -11,48 +10,44 @@ namespace Chonker.Scripts.Player.States {
         }
 
         public override void OnUpdate() {
-            if (inputMovementWrapper.WasJumpPressedThisFrame()) {
-                jumpRequested = true;
-            }
+            inputMovementWrapper.jumpInputManager.CheckForJumpInput();
         }
 
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
             coyoteTimeTimer += Time.fixedDeltaTime;
-            currentVelocity.y -= PlatformerPlayerPhysicsConfig.GravityRate * Time.fixedDeltaTime;
-            Vector2 position = transform.position;
-            Debug.DrawRay( position + currentVelocity * Time.fixedDeltaTime, Vector2.down * PlatformerPlayerPhysicsConfig
-                .DistanceToGroundToTreatAirJumpAsGrounded, Color.brown);
-            if (jumpRequested) {
-                jumpRequested = false;
-                RaycastHit2D groundProbe = characterController.probeGround(PlatformerPlayerPhysicsConfig
-                    .DistanceToGroundToTreatAirJumpAsGrounded);
-                if (currentVelocity.y < 0 && groundProbe.transform) {
-                    PlatformerPlayerState.ResetNumJumps();
-                    //characterController.transform.position = groundProbe.point;
-                    currentVelocity.y = PlatformerPlayerPhysicsConfig.JumpForce;
+            currentVelocity.y -= characterController.CurrentGravity * Time.fixedDeltaTime;
+            Debug.Log(PlatformerPlayerState.NumJumpsAvailable);
+            if (PlatformerPlayerState.NumJumpsAvailable > 0 && inputMovementWrapper.jumpInputManager.ConsumeJumpInput()) {
+                bool coyoteTimeValid = coyoteTimeTimer < PlatformerPlayerPhysicsConfig.CoyoteTime;
+                if (coyoteTimeValid) {
+                    ApplyJump(ref currentVelocity, true);
                 }
-                else if (coyoteTimeTimer < PlatformerPlayerPhysicsConfig.CoyoteTime) {
-                    PlatformerPlayerState.ResetNumJumps();
-                    currentVelocity.y = PlatformerPlayerPhysicsConfig.JumpForce;
+                else {
+                    ApplyJump(ref currentVelocity);
+                    PlatformerPlayerState.DecrementNumJumps();
                 }
-                else if (PlatformerPlayerState.NumJumpsAvailable > 0) {
-                    currentVelocity.y = PlatformerPlayerPhysicsConfig.JumpForce;
-                }
-                PlatformerPlayerState.DecrementNumJumps();
+
             }
 
-            if (characterController.Grounded && currentVelocity.y <= 0) {
+            float currentMovementInput = componentContainer.InputMovementWrapper.ReadHorizontalMovementInput();
+            float targetSpeed = currentMovementInput * PlatformerPlayerPhysicsConfig.MaxMovementSpeed;
+            float speedDif = targetSpeed - currentVelocity.x;
+
+            float accelRate = PlatformerPlayerPhysicsConfig.AirInputAcceleration;
+
+            float movement = accelRate * speedDif * Time.fixedDeltaTime;
+            currentVelocity.x += movement * Time.fixedDeltaTime;
+            if (characterController.Grounded) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Ground);
             }
         }
 
         public override void OnEnter() {
             coyoteTimeTimer = 0;
-            jumpRequested = false;
+            inputMovementWrapper.jumpInputManager.ClearJumpInput();
         }
 
         public override void OnExit() {
-            
         }
 
         public override PlatformerPlayerMovementStateId StateId => PlatformerPlayerMovementStateId.Air;
