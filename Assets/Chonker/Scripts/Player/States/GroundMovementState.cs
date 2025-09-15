@@ -24,7 +24,15 @@ namespace Chonker.Scripts.Player.States {
             }
             
             Vector2 currentMovement = componentContainer.InputMovementWrapper.ReadMovementInput();
-            currentVelocity.x = currentMovement.x * PlatformerPlayerPhysicsConfig.MovementSpeed;
+            float targetSpeed = currentMovement.x * PlatformerPlayerPhysicsConfig.MaxMovementSpeed;
+            float speedDif = targetSpeed - currentVelocity.x;
+
+            float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? PlatformerPlayerPhysicsConfig.GroundAcceleration : PlatformerPlayerPhysicsConfig.GroundDeceleration;
+            
+            float movement = accelRate * speedDif * Time.fixedDeltaTime;
+
+            currentVelocity.x += movement * Time.fixedDeltaTime;
+            currentVelocity = Vector2.ClampMagnitude(currentVelocity, PlatformerPlayerPhysicsConfig.MaxMovementSpeed);
             if (!characterController.Grounded) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
             }

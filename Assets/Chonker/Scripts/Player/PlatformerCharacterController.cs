@@ -37,19 +37,18 @@ public class PlatformerCharacterController : MonoBehaviour {
 
     private void FixedUpdate() {
         Vector2 currentVelocity = rigidbody2D.linearVelocity;
-        probeGround();
+        float probeBuffer = .1f;
+        float distanceCheck = rigidbody2D.linearVelocity.y * Time.fixedDeltaTime + probeBuffer;
+        CurrentGroundHit = probeGround(distanceCheck);
         platformerPlayerMovementStateManager.GetCurrentState().OnFixedUpdate(ref currentVelocity);
         rigidbody2D.linearVelocity = currentVelocity;
     }
 
-    private void probeGround() {
+    public RaycastHit2D probeGround(float distance) {
         Vector2 position = transform.position;
         position += boxCollider2D.offset;
-        float probeBuffer = .1f;
-        float distanceCheck = rigidbody2D.linearVelocity.y * Time.fixedDeltaTime + probeBuffer;
-        CurrentGroundHit = Physics2D.BoxCast(position, boxCollider2D.size, 0, Vector2.down, distanceCheck,
+        return Physics2D.BoxCast(position, boxCollider2D.size, 0, Vector2.down, distance,
             ObstacleMask);
-        ReportGroundedState = CurrentGroundHit;
     }
 
     private void OnValidate() {

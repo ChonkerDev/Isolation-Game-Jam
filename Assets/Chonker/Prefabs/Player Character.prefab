@@ -46,8 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   JumpForce: 10
-  MovementSpeed: 10
-  GravityRate: 9.8
+  MaxMovementSpeed: 10
+  GravityRate: 15
+  GroundAcceleration: 350
+  GroundDeceleration: 350
 --- !u!114 &2426743076922943853
 MonoBehaviour:
   m_ObjectHideFlags: 0
