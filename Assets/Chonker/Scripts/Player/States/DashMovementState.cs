@@ -55,7 +55,7 @@ namespace Chonker.Scripts.Player.States {
                 yield return null;
             }
 
-            if (direction.magnitude < .1f || !PlatformerPlayerState.AllowOmniDirectionDashing) {
+            if (direction.magnitude < .1f || !PlatformerPlayerState.AllowedToOmniDirectionalDash()) {
                 direction = PlatformerPlayerState.facingRight ? Vector2.right : Vector2.left;
             }
 
