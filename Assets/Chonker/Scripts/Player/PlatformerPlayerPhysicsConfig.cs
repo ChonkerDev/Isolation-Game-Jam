@@ -18,5 +18,11 @@ namespace Chonker.Scripts.Player {
         [Range(0, .5f)]public float CoyoteTime = .1f;
         [Range(0, .5f)] public float JumpInputBufferTimeInSeconds = .1f;
 
+        [Header("Dash")] 
+        public float DashAccelerationTime = .1f;
+        public float DashDecelerationTime = .1f;
+        public float DashConstantSpeedTime = .5f;
+        public float DashTopSpeed = 5;
+
     }
 }

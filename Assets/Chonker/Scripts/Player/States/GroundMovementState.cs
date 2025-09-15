@@ -9,12 +9,14 @@ namespace Chonker.Scripts.Player.States {
 
         public override void OnUpdate() {
             inputMovementWrapper.jumpInputManager.CheckForJumpInput();
+            if (inputMovementWrapper.WasDashPressedThisFrame()) {
+                parentManager.UpdateState(PlatformerPlayerMovementStateId.Dash);
+            }
         }
 
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
             if (inputMovementWrapper.jumpInputManager.ConsumeJumpInput() && PlatformerPlayerState.NumJumpsAvailable > 0) {
                 ApplyJump(ref currentVelocity);
-                PlatformerPlayerState.DecrementNumJumps();
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
                 return;
             }
@@ -33,13 +35,19 @@ namespace Chonker.Scripts.Player.States {
             if (!characterController.Grounded) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
             }
+            if (movement > 0) {
+                PlatformerPlayerState.facingRight = true;
+            } 
+            if (movement < 0) {
+                PlatformerPlayerState.facingRight = false;
+            }
         }
 
-        public override void OnEnter() {
+        public override void OnEnter(PlatformerPlayerMovementStateId prevState) {
             PlatformerPlayerState.ResetNumJumps();
         }
 
-        public override void OnExit() {
+        public override void OnExit(PlatformerPlayerMovementStateId newState) {
             
         }
 

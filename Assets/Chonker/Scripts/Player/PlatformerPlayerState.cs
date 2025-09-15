@@ -9,6 +9,7 @@ namespace Chonker.Scripts.Player {
         public int MaxNumberOfJumps => DoubleJumpUnlocked ? 2 : 1;
 
         public int NumJumpsAvailable { get; private set; }
+        public bool facingRight = true;
 
         private void Awake() {
             PlatformerPlayerPhysicsConfig = GetComponent<PlatformerPlayerPhysicsConfig>();

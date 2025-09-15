@@ -24,6 +24,10 @@ namespace Chonker.Scripts.Player {
         public float ReadVerticalMovementInput() {
             return IA_Player.PlayerControl.VerticalMovement.ReadValue<float>();
         }
+
+        public bool WasDashPressedThisFrame() {
+            return IA_Player.PlayerControl.Dash.WasPressedThisFrame();
+        }
         
     }
 }
