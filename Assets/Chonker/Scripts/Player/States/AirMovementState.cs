@@ -33,10 +33,7 @@ namespace Chonker.Scripts.Player.States {
             float accelRate = PlatformerPlayerPhysicsConfig.AirInputAcceleration;
 
             float movement = accelRate * speedDif * Time.fixedDeltaTime;
-            if (!characterController.ProbeForWall(new Vector2(currentMovementInput, 0),
-                    Mathf.Abs(movement) * Time.fixedDeltaTime)) {
-                currentVelocity.x += movement * Time.fixedDeltaTime;
-            }
+            currentVelocity.x += movement * Time.fixedDeltaTime;
 
             if (characterController.Grounded) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Ground);

@@ -35,10 +35,10 @@ namespace Chonker.Scripts.Player.States {
             if (!characterController.Grounded) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
             }
-            if (movement > 0) {
+            if (targetSpeed > 0) {
                 PlatformerPlayerState.facingRight = true;
             } 
-            if (movement < 0) {
+            if (targetSpeed < 0) {
                 PlatformerPlayerState.facingRight = false;
             }
         }

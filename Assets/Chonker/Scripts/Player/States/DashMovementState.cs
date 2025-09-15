@@ -13,7 +13,7 @@ namespace Chonker.Scripts.Player.States {
             if (direction.magnitude < .1f) {
                 direction = PlatformerPlayerState.facingRight ? Vector2.right : Vector2.left;
             }
-
+//TODO: use coyote timer to allow redirection, delay actual dash 
             dashStage = 0;
             StartCoroutine(ProcessAcceleration());
         }
@@ -25,13 +25,19 @@ namespace Chonker.Scripts.Player.States {
         public override PlatformerPlayerMovementStateId StateId => PlatformerPlayerMovementStateId.Dash;
 
         public override void OnUpdate() {
+            
         }
 
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
             Vector2 targetVelocity = this.currentVelocity;
             RaycastHit2D wallhit = characterController.ProbeForWallHit(new Vector2(targetVelocity.x, 0),
                 targetVelocity.magnitude * Time.fixedDeltaTime);
-            currentVelocity = Vector3.ProjectOnPlane(targetVelocity, wallhit.normal);
+            if (wallhit.transform) {
+                currentVelocity = Vector3.ProjectOnPlane(targetVelocity, wallhit.normal);
+            }
+            else {
+                currentVelocity = targetVelocity;
+            }
         }
 
         private IEnumerator ProcessAcceleration() {
