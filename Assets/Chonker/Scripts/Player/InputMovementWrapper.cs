@@ -15,7 +15,7 @@ namespace Chonker.Scripts.Player {
         }
 
         public bool WasJumpPressedThisFrame() {
-            return IA_Player.PlayerControl.Jump.ReadValue<bool>();
+            return IA_Player.PlayerControl.Jump.WasPressedThisFrame();
         }
     }
 }
