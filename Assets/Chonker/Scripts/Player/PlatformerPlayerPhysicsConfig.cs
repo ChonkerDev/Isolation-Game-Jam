@@ -19,10 +19,11 @@ namespace Chonker.Scripts.Player {
         [Range(0, .5f)] public float JumpInputBufferTimeInSeconds = .1f;
 
         [Header("Dash")] 
-        public float DashAccelerationTime = .1f;
-        public float DashDecelerationTime = .1f;
-        public float DashConstantSpeedTime = .5f;
-        public float DashTopSpeed = 5;
+        [Range(0, 1)] public float DashAccelerationTime = .1f;
+        [Range(0, 1)]public float DashConstantSpeedTime = .5f;
+        [Range(0, 30)] public float DashTopSpeed = 5;
+        [Range(0, .2f)] public float DirectionInputBufferInSeconds = .05f;
+        public bool AllowVerticalDash;
 
     }
 }

@@ -4,28 +4,22 @@ using UnityEngine;
 namespace Chonker.Scripts.Player.States {
     public class DashMovementState : PlatformerPlayerMovementState {
         private Vector2 direction;
-        private int dashStage = 0;
         private Vector2 currentVelocity;
 
         public override void OnEnter(PlatformerPlayerMovementStateId previousState) {
-            direction = new Vector2(inputMovementWrapper.ReadHorizontalMovementInput(),
-                inputMovementWrapper.ReadVerticalMovementInput());
-            if (direction.magnitude < .1f) {
-                direction = PlatformerPlayerState.facingRight ? Vector2.right : Vector2.left;
-            }
-//TODO: use coyote timer to allow redirection, delay actual dash 
-            dashStage = 0;
+            currentVelocity = Vector2.zero;
+            PlatformerPlayerState.DecrementNumberOfDashes();
+            StartCoroutine(DelaySetDirection());
             StartCoroutine(ProcessAcceleration());
         }
 
-        public override void OnExit(PlatformerPlayerMovementStateId  newState) {
+        public override void OnExit(PlatformerPlayerMovementStateId newState) {
             StopAllCoroutines();
         }
 
         public override PlatformerPlayerMovementStateId StateId => PlatformerPlayerMovementStateId.Dash;
 
         public override void OnUpdate() {
-            
         }
 
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
@@ -38,6 +32,33 @@ namespace Chonker.Scripts.Player.States {
             else {
                 currentVelocity = targetVelocity;
             }
+
+            if (currentVelocity.x > 0) {
+                PlatformerPlayerState.facingRight = true;
+            }
+            else if (currentVelocity.x < 0) {
+                PlatformerPlayerState.facingRight = false;
+            }
+        }
+
+        private IEnumerator DelaySetDirection() {
+            float timer = PlatformerPlayerPhysicsConfig.DirectionInputBufferInSeconds;
+            while (timer > 0) {
+                timer -= Time.deltaTime;
+                direction = new Vector2(inputMovementWrapper.ReadHorizontalMovementInput(),
+                    inputMovementWrapper.ReadVerticalMovementInput());
+                if (direction.magnitude > .1f) {
+                    PlatformerPlayerState.facingRight = direction.x > 0;
+                    break;
+                }
+
+                yield return null;
+            }
+
+            if (direction.magnitude < .1f || !PlatformerPlayerState.AllowOmniDirectionDashing) {
+                direction = PlatformerPlayerState.facingRight ? Vector2.right : Vector2.left;
+            }
+
         }
 
         private IEnumerator ProcessAcceleration() {
@@ -49,6 +70,7 @@ namespace Chonker.Scripts.Player.States {
                 currentVelocity = Vector2.Lerp(Vector2.zero, direction * dashSpeed, accTimer);
                 yield return new WaitForFixedUpdate();
             }
+
             currentVelocity = direction * dashSpeed;
             yield return new WaitForSeconds(PlatformerPlayerPhysicsConfig.DashConstantSpeedTime);
             parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);

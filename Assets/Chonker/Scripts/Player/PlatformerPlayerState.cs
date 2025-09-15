@@ -7,7 +7,9 @@ namespace Chonker.Scripts.Player {
         private PlatformerPlayerPhysicsConfig PlatformerPlayerPhysicsConfig;
         public bool DoubleJumpUnlocked;
         public int MaxNumberOfJumps => DoubleJumpUnlocked ? 2 : 1;
-
+        public int MaxNumberOfDashes => 1;
+        public bool AllowOmniDirectionDashing;
+        public int NumDashesAvailable;
         public int NumJumpsAvailable { get; private set; }
         public bool facingRight = true;
 
@@ -16,7 +18,8 @@ namespace Chonker.Scripts.Player {
         }
 
         private void Start() {
-            NumJumpsAvailable = MaxNumberOfJumps;
+            ResetNumDashes();
+            ResetNumJumps();
         }
 
         public void ResetNumJumps() {
@@ -26,6 +29,23 @@ namespace Chonker.Scripts.Player {
         public void DecrementNumJumps() {
             NumJumpsAvailable--;
             NumJumpsAvailable = Mathf.Max(0, NumJumpsAvailable);
+        }
+
+        public void ResetNumDashes() {
+            NumDashesAvailable = MaxNumberOfDashes;
+        }
+
+        public void DecrementNumberOfDashes() {
+            NumDashesAvailable--;
+            NumDashesAvailable = Mathf.Max(0, MaxNumberOfDashes);
+        }
+
+        public bool AllowedToDash() {
+            return NumDashesAvailable > 0;
+        }
+
+        public bool AllowedToOmniDirectionalDash() {
+            return AllowOmniDirectionDashing && PlatformerPlayerPhysicsConfig.AllowVerticalDash;
         }
     }
 }

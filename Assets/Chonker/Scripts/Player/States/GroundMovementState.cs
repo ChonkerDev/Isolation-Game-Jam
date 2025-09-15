@@ -9,7 +9,7 @@ namespace Chonker.Scripts.Player.States {
 
         public override void OnUpdate() {
             inputMovementWrapper.jumpInputManager.CheckForJumpInput();
-            if (inputMovementWrapper.WasDashPressedThisFrame()) {
+            if (PlatformerPlayerState.AllowedToDash() && inputMovementWrapper.WasDashPressedThisFrame()) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Dash);
             }
         }
@@ -45,6 +45,7 @@ namespace Chonker.Scripts.Player.States {
 
         public override void OnEnter(PlatformerPlayerMovementStateId prevState) {
             PlatformerPlayerState.ResetNumJumps();
+            PlatformerPlayerState.ResetNumDashes();
         }
 
         public override void OnExit(PlatformerPlayerMovementStateId newState) {

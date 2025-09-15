@@ -10,7 +10,7 @@ namespace Chonker.Scripts.Player.States {
 
         public override void OnUpdate() {
             inputMovementWrapper.jumpInputManager.CheckForJumpInput();
-            if (inputMovementWrapper.WasDashPressedThisFrame()) {
+            if (PlatformerPlayerState.AllowedToDash() && inputMovementWrapper.WasDashPressedThisFrame()) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Dash);
             }
         }
