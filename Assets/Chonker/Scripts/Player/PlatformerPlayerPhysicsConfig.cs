@@ -23,7 +23,7 @@ namespace Chonker.Scripts.Player {
         [Range(0, 1)]public float DashConstantSpeedTime = .5f;
         [Range(0, 30)] public float DashTopSpeed = 5;
         [Range(0, .2f)] public float DirectionInputBufferInSeconds = .05f;
-        public bool AllowVerticalDash;
+        public bool AllowOmniDirectionalDash;
 
     }
 }

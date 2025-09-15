@@ -45,7 +45,7 @@ namespace Chonker.Scripts.Player {
         }
 
         public bool AllowedToOmniDirectionalDash() {
-            return AllowOmniDirectionDashing && PlatformerPlayerPhysicsConfig.AllowVerticalDash;
+            return AllowOmniDirectionDashing && PlatformerPlayerPhysicsConfig.AllowOmniDirectionalDash;
         }
     }
 }
