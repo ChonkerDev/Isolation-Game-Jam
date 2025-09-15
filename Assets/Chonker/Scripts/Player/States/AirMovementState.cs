@@ -16,7 +16,6 @@ namespace Chonker.Scripts.Player.States {
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
             coyoteTimeTimer += Time.fixedDeltaTime;
             currentVelocity.y -= characterController.CurrentGravity * Time.fixedDeltaTime;
-            Debug.Log(PlatformerPlayerState.NumJumpsAvailable);
             if (PlatformerPlayerState.NumJumpsAvailable > 0 && inputMovementWrapper.jumpInputManager.ConsumeJumpInput()) {
                 bool coyoteTimeValid = coyoteTimeTimer < PlatformerPlayerPhysicsConfig.CoyoteTime;
                 if (coyoteTimeValid) {
@@ -42,6 +41,8 @@ namespace Chonker.Scripts.Player.States {
             if (characterController.Grounded) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Ground);
             }
+            
+            currentVelocity += componentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce;
         }
 
         public override void OnEnter() {

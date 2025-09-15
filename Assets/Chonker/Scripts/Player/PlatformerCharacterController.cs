@@ -26,7 +26,7 @@ public class PlatformerCharacterController : MonoBehaviour {
     private void Awake() {
         rigidbody2D = GetComponentInParent<Rigidbody2D>();
         platformerPlayerComponentContainer = GetComponentInParent<PlatformerPlayerComponentContainer>();
-        platformerPlayerMovementStateManager = GetComponent<PlatformerPlayerMovementStateManager>();
+        platformerPlayerMovementStateManager = GetComponentInChildren<PlatformerPlayerMovementStateManager>();
     }
 
     private void Start() {
@@ -58,7 +58,6 @@ public class PlatformerCharacterController : MonoBehaviour {
     public bool ProbeForWall(Vector2 direction, float distance) {
         Vector2 position = transform.position;
         position += boxCollider2D.offset;
-        Debug.Log(direction);
         Debug.DrawRay(position, direction * distance, Color.red);
         RaycastHit2D hit = Physics2D.BoxCast(position, boxCollider2D.size, 0,
             direction, distance,

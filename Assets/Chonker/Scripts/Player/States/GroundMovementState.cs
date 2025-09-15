@@ -29,6 +29,7 @@ namespace Chonker.Scripts.Player.States {
 
             currentVelocity.x += movement * Time.fixedDeltaTime;
             currentVelocity = Vector2.ClampMagnitude(currentVelocity, PlatformerPlayerPhysicsConfig.MaxMovementSpeed);
+            currentVelocity += componentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce;
             if (!characterController.Grounded) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
             }
