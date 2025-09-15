@@ -8,7 +8,7 @@ namespace Chonker.Scripts.Player {
         public bool DoubleJumpUnlocked;
         public int MaxNumberOfJumps => DoubleJumpUnlocked ? 2 : 1;
         public int MaxNumberOfDashes => 1;
-        [SerializeField] private bool allowOmniDirectionDashing;
+        [SerializeField] private bool omniDrirectionDashUnlocked;
         public int NumDashesAvailable;
         public int NumJumpsAvailable { get; private set; }
         public bool facingRight = true;
@@ -45,7 +45,7 @@ namespace Chonker.Scripts.Player {
         }
 
         public bool AllowedToOmniDirectionalDash() {
-            return allowOmniDirectionDashing && PlatformerPlayerPhysicsConfig.AllowOmniDirectionalDash;
+            return omniDrirectionDashUnlocked && PlatformerPlayerPhysicsConfig.AllowOmniDirectionalDash;
         }
     }
 }

@@ -73,14 +73,14 @@ namespace Chonker.Scripts.Player.States {
 
             currentVelocity = direction * dashSpeed;
             yield return new WaitForSeconds(PlatformerPlayerPhysicsConfig.DashConstantSpeedTime);
-            parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
-            /*float decelerationTime = PlatformerPlayerPhysicsConfig.DashDecelerationTime;
+            float decelerationTime = PlatformerPlayerPhysicsConfig.DashDecelerationTime;
             float decelerationTimer = 0;
             while (decelerationTimer < 1) {
                 decelerationTimer += Time.deltaTime/ decelerationTime;
-
+                currentVelocity = Vector2.Lerp(direction * dashSpeed, Vector2.zero, decelerationTimer);
                 yield return new WaitForFixedUpdate();
-            }*/
+            }
+            parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
         }
     }
 }
