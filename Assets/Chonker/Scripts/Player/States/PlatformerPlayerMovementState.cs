@@ -23,10 +23,6 @@ namespace Chonker.Scripts.Player.States {
             componentContainer = GetComponentInParent<PlatformerPlayerComponentContainer>();
         }
 
-        private void Start() {
-            
-        }
-
         protected void ApplyJump(ref Vector2 velocity, bool overrideVerticalVelocity = false,
             bool overrideHorizontalVelocity = false) {
             characterController.ApplyHighJumpGravityForDuration();
@@ -40,9 +36,6 @@ namespace Chonker.Scripts.Player.States {
             if (overrideHorizontalVelocity) {
                 velocity.x = 0;
             }
-
-            velocity.x += PlatformerPlayerPhysicsConfig.MaxMovementSpeed *
-                          inputMovementWrapper.ReadHorizontalMovementInput();
         }
 
 

@@ -45,11 +45,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f95ae2643864fae99a4b80f7a6799cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  JumpForce: 10
   MaxMovementSpeed: 10
-  GravityRate: 15
   GroundAcceleration: 350
   GroundDeceleration: 350
+  GravityRate: 20
+  AirInputAcceleration: 200
+  JumpPower: 10
+  HighJumpGravityRate: 15
+  CoyoteTime: 0.1
+  JumpInputBufferTimeInSeconds: 0.1
 --- !u!114 &2426743076922943853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,7 +253,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -448,6 +452,50 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
+--- !u!1 &6925050935421492464
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5255788484072778492}
+  - component: {fileID: 1322163284120544615}
+  m_Layer: 0
+  m_Name: Jump Input
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5255788484072778492
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6925050935421492464}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8017442920276613120}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1322163284120544615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6925050935421492464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93ff1dac01ea478e9ec992bef575cadc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7008198771313790721
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,7 +783,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5255788484072778492}
   m_Father: {fileID: 7330843755178028847}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3120598619610840914
@@ -750,6 +799,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f75f38166a504e36b2db903c3fc784e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpInputManager: {fileID: 0}
 --- !u!1 &8432820440833739915
 GameObject:
   m_ObjectHideFlags: 0

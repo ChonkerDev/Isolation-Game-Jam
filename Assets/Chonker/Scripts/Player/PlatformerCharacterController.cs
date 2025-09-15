@@ -55,6 +55,17 @@ public class PlatformerCharacterController : MonoBehaviour {
             ObstacleMask);
     }
 
+    public bool ProbeForWall(Vector2 direction, float distance) {
+        Vector2 position = transform.position;
+        position += boxCollider2D.offset;
+        Debug.Log(direction);
+        Debug.DrawRay(position, direction * distance, Color.red);
+        RaycastHit2D hit = Physics2D.BoxCast(position, boxCollider2D.size, 0,
+            direction, distance,
+            ObstacleMask);
+        return hit.transform;
+    }
+
     public void ApplyHighJumpGravityForDuration() {
         if (gravityCoroutine != null) {
             StopCoroutine(gravityCoroutine);
