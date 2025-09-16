@@ -55,10 +55,13 @@ namespace Chonker.Scripts.Player.States {
                 yield return null;
             }
 
-            if (direction.magnitude < .1f || !PlatformerPlayerState.AllowedToOmniDirectionalDash()) {
+            if (direction.magnitude < .1f) {
                 direction = PlatformerPlayerState.facingRight ? Vector2.right : Vector2.left;
             }
-
+            else if (!PlatformerPlayerState.AllowedToOmniDirectionalDash()) {
+                direction = PlatformerPlayerState.facingRight ? Vector2.right : Vector2.left;
+                direction = direction.normalized;
+            }
         }
 
         private IEnumerator ProcessAcceleration() {
@@ -76,10 +79,11 @@ namespace Chonker.Scripts.Player.States {
             float decelerationTime = PlatformerPlayerPhysicsConfig.DashDecelerationTime;
             float decelerationTimer = 0;
             while (decelerationTimer < 1 && decelerationTime > 0) {
-                decelerationTimer += Time.deltaTime/ decelerationTime;
+                decelerationTimer += Time.deltaTime / decelerationTime;
                 currentVelocity = Vector2.Lerp(direction * dashSpeed, Vector2.zero, decelerationTimer);
                 yield return new WaitForFixedUpdate();
             }
+
             parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
         }
     }
