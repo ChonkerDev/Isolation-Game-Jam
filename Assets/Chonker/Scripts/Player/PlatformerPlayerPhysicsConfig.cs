@@ -25,6 +25,10 @@ namespace Chonker.Scripts.Player {
         [Range(0, 30)] public float DashTopSpeed = 5;
         [Range(0, .2f)] public float DirectionInputBufferInSeconds = .05f;
         public bool AllowOmniDirectionalDash;
+        
+        [Header("Other")]
+        public float CeilingPassthroughMargin = .1f;
+        
 
     }
 }

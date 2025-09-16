@@ -46,6 +46,7 @@ public class PlatformerCharacterController : MonoBehaviour {
         CurrentGroundHit = probeGround(distanceCheck);
         platformerPlayerMovementStateManager.GetCurrentState().OnFixedUpdate(ref currentVelocity);
         rigidbody2D.linearVelocity = currentVelocity;
+        ProbeCeiling(1);
     }
 
     public RaycastHit2D probeGround(float distance) {
@@ -63,6 +64,27 @@ public class PlatformerCharacterController : MonoBehaviour {
             direction, distance,
             ObstacleMask);
         return hit.transform;
+    }
+
+    public void ProbeCeiling(float distanceFromTopOfBox) {
+        float yPosition = rigidbody2D.position.y + boxCollider2D.offset.y + boxCollider2D.size.y / 2;
+        float baseXPosition = rigidbody2D.position.x;
+        float distance = boxCollider2D.size.y / 2 + distanceFromTopOfBox;
+        float boxHalfWidth = boxCollider2D.size.x / 2;
+        int numRaycasts = 5;
+        RaycastHit2D hit2D;
+        for (int i = 0; i < numRaycasts; i++) {
+            float alpha = i / ((float)numRaycasts - 1);
+            float xPosition = Mathf.Lerp(baseXPosition - boxHalfWidth, baseXPosition + boxHalfWidth, alpha);
+            Vector2 position = new Vector2(xPosition, yPosition);
+            Debug.DrawRay(position, Vector2.up * distance, Color.red);
+            hit2D = Physics2D.Raycast(position, Vector2.up, distance, ObstacleMask);
+            if (hit2D.transform) {
+                break;
+            }
+        }
+        
+        
     }
     
     public RaycastHit2D ProbeForWallHit(Vector2 direction, float distance) {

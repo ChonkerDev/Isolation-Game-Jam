@@ -75,7 +75,7 @@ namespace Chonker.Scripts.Player.States {
             yield return new WaitForSeconds(PlatformerPlayerPhysicsConfig.DashConstantSpeedTime);
             float decelerationTime = PlatformerPlayerPhysicsConfig.DashDecelerationTime;
             float decelerationTimer = 0;
-            while (decelerationTimer < 1) {
+            while (decelerationTimer < 1 && decelerationTime > 0) {
                 decelerationTimer += Time.deltaTime/ decelerationTime;
                 currentVelocity = Vector2.Lerp(direction * dashSpeed, Vector2.zero, decelerationTimer);
                 yield return new WaitForFixedUpdate();
