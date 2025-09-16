@@ -48,6 +48,7 @@ namespace Chonker.Scripts.Player.States {
                 direction = new Vector2(inputMovementWrapper.ReadHorizontalMovementInput(),
                     inputMovementWrapper.ReadVerticalMovementInput());
                 if (direction.magnitude > .1f) {
+                    direction = direction.normalized;
                     PlatformerPlayerState.facingRight = direction.x > 0;
                     break;
                 }
@@ -60,7 +61,6 @@ namespace Chonker.Scripts.Player.States {
             }
             else if (!PlatformerPlayerState.AllowedToOmniDirectionalDash()) {
                 direction = PlatformerPlayerState.facingRight ? Vector2.right : Vector2.left;
-                direction = direction.normalized;
             }
         }
 
