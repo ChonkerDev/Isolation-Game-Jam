@@ -459,7 +459,7 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741827
-  - first: {x: 7, y: 4, z: 0}
+  - first: {x: 6, y: 4, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 0
@@ -898,7 +898,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1485519117752594021, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: JumpPower
-      value: 8.88
+      value: 8.5
       objectReference: {fileID: 0}
     - target: {fileID: 1485519117752594021, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: CoyoteTime
@@ -906,11 +906,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1485519117752594021, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: GravityRate
-      value: 35
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485519117752594021, guid: cf5e5d99769824146882ec8103935897, type: 3}
+      propertyPath: DashTopSpeed
+      value: 11.8
       objectReference: {fileID: 0}
     - target: {fileID: 1485519117752594021, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: MaxMovementSpeed
       value: 5.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485519117752594021, guid: cf5e5d99769824146882ec8103935897, type: 3}
+      propertyPath: AllowVerticalDash
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1485519117752594021, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: GroundDeceleration
@@ -922,7 +930,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1485519117752594021, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: AirInputAcceleration
-      value: 157.4
+      value: 883
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485519117752594021, guid: cf5e5d99769824146882ec8103935897, type: 3}
+      propertyPath: DashAccelerationTime
+      value: 0.183
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485519117752594021, guid: cf5e5d99769824146882ec8103935897, type: 3}
+      propertyPath: DashDecelerationTime
+      value: 0.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485519117752594021, guid: cf5e5d99769824146882ec8103935897, type: 3}
+      propertyPath: DashConstantSpeedTime
+      value: 0.131
+      objectReference: {fileID: 0}
+    - target: {fileID: 1485519117752594021, guid: cf5e5d99769824146882ec8103935897, type: 3}
+      propertyPath: AllowOmniDirectionalDash
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1485519117752594021, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: JumpInputBufferTimeInSeconds
@@ -941,8 +965,20 @@ PrefabInstance:
       value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 2426743076922943853, guid: cf5e5d99769824146882ec8103935897, type: 3}
+      propertyPath: facingRight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2426743076922943853, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: DoubleJumpUnlocked
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2426743076922943853, guid: cf5e5d99769824146882ec8103935897, type: 3}
+      propertyPath: AllowOmniDirectionDashing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2426743076922943853, guid: cf5e5d99769824146882ec8103935897, type: 3}
+      propertyPath: omniDrirectionDashUnlocked
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4047896977512683131, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: m_Name
@@ -962,11 +998,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7330843755178028847, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 69.64
+      value: -0.02
       objectReference: {fileID: 0}
     - target: {fileID: 7330843755178028847, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 17.59
+      value: -1.29
       objectReference: {fileID: 0}
     - target: {fileID: 7330843755178028847, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7426,7 +7462,7 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741827
-  - first: {x: 7, y: 3, z: 0}
+  - first: {x: 6, y: 3, z: 0}
     second:
       serializedVersion: 2
       m_TileIndex: 0
@@ -25350,13 +25386,13 @@ CompositeCollider2D:
         Y: 100000000
       - X: 440000000
         Y: 100000000
-    - - X: 80000000
+    - - X: 70000000
         Y: 40000000
-      - X: 70000000
+      - X: 60000000
         Y: 40000000
-      - X: 70000000
+      - X: 60000000
         Y: 30000000
-      - X: 80000000
+      - X: 70000000
         Y: 30000000
     - - X: 100000000
         Y: 20000000
@@ -25526,10 +25562,10 @@ CompositeCollider2D:
       - {x: 43.999973, y: 11}
       - {x: 42, y: 10.99997}
       - {x: 42.00003, y: 10}
-    - - {x: 7.9999704, y: 3}
-      - {x: 7.9999704, y: 4}
-      - {x: 7, y: 3.999971}
-      - {x: 7.0000296, y: 3}
+    - - {x: 6.9999704, y: 3}
+      - {x: 6.9999704, y: 4}
+      - {x: 6, y: 3.999971}
+      - {x: 6.000029, y: 3}
     - - {x: 9.99997, y: 1}
       - {x: 9.99997, y: 2}
       - {x: 9, y: 1.9999708}
