@@ -10,7 +10,6 @@ namespace Chonker.Scripts.Player.States {
             currentVelocity = Vector2.zero;
             PlatformerPlayerState.DecrementNumberOfDashes();
             StartCoroutine(DelaySetDirection());
-            StartCoroutine(ProcessAcceleration());
         }
 
         public override void OnExit(PlatformerPlayerMovementStateId newState) {
@@ -35,10 +34,10 @@ namespace Chonker.Scripts.Player.States {
 
             float changeViewDirectionThreshold = 0;
             if (currentVelocity.x > changeViewDirectionThreshold) {
-                PlatformerPlayerState.facingRight = true;
+                setLookDirection(true);
             }
             else if (currentVelocity.x < -changeViewDirectionThreshold) {
-                PlatformerPlayerState.facingRight = false;
+                setLookDirection(false);
             }
         }
 
@@ -46,11 +45,18 @@ namespace Chonker.Scripts.Player.States {
             float timer = PlatformerPlayerPhysicsConfig.DirectionInputBufferInSeconds;
             while (timer > 0) {
                 timer -= Time.deltaTime;
+                PlatformerPlayerAnimationManager.setTargetRotation(0);
+                if (characterController.RbVelocity.x > 0) {
+                    setLookDirection(true);
+                }
+                else if (characterController.RbVelocity.x < 0) {
+                    setLookDirection(false);
+                }
                 direction = new Vector2(inputMovementWrapper.ReadHorizontalMovementInput(),
                     inputMovementWrapper.ReadVerticalMovementInput());
                 if (direction.magnitude > .1f) {
                     direction = direction.normalized;
-                    PlatformerPlayerState.facingRight = direction.x > 0;
+                    setLookDirection(direction.x > 0);
                     break;
                 }
 
@@ -58,18 +64,31 @@ namespace Chonker.Scripts.Player.States {
             }
 
             if (direction.magnitude < .1f) {
-                direction = PlatformerPlayerState.facingRight ? Vector2.right : Vector2.left;
+                direction = PlatformerPlayerAnimationManager.FacingRight ? Vector2.right : Vector2.left;
             }
             else if (!PlatformerPlayerState.AllowedToOmniDirectionalDash()) {
-                direction = PlatformerPlayerState.facingRight ? Vector2.right : Vector2.left;
+                direction = PlatformerPlayerAnimationManager.FacingRight ? Vector2.right : Vector2.left;
             }
+
+            float lookAngle;
+            if (PlatformerPlayerAnimationManager.FacingRight) {
+                lookAngle = -Vector2.SignedAngle(
+                    direction,
+                    Vector2.right);
+            }
+            else {
+                lookAngle = -Vector2.SignedAngle(
+                    direction,
+                    Vector2.left);
+            }
+            PlatformerPlayerAnimationManager.setTargetRotation(lookAngle);
+            StartCoroutine(ProcessAcceleration());
         }
 
         private IEnumerator ProcessAcceleration() {
             float accelerationTime = PlatformerPlayerPhysicsConfig.DashAccelerationTime;
             float dashSpeed = PlatformerPlayerPhysicsConfig.DashTopSpeed;
             float accTimer = 0;
-            PlatformerPlayerAnimationManager.CrossFadeDash(PlatformerPlayerAnimationManager.DashState.Start);
             while (accTimer < 1) {
                 accTimer += Time.deltaTime / accelerationTime;
                 currentVelocity = Vector2.Lerp(Vector2.zero, direction * dashSpeed, accTimer);
@@ -90,5 +109,6 @@ namespace Chonker.Scripts.Player.States {
 
             parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
         }
+        
     }
 }

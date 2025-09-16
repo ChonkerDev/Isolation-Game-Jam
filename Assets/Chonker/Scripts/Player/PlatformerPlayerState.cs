@@ -11,7 +11,6 @@ namespace Chonker.Scripts.Player {
         [SerializeField] private bool omniDrirectionDashUnlocked;
         public int NumDashesAvailable;
         public int NumJumpsAvailable { get; private set; }
-        public bool facingRight = true;
 
         public bool DebugInifiniteDashes;
 

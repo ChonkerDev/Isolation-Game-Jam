@@ -36,10 +36,10 @@ namespace Chonker.Scripts.Player.States {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
             }
             if (targetSpeed > 0) {
-                PlatformerPlayerState.facingRight = true;
+                setLookDirection(true);
             } 
             if (targetSpeed < 0) {
-                PlatformerPlayerState.facingRight = false;
+                setLookDirection(false);
             }
 
             bool isIdle = Mathf.Abs(currentVelocity.x) < .02f || currentMovementInput == 0;
@@ -50,6 +50,7 @@ namespace Chonker.Scripts.Player.States {
         public override void OnEnter(PlatformerPlayerMovementStateId prevState) {
             PlatformerPlayerState.ResetNumJumps();
             PlatformerPlayerState.ResetNumDashes();
+            PlatformerPlayerAnimationManager.setTargetRotation(0);
         }
 
         public override void OnExit(PlatformerPlayerMovementStateId newState) {

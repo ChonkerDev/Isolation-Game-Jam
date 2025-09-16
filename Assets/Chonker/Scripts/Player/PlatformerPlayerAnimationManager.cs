@@ -5,50 +5,45 @@ using UnityEngine;
 
 public class PlatformerPlayerAnimationManager : MonoBehaviour {
     [SerializeField] private Animator _animator;
-    [SerializeField] private float lookRotationSpeed = 1080;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private Transform _spriteAnchor;
     private PlatformerPlayerComponentContainer componentContainer;
     private string LastAnimatorState;
+    private float targetRotation;
+    private float rotationSpeed = 100000000;
+
+    [SerializeField] private bool _initialFacingRight = true;
+    private bool _facingRight;
+    public bool FacingRight {
+        get => _facingRight;
+        set {
+            _facingRight = value;
+            _spriteRenderer.flipX = !_facingRight;
+        }
+    }
 
     private void Awake() {
         componentContainer = GetComponentInParent<PlatformerPlayerComponentContainer>();
+    }
+
+    private void Start() {
+        FacingRight = _initialFacingRight;
     }
 
     private void Update() {
         rotateSprite();
     }
 
+    public void setTargetRotation(float rotation, int rotationSpeed = 100000000) {
+        targetRotation = rotation;
+        this.rotationSpeed = rotationSpeed;
+    }
+
     private void rotateSprite() {
-        PlatformerPlayerMovementStateId stateId =
-            componentContainer.PlatformerCharacterController.CurrentMovementStateId;
-        float targetLookRotation = 0;
-        switch (stateId) {
-            case PlatformerPlayerMovementStateId.Air:
-            case PlatformerPlayerMovementStateId.Ground:
-                float lookAngleRotation = 0;
-                break;
-            case PlatformerPlayerMovementStateId.Dash:
-                if (componentContainer.PlatformerCharacterController.RbVelocity.x > 0) {
-                    targetLookRotation = -Vector2.SignedAngle(
-                        componentContainer.PlatformerCharacterController.RbVelocity,
-                        Vector2.right);
-                }
-                else {
-                    targetLookRotation = -Vector2.SignedAngle(
-                        componentContainer.PlatformerCharacterController.RbVelocity,
-                        Vector2.left);
-                }
-
-                break;
-        }
-
         float currentLookRotation = transform.localEulerAngles.z;
-        Debug.Log(targetLookRotation);
         float lookRotation =
-            Mathf.MoveTowardsAngle(currentLookRotation, targetLookRotation, lookRotationSpeed * Time.deltaTime);
+            Mathf.MoveTowardsAngle(currentLookRotation, targetRotation, rotationSpeed * Time.deltaTime);
         _spriteAnchor.localEulerAngles = new Vector3(0, 0, lookRotation);
-        _spriteRenderer.flipX = !componentContainer.PlatformerPlayerState.facingRight;
     }
 
     private void CrossFadeAnimator(string stateName) {

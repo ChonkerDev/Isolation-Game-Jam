@@ -52,11 +52,11 @@ namespace Chonker.Scripts.Player.States {
             currentVelocity += componentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce;
 
             if (currentVelocity.x > 0) {
-                PlatformerPlayerState.facingRight = true;
+                setLookDirection(true);
             }
 
             if (currentVelocity.x < 0) {
-                PlatformerPlayerState.facingRight = false;
+                setLookDirection(false);
             }
         }
 
@@ -66,6 +66,7 @@ namespace Chonker.Scripts.Player.States {
                 PlatformerPlayerState.DecrementNumJumps();
                 StartCoroutine(CheckForCoyoteTimeJump());
             }
+            PlatformerPlayerAnimationManager.setTargetRotation(0);
         }
 
         public override void OnExit(PlatformerPlayerMovementStateId newState) {

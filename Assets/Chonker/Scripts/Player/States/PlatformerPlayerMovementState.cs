@@ -40,6 +40,10 @@ namespace Chonker.Scripts.Player.States {
             }
         }
 
+        protected void setLookDirection(bool facingRight) {
+            PlatformerPlayerAnimationManager.FacingRight = facingRight;
+        }
+
 
 
         public abstract void OnUpdate();
