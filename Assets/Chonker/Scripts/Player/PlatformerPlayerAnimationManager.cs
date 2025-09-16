@@ -14,6 +14,7 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
 
     [SerializeField] private bool _initialFacingRight = true;
     private bool _facingRight;
+
     public bool FacingRight {
         get => _facingRight;
         set {
@@ -55,13 +56,8 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
         _animator.CrossFadeInFixedTime(stateName, 0);
     }
 
-    public void CrossFadeToGround(bool idle) {
-        if (idle) {
-            CrossFadeAnimator("Base Layer.Ground.Idle");
-        }
-        else {
-            CrossFadeAnimator("Base Layer.Ground.Move");
-        }
+    public void CrossFadeToGround(GroundStates GroundState) {
+        CrossFadeAnimator("Base Layer.Ground." + GroundState.ToString());
     }
 
     public void CrossFadeToAir(AirStates airState) {
@@ -74,6 +70,17 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
         CrossFadeAnimator(stateName);
     }
 
+    public bool isCurrentState(GroundStates GroundState) {
+        return _animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Ground." + GroundState);
+    }
+
+    public enum GroundStates {
+        Idle,
+        MoveLoop,
+        MoveStart,
+        MoveStop,
+        Land
+    }
 
     public enum AirStates {
         Fall,

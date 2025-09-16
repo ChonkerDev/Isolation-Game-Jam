@@ -14,18 +14,26 @@ public class PlatformerCharacterController : MonoBehaviour {
 
     [SerializeField] private float _boxColliderHeight = 1;
     [SerializeField] private float _boxColliderWidth = 1;
-    
+
     [SerializeField] private bool ReportGroundedState;
     private LayerMask ObstacleMask;
 
     private PlatformerPlayerMovementStateManager platformerPlayerMovementStateManager;
-    
+
     public float CurrentGravity { get; private set; }
     public Vector2 RbVelocity => rigidbody2D.linearVelocity;
     private Coroutine gravityCoroutine;
 
+    public float TopOfBoxY => rigidbody2D.position.y + boxCollider2D.size.y / 2 + boxCollider2D.offset.y;
+
+    public float MiddleOfBoxY => rigidbody2D.position.y + boxCollider2D.offset.y;
+
+    public float LeftBoxEdgeX => rigidbody2D.position.x - boxCollider2D.size.x / 2;
+
+    public float RightBoxEdgeX => rigidbody2D.position.x + boxCollider2D.size.x / 2;
+
     public PlatformerPlayerMovementStateId CurrentMovementStateId => platformerPlayerMovementStateManager.CurrentState;
-    
+
     private void Awake() {
         rigidbody2D = GetComponentInParent<Rigidbody2D>();
         platformerPlayerComponentContainer = GetComponentInParent<PlatformerPlayerComponentContainer>();
@@ -39,7 +47,6 @@ public class PlatformerCharacterController : MonoBehaviour {
 
     private void Update() {
         platformerPlayerMovementStateManager.GetCurrentState().OnUpdate();
-
     }
 
     private void FixedUpdate() {
@@ -49,7 +56,7 @@ public class PlatformerCharacterController : MonoBehaviour {
         CurrentGroundHit = probeGround(distanceCheck);
         platformerPlayerMovementStateManager.GetCurrentState().OnFixedUpdate(ref currentVelocity);
         rigidbody2D.linearVelocity = currentVelocity;
-        ProbeCeiling(1);
+        ProbeCeiling(currentVelocity.y * Time.fixedDeltaTime);
     }
 
     public RaycastHit2D probeGround(float distance) {
@@ -70,13 +77,51 @@ public class PlatformerCharacterController : MonoBehaviour {
     }
 
     public void ProbeCeiling(float distanceFromTopOfBox) {
-        float yPosition = rigidbody2D.position.y + boxCollider2D.offset.y + boxCollider2D.size.y / 2;
-        float baseXPosition = rigidbody2D.position.x;
-        float distance = boxCollider2D.size.y / 2 + distanceFromTopOfBox;
-        float boxHalfWidth = boxCollider2D.size.x / 2;
+        float boxHalfHeight = boxCollider2D.size.y / 2;
         int numRaycasts = 4;
-        RaycastHit2D hit2D;
-        for (int i = 0; i < numRaycasts; i++) {
+        float margin = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.CeilingPassthroughMargin;
+
+        float totalDistance = boxHalfHeight + distanceFromTopOfBox;
+        Vector2 leftPosition = new Vector2(LeftBoxEdgeX, MiddleOfBoxY);
+        Vector2 rightPosition = new Vector2(RightBoxEdgeX, MiddleOfBoxY);
+        Vector2 leftPositionWithMargin = leftPosition;
+        leftPositionWithMargin.x += margin;
+        Vector2 rightPositionWithMargin = rightPosition;
+        rightPositionWithMargin.x -= margin;
+
+        Debug.DrawRay(leftPosition, Vector2.up * totalDistance, Color.red);
+        Debug.DrawRay(leftPositionWithMargin, Vector2.up * totalDistance, Color.red);
+        Debug.DrawRay(rightPosition, Vector2.up * totalDistance, Color.red);
+        Debug.DrawRay(rightPositionWithMargin, Vector2.up * totalDistance, Color.red);
+
+        if (rigidbody2D.linearVelocityY <= 0) return;
+        RaycastHit2D leftHit =
+            Physics2D.Raycast(leftPosition, Vector2.up, totalDistance, ObstacleMask);
+        if (leftHit.transform) {
+            RaycastHit2D leftHitWithMargin =
+                Physics2D.Raycast(leftPositionWithMargin, Vector2.up, totalDistance, ObstacleMask);
+            if (leftHitWithMargin.transform) {
+                return;
+            }
+            Vector2 newPosition = rigidbody2D.position;
+            newPosition.x += margin;
+            rigidbody2D.MovePosition(newPosition);
+        }
+        RaycastHit2D rightHit =
+            Physics2D.Raycast(rightPosition, Vector2.up, totalDistance, ObstacleMask);
+        if (rightHit.transform) {
+            RaycastHit2D rightHitWithMargin =
+                Physics2D.Raycast(rightPositionWithMargin, Vector2.up, totalDistance, ObstacleMask);
+            if (rightHitWithMargin.transform) {
+                return;
+            }
+            Vector2 newPosition = rigidbody2D.position;
+            newPosition.x -= margin;
+            rigidbody2D.MovePosition(newPosition);
+        }
+
+
+        /*for (int i = 0; i < numRaycasts; i++) {
             float alpha = i / ((float)numRaycasts - 1);
             float xPosition = Mathf.Lerp(baseXPosition - boxHalfWidth, baseXPosition + boxHalfWidth, alpha);
             Vector2 position = new Vector2(xPosition, yPosition);
@@ -85,11 +130,12 @@ public class PlatformerCharacterController : MonoBehaviour {
             if (hit2D.transform) {
                 break;
             }
-        }
-        
-        
+        }*/
     }
-    
+
+
+
+
     public RaycastHit2D ProbeForWallHit(Vector2 direction, float distance) {
         Vector2 position = transform.position;
         position += boxCollider2D.offset;
@@ -103,7 +149,8 @@ public class PlatformerCharacterController : MonoBehaviour {
     public void ApplyHighJumpGravityForDuration() {
         if (gravityCoroutine != null) {
             StopCoroutine(gravityCoroutine);
-        } 
+        }
+
         gravityCoroutine = StartCoroutine(applyGravityForHighJumpI());
     }
 
@@ -116,10 +163,12 @@ public class PlatformerCharacterController : MonoBehaviour {
             else {
                 CurrentGravity = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.GravityRate;
             }
+
             float time = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.JumpPower / CurrentGravity;
             timer -= Time.deltaTime / time;
             yield return null;
         }
+
         CurrentGravity = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.GravityRate;
         gravityCoroutine = null;
     }

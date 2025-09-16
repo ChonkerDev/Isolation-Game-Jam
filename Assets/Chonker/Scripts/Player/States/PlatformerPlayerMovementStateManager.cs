@@ -6,5 +6,16 @@ namespace Chonker.Scripts.Player.States {
         public void UpdateState(PlatformerPlayerMovementStateId stateId) {
             base.UpdateState(stateId);
         }
+        public void UpdateStateToGround() {
+            UpdateState(PlatformerPlayerMovementStateId.Ground);
+        }
+
+        public void UpdateStateToAir() {
+            UpdateState(PlatformerPlayerMovementStateId.Air);
+        }
+
+        public void UpdateStateToDash() {
+            UpdateState(PlatformerPlayerMovementStateId.Dash);
+        }
     }
 }
