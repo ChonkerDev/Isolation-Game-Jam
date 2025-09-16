@@ -10,6 +10,8 @@ namespace Chonker.Scripts.Player.States {
         protected PlatformerCharacterController characterController => componentContainer.PlatformerCharacterController;
         protected InputMovementWrapper inputMovementWrapper => componentContainer.InputMovementWrapper;
 
+        protected PlatformerPlayerAnimationManager PlatformerPlayerAnimationManager => componentContainer.platformerPlayerAnimationManager;
+
         protected RaycastHit2D CurrentGroundHit => characterController.CurrentGroundHit;
 
         protected PlatformerPlayerPhysicsConfig PlatformerPlayerPhysicsConfig =>

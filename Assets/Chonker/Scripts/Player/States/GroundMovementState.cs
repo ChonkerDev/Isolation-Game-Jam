@@ -41,6 +41,10 @@ namespace Chonker.Scripts.Player.States {
             if (targetSpeed < 0) {
                 PlatformerPlayerState.facingRight = false;
             }
+
+            bool isIdle = Mathf.Abs(currentVelocity.x) < .02f || currentMovementInput == 0;
+            PlatformerPlayerAnimationManager.CrossFadeToGround(isIdle);
+
         }
 
         public override void OnEnter(PlatformerPlayerMovementStateId prevState) {

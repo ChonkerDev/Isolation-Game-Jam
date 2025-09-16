@@ -33,10 +33,11 @@ namespace Chonker.Scripts.Player.States {
                 currentVelocity = targetVelocity;
             }
 
-            if (currentVelocity.x > 0) {
+            float changeViewDirectionThreshold = 0;
+            if (currentVelocity.x > changeViewDirectionThreshold) {
                 PlatformerPlayerState.facingRight = true;
             }
-            else if (currentVelocity.x < 0) {
+            else if (currentVelocity.x < -changeViewDirectionThreshold) {
                 PlatformerPlayerState.facingRight = false;
             }
         }
@@ -68,6 +69,7 @@ namespace Chonker.Scripts.Player.States {
             float accelerationTime = PlatformerPlayerPhysicsConfig.DashAccelerationTime;
             float dashSpeed = PlatformerPlayerPhysicsConfig.DashTopSpeed;
             float accTimer = 0;
+            PlatformerPlayerAnimationManager.CrossFadeDash(PlatformerPlayerAnimationManager.DashState.Start);
             while (accTimer < 1) {
                 accTimer += Time.deltaTime / accelerationTime;
                 currentVelocity = Vector2.Lerp(Vector2.zero, direction * dashSpeed, accTimer);
@@ -75,9 +77,11 @@ namespace Chonker.Scripts.Player.States {
             }
 
             currentVelocity = direction * dashSpeed;
+            PlatformerPlayerAnimationManager.CrossFadeDash(PlatformerPlayerAnimationManager.DashState.Loop);
             yield return new WaitForSeconds(PlatformerPlayerPhysicsConfig.DashConstantSpeedTime);
             float decelerationTime = PlatformerPlayerPhysicsConfig.DashDecelerationTime;
             float decelerationTimer = 0;
+            PlatformerPlayerAnimationManager.CrossFadeDash(PlatformerPlayerAnimationManager.DashState.End);
             while (decelerationTimer < 1 && decelerationTime > 0) {
                 decelerationTimer += Time.deltaTime / decelerationTime;
                 currentVelocity = Vector2.Lerp(direction * dashSpeed, Vector2.zero, decelerationTimer);

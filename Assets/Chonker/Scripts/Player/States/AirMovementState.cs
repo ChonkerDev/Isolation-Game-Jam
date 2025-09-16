@@ -4,6 +4,8 @@ using UnityEngine;
 namespace Chonker.Scripts.Player.States {
     public class AirMovementState : PlatformerPlayerMovementState {
         private bool applyCoyoteTimeJump = false;
+        private float midAnimationVelThreshold => PlatformerPlayerPhysicsConfig.JumpPower * -.2f;
+        private float risingAnimationVelThreshold => PlatformerPlayerPhysicsConfig.JumpPower * .2f;
         public override void Initialize() {
             base.Initialize();
         }
@@ -12,6 +14,14 @@ namespace Chonker.Scripts.Player.States {
             inputMovementWrapper.jumpInputManager.CheckForJumpInput();
             if (PlatformerPlayerState.AllowedToDash() && inputMovementWrapper.WasDashPressedThisFrame()) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Dash);
+            }
+            if (characterController.RbVelocity.y < midAnimationVelThreshold) {
+                PlatformerPlayerAnimationManager.CrossFadeToAir(PlatformerPlayerAnimationManager.AirStates.Fall);
+            } else if (characterController.RbVelocity.y < risingAnimationVelThreshold) {
+                PlatformerPlayerAnimationManager.CrossFadeToAir(PlatformerPlayerAnimationManager.AirStates.Mid);
+            }
+            else {
+                PlatformerPlayerAnimationManager.CrossFadeToAir(PlatformerPlayerAnimationManager.AirStates.Rise);
             }
         }
 

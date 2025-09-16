@@ -21,8 +21,11 @@ public class PlatformerCharacterController : MonoBehaviour {
     private PlatformerPlayerMovementStateManager platformerPlayerMovementStateManager;
     
     public float CurrentGravity { get; private set; }
+    public Vector2 RbVelocity => rigidbody2D.linearVelocity;
     private Coroutine gravityCoroutine;
 
+    public PlatformerPlayerMovementStateId CurrentMovementStateId => platformerPlayerMovementStateManager.CurrentState;
+    
     private void Awake() {
         rigidbody2D = GetComponentInParent<Rigidbody2D>();
         platformerPlayerComponentContainer = GetComponentInParent<PlatformerPlayerComponentContainer>();
@@ -71,7 +74,7 @@ public class PlatformerCharacterController : MonoBehaviour {
         float baseXPosition = rigidbody2D.position.x;
         float distance = boxCollider2D.size.y / 2 + distanceFromTopOfBox;
         float boxHalfWidth = boxCollider2D.size.x / 2;
-        int numRaycasts = 5;
+        int numRaycasts = 4;
         RaycastHit2D hit2D;
         for (int i = 0; i < numRaycasts; i++) {
             float alpha = i / ((float)numRaycasts - 1);

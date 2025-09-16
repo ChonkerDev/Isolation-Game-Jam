@@ -8,5 +8,6 @@ namespace Chonker.Scripts.Player {
         public PlatformerPlayerPhysicsConfig PlatformerPlayerPhysicsConfig;
         public PlatformerPlayerState PlatformerPlayerState;
         public PlatformerPlayerForceFieldDetector PlatformerPlayerForceFieldDetector;
+        public PlatformerPlayerAnimationManager platformerPlayerAnimationManager;
     }
 }
