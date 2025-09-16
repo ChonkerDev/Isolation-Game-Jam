@@ -13,6 +13,10 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
     private float rotationSpeed = 100000000;
 
     [SerializeField] private bool _initialFacingRight = true;
+
+    private PlatformerPlayerAnimationConfig platformerPlayerAnimationConfig =>
+        componentContainer.PlatformerPlayerAnimationConfig;
+
     private bool _facingRight;
 
     public bool FacingRight {
@@ -57,19 +61,57 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
     }
 
     public void CrossFadeToGround(GroundStates GroundState) {
-        CrossFadeAnimator("Base Layer.Ground." + GroundState.ToString());
+        GroundStates groundStateReplaced = GroundState;
+        switch (GroundState) {
+            case GroundStates.MoveStart:
+                if (platformerPlayerAnimationConfig.SkipMovingStartAnimation) {
+                    groundStateReplaced = GroundStates.MoveLoop;
+                }
+
+                break;
+            case GroundStates.MoveStop:
+                if (platformerPlayerAnimationConfig.SkipMovingStopAnimation) {
+                    groundStateReplaced = GroundStates.Idle;
+                }
+
+                break;
+            case GroundStates.Land:
+                if (platformerPlayerAnimationConfig.SkipLandingAnimation) {
+                    groundStateReplaced = GroundStates.Idle;
+                }
+
+                break;
+        }
+
+        CrossFadeAnimator("Base Layer.Ground." + groundStateReplaced);
     }
 
     public void CrossFadeToAir(AirStates airState) {
-        string stateName = "Base Layer.Air." + airState.ToString();
+        string stateName = "Base Layer.Air." + airState;
         CrossFadeAnimator(stateName);
     }
 
     public void CrossFadeDash(DashState DashState) {
-        string stateName = "Base Layer.Dash." + DashState.ToString();
+        DashState dashStateReplaced = DashState;
+        switch (DashState) {
+            case DashState.Start:
+                if (platformerPlayerAnimationConfig.SkipDashStartAnimation) {
+                    dashStateReplaced = DashState.Loop;
+                }
+
+                break;
+            case DashState.End:
+                if (platformerPlayerAnimationConfig.SkipDashStopAnimation) {
+                    return;
+                }
+
+                break;
+        }
+
+        string stateName = "Base Layer.Dash." + dashStateReplaced;
         CrossFadeAnimator(stateName);
     }
-    
+
     public void CrossFadeToDead() {
         string stateName = "Base Layer.Dead.Dead";
         CrossFadeAnimator(stateName);
@@ -78,7 +120,6 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
     public bool isCurrentState(GroundStates GroundState) {
         return _animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Ground." + GroundState);
     }
-
 
 
     public enum GroundStates {

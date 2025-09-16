@@ -7,6 +7,8 @@ public class PlayerGroundStateAnimationController : MonoBehaviour {
     private PlatformerPlayerComponentContainer platformerPlayerComponentContainer;
     private PlatformerPlayerAnimationManager playerAnimationManager => platformerPlayerComponentContainer.platformerPlayerAnimationManager;
     private PlatformerCharacterController characterController => platformerPlayerComponentContainer.PlatformerCharacterController;
+    
+    private PlatformerPlayerAnimationConfig platformerPlayerAnimationConfig  => platformerPlayerComponentContainer.PlatformerPlayerAnimationConfig;
 
     private bool wasStationaryLastFrame;
     private void Awake() {
@@ -35,6 +37,7 @@ public class PlayerGroundStateAnimationController : MonoBehaviour {
     private void crossFadeToMoving() {
         if (playerAnimationManager.isCurrentState(PlatformerPlayerAnimationManager.GroundStates.MoveLoop)) return;
         playerAnimationManager.CrossFadeToGround(PlatformerPlayerAnimationManager.GroundStates.MoveStart);
+
     }
 
     public void OnGroundStateEnter(PlatformerPlayerMovementStateId previousState) {

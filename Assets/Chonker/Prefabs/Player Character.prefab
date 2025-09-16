@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1607210085988122848}
   - component: {fileID: 1485519117752594021}
   - component: {fileID: 2426743076922943853}
+  - component: {fileID: 7872168042462595445}
   m_Layer: 7
   m_Name: Config
   m_TagString: Untagged
@@ -77,6 +78,23 @@ MonoBehaviour:
   omniDrirectionDashUnlocked: 0
   NumDashesAvailable: 0
   DebugInifiniteDashes: 0
+--- !u!114 &7872168042462595445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921784700567882673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66e8ac830c37f1446a57f17f3e8b3b5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SkipMovingStopAnimation: 0
+  SkipMovingStartAnimation: 0
+  SkipLandingAnimation: 0
+  SkipDashStartAnimation: 0
+  SkipDashStopAnimation: 0
 --- !u!1 &1007631168745840315
 GameObject:
   m_ObjectHideFlags: 0
@@ -445,6 +463,7 @@ MonoBehaviour:
   PlatformerPlayerState: {fileID: 2426743076922943853}
   PlatformerPlayerForceFieldDetector: {fileID: 3978537597150283144}
   platformerPlayerAnimationManager: {fileID: 4192751119666487108}
+  PlatformerPlayerAnimationConfig: {fileID: 7872168042462595445}
 --- !u!61 &5701460806950717758
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -17,6 +17,9 @@ namespace Chonker.Scripts.Player.States {
         protected PlatformerPlayerPhysicsConfig PlatformerPlayerPhysicsConfig =>
             componentContainer.PlatformerPlayerPhysicsConfig;
 
+        protected PlatformerPlayerAnimationConfig PlatformerPlayerAnimationConfig =>
+            componentContainer.PlatformerPlayerAnimationConfig;
+
         protected PlatformerPlayerState PlatformerPlayerState => componentContainer.PlatformerPlayerState;
 
 
