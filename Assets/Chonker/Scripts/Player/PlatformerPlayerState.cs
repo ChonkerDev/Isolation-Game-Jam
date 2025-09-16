@@ -13,6 +13,8 @@ namespace Chonker.Scripts.Player {
         public int NumJumpsAvailable { get; private set; }
         public bool facingRight = true;
 
+        public bool DebugInifiniteDashes;
+
         private void Awake() {
             PlatformerPlayerPhysicsConfig = GetComponent<PlatformerPlayerPhysicsConfig>();
         }
@@ -41,7 +43,7 @@ namespace Chonker.Scripts.Player {
         }
 
         public bool AllowedToDash() {
-            return NumDashesAvailable > 0;
+            return NumDashesAvailable > 0 || DebugInifiniteDashes;
         }
 
         public bool AllowedToOmniDirectionalDash() {
