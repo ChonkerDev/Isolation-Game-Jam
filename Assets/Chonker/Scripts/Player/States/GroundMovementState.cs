@@ -51,8 +51,9 @@ namespace Chonker.Scripts.Player.States {
 
             Vector2 requestedVelocityBeforeForceField = currentVelocity;
             currentVelocity += componentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce;
-            bool isStationary = requestedVelocityBeforeForceField.x == 0 || currentMovementInput == 0;
-            Debug.Log($"{requestedVelocityBeforeForceField.x == 0} | {characterController.RbVelocity.x == 0}");
+            bool isStationary = requestedVelocityBeforeForceField.x == 0 || currentMovementInput == 0 ||
+                                characterController.RbVelocity.x == 0;
+            //Debug.Log($"{requestedVelocityBeforeForceField.x == 0} | {currentMovementInput == 0} | {characterController.RbVelocity.x == 0}");
             groundStateAnimationController.ProcessAnimations(isStationary);
         }
 

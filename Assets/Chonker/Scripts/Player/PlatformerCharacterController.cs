@@ -25,12 +25,11 @@ public class PlatformerCharacterController : MonoBehaviour {
     private Coroutine gravityCoroutine;
 
     public float TopOfBoxY => rigidbody2D.position.y + boxCollider2D.size.y / 2 + boxCollider2D.offset.y;
-
     public float MiddleOfBoxY => rigidbody2D.position.y + boxCollider2D.offset.y;
-
+    public Vector2 MiddleOfBox => rigidbody2D.position + boxCollider2D.offset;
     public float LeftBoxEdgeX => rigidbody2D.position.x - boxCollider2D.size.x / 2;
-
     public float RightBoxEdgeX => rigidbody2D.position.x + boxCollider2D.size.x / 2;
+    public Vector2 BoxSize => boxCollider2D.size;
 
     public PlatformerPlayerMovementStateId CurrentMovementStateId => platformerPlayerMovementStateManager.CurrentState;
 
@@ -78,7 +77,6 @@ public class PlatformerCharacterController : MonoBehaviour {
 
     public void ProbeCeiling(float distanceFromTopOfBox) {
         float boxHalfHeight = boxCollider2D.size.y / 2;
-        int numRaycasts = 4;
         float margin = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.CeilingPassthroughMargin;
 
         float totalDistance = boxHalfHeight + distanceFromTopOfBox;
@@ -171,6 +169,10 @@ public class PlatformerCharacterController : MonoBehaviour {
 
         CurrentGravity = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.GravityRate;
         gravityCoroutine = null;
+    }
+
+    public void KillPlayer() {
+        platformerPlayerMovementStateManager.UpdateState(PlatformerPlayerMovementStateId.Dead);
     }
 
     private void OnValidate() {

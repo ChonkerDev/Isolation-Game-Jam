@@ -2,6 +2,7 @@
     public enum PlatformerPlayerMovementStateId {
         Air,
         Ground,
-        Dash
+        Dash,
+        Dead
     }
 }

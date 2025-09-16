@@ -5,11 +5,13 @@ namespace Chonker.Scripts.Player.States {
     public class DashMovementState : PlatformerPlayerMovementState {
         private Vector2 direction;
         private Vector2 currentVelocity;
+        private LayerMask breakableWallLayerMask;
 
         public override void OnEnter(PlatformerPlayerMovementStateId previousState) {
             currentVelocity = Vector2.zero;
             PlatformerPlayerState.DecrementNumberOfDashes();
             StartCoroutine(DelaySetDirection());
+            breakableWallLayerMask = LayerMask.GetMask("Breakable Wall");
         }
 
         public override void OnExit(PlatformerPlayerMovementStateId newState) {
@@ -31,6 +33,8 @@ namespace Chonker.Scripts.Player.States {
             else {
                 currentVelocity = targetVelocity;
             }
+            
+            CheckForWallBreak();
 
             float changeViewDirectionThreshold = 0;
             if (currentVelocity.x > changeViewDirectionThreshold) {
@@ -108,6 +112,19 @@ namespace Chonker.Scripts.Player.States {
             }
 
             parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
+        }
+
+        private void CheckForWallBreak() {
+            Vector2 directionCheck = currentVelocity.normalized * characterController.BoxSize / 2 + currentVelocity * Time.fixedDeltaTime;
+            Vector2 position = characterController.MiddleOfBox;
+            Debug.DrawRay(position, direction, Color.blue );
+            RaycastHit2D raycastHit2D = Physics2D.Raycast(characterController.MiddleOfBox, directionCheck,
+                directionCheck.magnitude, breakableWallLayerMask);
+            if (raycastHit2D.transform) {
+                if (raycastHit2D.collider.gameObject.TryGetComponent(out BreakableWall bw)) {
+                    bw.BreakWall();
+                }
+            }
         }
         
     }

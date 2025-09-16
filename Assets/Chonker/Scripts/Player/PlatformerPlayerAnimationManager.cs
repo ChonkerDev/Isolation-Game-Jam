@@ -69,10 +69,17 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
         string stateName = "Base Layer.Dash." + DashState.ToString();
         CrossFadeAnimator(stateName);
     }
+    
+    public void CrossFadeToDead() {
+        string stateName = "Base Layer.Dead.Dead";
+        CrossFadeAnimator(stateName);
+    }
 
     public bool isCurrentState(GroundStates GroundState) {
         return _animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Ground." + GroundState);
     }
+
+
 
     public enum GroundStates {
         Idle,

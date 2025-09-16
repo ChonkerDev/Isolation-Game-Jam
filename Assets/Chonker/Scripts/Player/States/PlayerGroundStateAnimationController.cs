@@ -8,19 +8,12 @@ public class PlayerGroundStateAnimationController : MonoBehaviour {
     private PlatformerPlayerAnimationManager playerAnimationManager => platformerPlayerComponentContainer.platformerPlayerAnimationManager;
     private PlatformerCharacterController characterController => platformerPlayerComponentContainer.PlatformerCharacterController;
 
-    private PlatformerPlayerAnimationManager.GroundStates currentGroundState = PlatformerPlayerAnimationManager.GroundStates.Idle;
     private bool wasStationaryLastFrame;
     private void Awake() {
         platformerPlayerComponentContainer = GetComponentInParent<PlatformerPlayerComponentContainer>();
     }
-
-    private void Start() {
-        
-    }
-
     public void ProcessAnimations(bool isStationary) {
         bool stationaryStateChanged = isStationary != wasStationaryLastFrame;
-        Debug.Log(isStationary);
         if (stationaryStateChanged) {
             if (isStationary) {
                 crossFadeToIdle();
