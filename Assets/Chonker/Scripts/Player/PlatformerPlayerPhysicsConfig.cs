@@ -28,7 +28,9 @@ namespace Chonker.Scripts.Player {
         
         [Header("Other")]
         public float CeilingPassthroughMargin = .1f;
-        
+
+        public float slipperySurfaceCoefficient = 2;
+
 
     }
 }

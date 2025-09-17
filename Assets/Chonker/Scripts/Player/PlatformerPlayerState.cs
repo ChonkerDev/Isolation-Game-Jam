@@ -14,6 +14,9 @@ namespace Chonker.Scripts.Player {
 
         public bool DebugInifiniteDashes;
 
+        public float CurrentSurfaceAccelerationCoefficient;
+        public Vector2 CurrentMoveablePlatformPositionDiff;
+
         private void Awake() {
             PlatformerPlayerPhysicsConfig = GetComponent<PlatformerPlayerPhysicsConfig>();
         }

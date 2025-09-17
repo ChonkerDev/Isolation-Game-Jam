@@ -5,10 +5,9 @@ using UnityEngine;
 public class PlatformerPlayerDeathBoxDetector : MonoBehaviour {
     private PlatformerPlayerComponentContainer platformerPlayerComponentContainer;
     private int KillBoxLayerIndex;
-    private Collider2D collider2D;
+    [SerializeField] private BoxCollider2D _collider2D;
     private void Awake() {
         platformerPlayerComponentContainer = GetComponentInParent<PlatformerPlayerComponentContainer>();
-        collider2D = GetComponent<Collider2D>();
     }
 
     private void Start() {
@@ -17,7 +16,15 @@ public class PlatformerPlayerDeathBoxDetector : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.layer != KillBoxLayerIndex) return;
-        collider2D.enabled = false;
+        _collider2D.enabled = false;
         platformerPlayerComponentContainer.PlatformerCharacterController.KillPlayer();
+    }
+    
+    public void UpdateBoxCollider(Vector2 size) {
+        if (!_collider2D) {
+            _collider2D = GetComponent<BoxCollider2D>();
+        }
+        
+        _collider2D.size = size;
     }
 }

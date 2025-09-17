@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &345061807461615417
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3069794680086371384}
+  - component: {fileID: 8382213552327552876}
+  m_Layer: 0
+  m_Name: Surface Check
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3069794680086371384
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 345061807461615417}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5742639599248979022}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8382213552327552876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 345061807461615417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53edb64bd231c864b8eeac8e7d17896b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &921784700567882673
 GameObject:
   m_ObjectHideFlags: 0
@@ -62,6 +106,7 @@ MonoBehaviour:
   DirectionInputBufferInSeconds: 0.05
   AllowOmniDirectionalDash: 0
   CeilingPassthroughMargin: 0.1
+  slipperySurfaceCoefficient: 2
 --- !u!114 &2426743076922943853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,6 +123,8 @@ MonoBehaviour:
   omniDrirectionDashUnlocked: 0
   NumDashesAvailable: 0
   DebugInifiniteDashes: 0
+  CurrentSurfaceAccelerationCoefficient: 0
+  CurrentMoveablePlatformPositionDiff: {x: 0, y: 0}
 --- !u!114 &7872168042462595445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,7 +167,7 @@ Transform:
   m_GameObject: {fileID: 1007631168745840315}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.423, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -154,7 +201,7 @@ Transform:
   m_GameObject: {fileID: 1499428482014578269}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.389, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -173,6 +220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentForceFieldForce: {x: 0, y: 0}
+  _collider: {fileID: 6656733527103660608}
 --- !u!61 &6656733527103660608
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -217,7 +265,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.85, y: 0.86}
   m_EdgeRadius: 0
 --- !u!1 &2626671059187748631
 GameObject:
@@ -296,6 +344,7 @@ Transform:
   - {fileID: 1540042198129302869}
   - {fileID: 3197389274777847549}
   - {fileID: 2104824341127367610}
+  - {fileID: 3069794680086371384}
   m_Father: {fileID: 7330843755178028847}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &760683023249991060
@@ -310,9 +359,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e917d43f170f9f4e9dda7e81c50be35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxCollider2D: {fileID: 5701460806950717758}
-  _boxColliderHeight: 0.87
-  _boxColliderWidth: 1.04
+  _boxCollider2D: {fileID: 5701460806950717758}
+  _boxColliderWidth: 0.85
+  _boxColliderHeight: 0.86
+  platformerPlayerComponentContainer: {fileID: 6565458024754381535}
   ReportGroundedState: 0
 --- !u!1 &3701870462149898835
 GameObject:
@@ -359,6 +409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 975a86d1453f758408fe166351f96faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _collider2D: {fileID: 3102600005446421316}
 --- !u!61 &3102600005446421316
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -393,7 +444,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.435}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -403,7 +454,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.04, y: 0.87}
+  m_Size: {x: 0.85, y: 0.86}
   m_EdgeRadius: 0
 --- !u!1 &4047896977512683131
 GameObject:
@@ -464,6 +515,8 @@ MonoBehaviour:
   PlatformerPlayerForceFieldDetector: {fileID: 3978537597150283144}
   platformerPlayerAnimationManager: {fileID: 4192751119666487108}
   PlatformerPlayerAnimationConfig: {fileID: 7872168042462595445}
+  PlatformerSurfaceCheck: {fileID: 8382213552327552876}
+  PlatformerPlayerDeathBoxDetector: {fileID: 5842036199576588963}
 --- !u!61 &5701460806950717758
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -498,7 +551,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.435}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -508,7 +561,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.04, y: 0.87}
+  m_Size: {x: 0.85, y: 0.86}
   m_EdgeRadius: 0
 --- !u!50 &4700044343721272431
 Rigidbody2D:
@@ -859,7 +912,7 @@ Transform:
   m_GameObject: {fileID: 7008198771313790721}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -8.12}
+  m_LocalPosition: {x: 1.3613, y: 0.4063697, z: -5.445715}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1027,7 +1080,7 @@ Transform:
   m_GameObject: {fileID: 7099308950209185229}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.433, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

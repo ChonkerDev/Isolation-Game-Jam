@@ -10,5 +10,7 @@ namespace Chonker.Scripts.Player {
         public PlatformerPlayerForceFieldDetector PlatformerPlayerForceFieldDetector;
         public PlatformerPlayerAnimationManager platformerPlayerAnimationManager;
         public PlatformerPlayerAnimationConfig PlatformerPlayerAnimationConfig;
+        public PlatformerSurfaceCheck PlatformerSurfaceCheck;
+        public PlatformerPlayerDeathBoxDetector PlatformerPlayerDeathBoxDetector;
     }
 }
