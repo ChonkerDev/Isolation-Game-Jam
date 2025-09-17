@@ -6,15 +6,14 @@ using UnityEngine;
 
 public class PlatformerCharacterController : MonoBehaviour {
     private Rigidbody2D rigidbody2D;
-    [SerializeField, HideInInspector] private BoxCollider2D boxCollider2D;
-    private PlatformerPlayerComponentContainer platformerPlayerComponentContainer;
+    [SerializeField, HideInInspector] private BoxCollider2D _boxCollider2D;
+    [SerializeField] private float _boxColliderWidth = 1;
+    [SerializeField] private float _boxColliderHeight = 1;
+    [SerializeField] private PlatformerPlayerComponentContainer platformerPlayerComponentContainer;
     private Vector2 currentVelocity;
     public RaycastHit2D CurrentGroundHit { get; private set; }
     public bool Grounded => CurrentGroundHit.transform != null;
-
-    [SerializeField] private float _boxColliderHeight = 1;
-    [SerializeField] private float _boxColliderWidth = 1;
-
+    
     [SerializeField] private bool ReportGroundedState;
     private LayerMask ObstacleMask;
 
@@ -24,18 +23,17 @@ public class PlatformerCharacterController : MonoBehaviour {
     public Vector2 RbVelocity => rigidbody2D.linearVelocity;
     private Coroutine gravityCoroutine;
 
-    public float TopOfBoxY => rigidbody2D.position.y + boxCollider2D.size.y / 2 + boxCollider2D.offset.y;
-    public float MiddleOfBoxY => rigidbody2D.position.y + boxCollider2D.offset.y;
-    public Vector2 MiddleOfBox => rigidbody2D.position + boxCollider2D.offset;
-    public float LeftBoxEdgeX => rigidbody2D.position.x - boxCollider2D.size.x / 2;
-    public float RightBoxEdgeX => rigidbody2D.position.x + boxCollider2D.size.x / 2;
-    public Vector2 BoxSize => boxCollider2D.size;
+    public float TopOfBoxY => _boxCollider2D.transform.position.y + _boxCollider2D.size.y / 2 + _boxCollider2D.offset.y;
+    public float MiddleOfBoxY => _boxCollider2D.transform.position.y + _boxCollider2D.offset.y;
+    public Vector2 MiddleOfBox => new Vector2(_boxCollider2D.transform.position.x, _boxCollider2D.transform.position.y ) + _boxCollider2D.offset;
+    public float LeftBoxEdgeX => _boxCollider2D.transform.position.x - _boxCollider2D.size.x / 2;
+    public float RightBoxEdgeX => _boxCollider2D.transform.position.x + _boxCollider2D.size.x / 2;
+    public Vector2 BoxSize => _boxCollider2D.size;
 
     public PlatformerPlayerMovementStateId CurrentMovementStateId => platformerPlayerMovementStateManager.CurrentState;
 
     private void Awake() {
         rigidbody2D = GetComponentInParent<Rigidbody2D>();
-        platformerPlayerComponentContainer = GetComponentInParent<PlatformerPlayerComponentContainer>();
         platformerPlayerMovementStateManager = GetComponentInChildren<PlatformerPlayerMovementStateManager>();
     }
 
@@ -54,29 +52,32 @@ public class PlatformerCharacterController : MonoBehaviour {
         float distanceCheck = -rigidbody2D.linearVelocity.y * Time.fixedDeltaTime + probeBuffer;
         CurrentGroundHit = probeGround(distanceCheck);
         platformerPlayerMovementStateManager.GetCurrentState().OnFixedUpdate(ref currentVelocity);
+        currentVelocity += platformerPlayerComponentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce;
         rigidbody2D.linearVelocity = currentVelocity;
+
+        //rigidbody2D.MovePosition(rigidbody2D.position + );
         ProbeCeiling(currentVelocity.y * Time.fixedDeltaTime);
     }
 
     public RaycastHit2D probeGround(float distance) {
         Vector2 position = transform.position;
-        position += boxCollider2D.offset;
-        return Physics2D.BoxCast(position, boxCollider2D.size, 0, Vector2.down, distance,
+        position += _boxCollider2D.offset;
+        return Physics2D.BoxCast(position, _boxCollider2D.size, 0, Vector2.down, distance,
             ObstacleMask);
     }
 
     public bool ProbeForWall(Vector2 direction, float distance) {
         Vector2 position = transform.position;
-        position += boxCollider2D.offset;
+        position += _boxCollider2D.offset;
         Debug.DrawRay(position, direction * distance, Color.red);
-        RaycastHit2D hit = Physics2D.BoxCast(position, boxCollider2D.size, 0,
+        RaycastHit2D hit = Physics2D.BoxCast(position, _boxCollider2D.size, 0,
             direction, distance,
             ObstacleMask);
         return hit.transform;
     }
 
     public void ProbeCeiling(float distanceFromTopOfBox) {
-        float boxHalfHeight = boxCollider2D.size.y / 2;
+        float boxHalfHeight = _boxCollider2D.size.y / 2;
         float margin = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.CeilingPassthroughMargin;
 
         float totalDistance = boxHalfHeight + distanceFromTopOfBox;
@@ -136,9 +137,9 @@ public class PlatformerCharacterController : MonoBehaviour {
 
     public RaycastHit2D ProbeForWallHit(Vector2 direction, float distance) {
         Vector2 position = transform.position;
-        position += boxCollider2D.offset;
+        position += _boxCollider2D.offset;
         Debug.DrawRay(position, direction * distance, Color.red);
-        RaycastHit2D hit = Physics2D.BoxCast(position, boxCollider2D.size, 0,
+        RaycastHit2D hit = Physics2D.BoxCast(position, _boxCollider2D.size, 0,
             direction, distance,
             ObstacleMask);
         return hit;
@@ -176,17 +177,16 @@ public class PlatformerCharacterController : MonoBehaviour {
     }
 
     private void OnValidate() {
-        if (!boxCollider2D) {
-            boxCollider2D = GetComponentInParent<BoxCollider2D>();
+        if (!platformerPlayerComponentContainer) {
+            platformerPlayerComponentContainer = GetComponentInParent<PlatformerPlayerComponentContainer>();
         }
-
-        boxCollider2D.size = new Vector2(_boxColliderWidth, _boxColliderHeight);
-        boxCollider2D.offset = new Vector2(0, _boxColliderHeight / 2);
-    }
-
-    private void OnDrawGizmos() {
-        Gizmos.color = Color.forestGreen;
-        Vector2 position = boxCollider2D.transform.position;
-        Gizmos.DrawWireCube(position + boxCollider2D.offset, boxCollider2D.size);
+        if (!_boxCollider2D) {
+            _boxCollider2D = platformerPlayerComponentContainer.GetComponent<BoxCollider2D>();
+        }
+        
+        _boxCollider2D.size = new Vector2(_boxColliderWidth, _boxColliderHeight);
+        
+        platformerPlayerComponentContainer.PlatformerPlayerDeathBoxDetector.UpdateBoxCollider(_boxCollider2D.size);
+        platformerPlayerComponentContainer.PlatformerPlayerForceFieldDetector.UpdateBoxCollider(_boxCollider2D.size);
     }
 }

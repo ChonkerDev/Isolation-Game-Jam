@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics.Geometry;
+using UnityEngine;
 
 namespace Chonker.Scripts.Player.States {
     public class GroundMovementState : PlatformerPlayerMovementState {
         private PlayerGroundStateAnimationController groundStateAnimationController;
+        private float desiredVelocity;
 
         public override void Initialize() {
             base.Initialize();
@@ -26,17 +28,19 @@ namespace Chonker.Scripts.Player.States {
 
             float currentMovementInput = componentContainer.InputMovementWrapper.ReadHorizontalMovementInput();
             float targetSpeed = currentMovementInput * PlatformerPlayerPhysicsConfig.MaxMovementSpeed;
-            float speedDif = targetSpeed - currentVelocity.x;
+            float speedDif = targetSpeed - desiredVelocity;
 
             bool accelerating = (Mathf.Abs(targetSpeed) > 0.01f);
             float accelRate = accelerating
                 ? PlatformerPlayerPhysicsConfig.GroundAcceleration
                 : PlatformerPlayerPhysicsConfig.GroundDeceleration;
+            accelRate *= PlatformerPlayerState.CurrentSurfaceAccelerationCoefficient;
 
             float movement = accelRate * speedDif * Time.fixedDeltaTime;
 
-            currentVelocity.x += movement * Time.fixedDeltaTime;
-            currentVelocity = Vector2.ClampMagnitude(currentVelocity, PlatformerPlayerPhysicsConfig.MaxMovementSpeed);
+            desiredVelocity += movement * Time.fixedDeltaTime;
+            desiredVelocity = Mathf.Clamp(desiredVelocity, -PlatformerPlayerPhysicsConfig.MaxMovementSpeed,
+                PlatformerPlayerPhysicsConfig.MaxMovementSpeed);
             if (!characterController.Grounded) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
             }
@@ -49,9 +53,12 @@ namespace Chonker.Scripts.Player.States {
                 setLookDirection(false);
             }
 
-            Vector2 requestedVelocityBeforeForceField = currentVelocity;
-            currentVelocity += componentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce;
-            bool isStationary = requestedVelocityBeforeForceField.x == 0 || currentMovementInput == 0 ||
+            float requestedVelocityBeforeForceField = desiredVelocity;
+            currentVelocity.x = desiredVelocity;
+            currentVelocity +=
+                componentContainer.PlatformerPlayerState.CurrentMoveablePlatformPositionDiff /
+                Time.fixedDeltaTime;
+            bool isStationary = requestedVelocityBeforeForceField == 0 || currentMovementInput == 0 ||
                                 characterController.RbVelocity.x == 0;
             //Debug.Log($"{requestedVelocityBeforeForceField.x == 0} | {currentMovementInput == 0} | {characterController.RbVelocity.x == 0}");
             groundStateAnimationController.ProcessAnimations(isStationary);
@@ -62,6 +69,7 @@ namespace Chonker.Scripts.Player.States {
             PlatformerPlayerState.ResetNumDashes();
             PlatformerPlayerAnimationManager.setTargetRotation(0);
             groundStateAnimationController.OnGroundStateEnter(prevState);
+            desiredVelocity = characterController.RbVelocity.x;
         }
 
         public override void OnExit(PlatformerPlayerMovementStateId newState) {
