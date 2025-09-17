@@ -7,10 +7,12 @@ public class MoveablePlatform : MonoBehaviour {
 
     private int currentTargetIndex;
     private MoveablePlatformTargetPoint[] targetPoints;
-    private float timer;
-    
+
     public Vector2 CurrentPositionDifference;
 
+    // For interpolation:
+    private Vector2 lastFixedPos;
+    private Vector2 currentFixedPos;
 
     private void Awake() {
         targetPoints = GetComponentsInChildren<MoveablePlatformTargetPoint>();
@@ -19,36 +21,48 @@ public class MoveablePlatform : MonoBehaviour {
     private void Start() {
         transform.position = targetPoints[0].transform.position;
         nextPosition = targetPoints[0].transform.position;
+
+        lastFixedPos = nextPosition;
+        currentFixedPos = nextPosition;
+
         StartCoroutine(MoveToTargets());
     }
 
     private void FixedUpdate() {
-        Vector2 currentPosition = transform.position;
-        CurrentPositionDifference = nextPosition - currentPosition;
-        transform.position = nextPosition;
+        lastFixedPos = currentFixedPos;
+        currentFixedPos = nextPosition;
+        CurrentPositionDifference = currentFixedPos - lastFixedPos;
+    }
 
+    private void LateUpdate() {
+        float t = (Time.time - Time.fixedTime) / Time.fixedDeltaTime;
+        t = Mathf.Clamp01(t);
+
+        Vector2 interpolatedPos = Vector2.Lerp(lastFixedPos, currentFixedPos, t);
+
+        transform.position = interpolatedPos;
     }
 
     private IEnumerator MoveToTargets() {
         int currentTargetIndex = 0;
         while (true) {
             MoveablePlatformTargetPoint currentTarget = targetPoints[currentTargetIndex];
-            float timer = 0;
+            float timer = 0f;
             float moveTime = currentTarget.timeToMoveToNextPointInSeconds;
-            Vector2 startPosition = transform.position;
+            Vector2 startPosition = currentFixedPos;
             Vector2 targetPosition = currentTarget.CachedGlobalPosition;
-            while (timer < 1) {
+
+            while (timer < 1f) {
                 timer += Time.fixedDeltaTime / moveTime;
                 nextPosition = Vector2.Lerp(startPosition, targetPosition, timer);
                 yield return new WaitForFixedUpdate();
             }
+
             yield return new WaitForSeconds(currentTarget.DelayMoveToNextPointInSeconds);
+
             currentTargetIndex++;
-            if(currentTargetIndex >= targetPoints.Length) currentTargetIndex = 0;
+            if (currentTargetIndex >= targetPoints.Length)
+                currentTargetIndex = 0;
         }
     }
-    
-
-    
-    
 }
