@@ -3,28 +3,52 @@ using System.Collections;
 using UnityEngine;
 
 public class MoveablePlatform : MonoBehaviour {
-    public Vector2 moveDirection = Vector2.right;
-    public float distance = 5f;
-    public float speed = 2f;
+    private Vector2 nextPosition;
 
-    private Vector2 startPosition;
-    private Vector2 lastPosition;
+    private int currentTargetIndex;
+    private MoveablePlatformTargetPoint[] targetPoints;
+    private float timer;
+    
+    public Vector2 CurrentPositionDifference;
+
+
+    private void Awake() {
+        targetPoints = GetComponentsInChildren<MoveablePlatformTargetPoint>();
+    }
 
     private void Start() {
-        startPosition = transform.position;
-        StartCoroutine(PingPongMove());
+        transform.position = targetPoints[0].transform.position;
+        nextPosition = targetPoints[0].transform.position;
+        StartCoroutine(MoveToTargets());
     }
 
-    private IEnumerator PingPongMove() {
+    private void FixedUpdate() {
+        Vector2 currentPosition = transform.position;
+        CurrentPositionDifference = nextPosition - currentPosition;
+        transform.position = nextPosition;
+
+    }
+
+    private IEnumerator MoveToTargets() {
+        int currentTargetIndex = 0;
         while (true) {
-            float offset = Mathf.PingPong(Time.time * speed, distance);
-            Vector2 newPosition = startPosition + moveDirection.normalized * offset;
-            CurrentPositionDifference = newPosition - lastPosition;
-            transform.position = newPosition;
-            lastPosition = newPosition;
-            yield return new WaitForFixedUpdate();
+            MoveablePlatformTargetPoint currentTarget = targetPoints[currentTargetIndex];
+            float timer = 0;
+            float moveTime = currentTarget.timeToMoveToNextPointInSeconds;
+            Vector2 startPosition = transform.position;
+            Vector2 targetPosition = currentTarget.CachedGlobalPosition;
+            while (timer < 1) {
+                timer += Time.fixedDeltaTime / moveTime;
+                nextPosition = Vector2.Lerp(startPosition, targetPosition, timer);
+                yield return new WaitForFixedUpdate();
+            }
+            yield return new WaitForSeconds(currentTarget.DelayMoveToNextPointInSeconds);
+            currentTargetIndex++;
+            if(currentTargetIndex >= targetPoints.Length) currentTargetIndex = 0;
         }
     }
+    
 
-    public Vector2 CurrentPositionDifference;
+    
+    
 }

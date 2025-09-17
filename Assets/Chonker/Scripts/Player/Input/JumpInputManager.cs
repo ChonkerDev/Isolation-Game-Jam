@@ -25,7 +25,7 @@ namespace Chonker.Scripts.Player {
 
         private IEnumerator ClearJumpInputDelayedI() {
             jumpPressedThisFrame = true;
-            yield return new WaitForSeconds(platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.JumpInputBufferTimeInSeconds);
+            yield return new WaitForSeconds(platformerPlayerComponentContainer.PhysicsConfigSO.JumpInputBufferTimeInSeconds);
             jumpPressedThisFrame = false;
             ClearJumpInputDelayedCoroutine = null;
         }

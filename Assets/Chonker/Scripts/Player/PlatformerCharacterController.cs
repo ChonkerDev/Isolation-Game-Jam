@@ -24,6 +24,9 @@ public class PlatformerCharacterController : MonoBehaviour {
     private Coroutine gravityCoroutine;
 
     public float TopOfBoxY => _boxCollider2D.transform.position.y + _boxCollider2D.size.y / 2 + _boxCollider2D.offset.y;
+
+    public float BottomOfBoxY =>
+        _boxCollider2D.transform.position.y - _boxCollider2D.size.y / 2 + _boxCollider2D.offset.y;
     public float MiddleOfBoxY => _boxCollider2D.transform.position.y + _boxCollider2D.offset.y;
     public Vector2 MiddleOfBox => new Vector2(_boxCollider2D.transform.position.x, _boxCollider2D.transform.position.y ) + _boxCollider2D.offset;
     public float LeftBoxEdgeX => _boxCollider2D.transform.position.x - _boxCollider2D.size.x / 2;
@@ -39,7 +42,7 @@ public class PlatformerCharacterController : MonoBehaviour {
 
     private void Start() {
         ObstacleMask = LayerMask.GetMask("Obstacle");
-        CurrentGravity = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.GravityRate;
+        CurrentGravity = platformerPlayerComponentContainer.PhysicsConfigSO.GravityRate;
     }
 
     private void Update() {
@@ -59,10 +62,11 @@ public class PlatformerCharacterController : MonoBehaviour {
         ProbeCeiling(currentVelocity.y * Time.fixedDeltaTime);
     }
 
-    public RaycastHit2D probeGround(float distance) {
+    public RaycastHit2D probeGround(float distance, float probeBoxScale = 1) {
         Vector2 position = transform.position;
         position += _boxCollider2D.offset;
-        return Physics2D.BoxCast(position, _boxCollider2D.size, 0, Vector2.down, distance,
+        Debug.DrawRay(position, Vector3.down * distance, Color.brown);
+        return Physics2D.BoxCast(position, _boxCollider2D.size * probeBoxScale, 0, Vector2.down, distance,
             ObstacleMask);
     }
 
@@ -78,7 +82,7 @@ public class PlatformerCharacterController : MonoBehaviour {
 
     public void ProbeCeiling(float distanceFromTopOfBox) {
         float boxHalfHeight = _boxCollider2D.size.y / 2;
-        float margin = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.CeilingPassthroughMargin;
+        float margin = platformerPlayerComponentContainer.PhysicsConfigSO.CeilingPassthroughMargin;
 
         float totalDistance = boxHalfHeight + distanceFromTopOfBox;
         Vector2 leftPosition = new Vector2(LeftBoxEdgeX, MiddleOfBoxY);
@@ -118,21 +122,13 @@ public class PlatformerCharacterController : MonoBehaviour {
             newPosition.x -= margin;
             rigidbody2D.MovePosition(newPosition);
         }
-
-
-        /*for (int i = 0; i < numRaycasts; i++) {
-            float alpha = i / ((float)numRaycasts - 1);
-            float xPosition = Mathf.Lerp(baseXPosition - boxHalfWidth, baseXPosition + boxHalfWidth, alpha);
-            Vector2 position = new Vector2(xPosition, yPosition);
-            Debug.DrawRay(position, Vector2.up * distance, Color.red);
-            hit2D = Physics2D.Raycast(position, Vector2.up, distance, ObstacleMask);
-            if (hit2D.transform) {
-                break;
-            }
-        }*/
     }
 
-
+    public void TeleportX(float x) {
+        Vector2 position = rigidbody2D.position;
+        position.x = x;
+        rigidbody2D.position = position;
+    }
 
 
     public RaycastHit2D ProbeForWallHit(Vector2 direction, float distance) {
@@ -157,18 +153,18 @@ public class PlatformerCharacterController : MonoBehaviour {
         float timer = 1;
         while (timer > 0) {
             if (platformerPlayerComponentContainer.InputMovementWrapper.jumpInputManager.IsJumpHeld) {
-                CurrentGravity = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.HighJumpGravityRate;
+                CurrentGravity = platformerPlayerComponentContainer.PhysicsConfigSO.HighJumpGravityRate;
             }
             else {
-                CurrentGravity = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.GravityRate;
+                CurrentGravity = platformerPlayerComponentContainer.PhysicsConfigSO.GravityRate;
             }
 
-            float time = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.JumpPower / CurrentGravity;
+            float time = platformerPlayerComponentContainer.PhysicsConfigSO.JumpPower / CurrentGravity;
             timer -= Time.deltaTime / time;
             yield return null;
         }
 
-        CurrentGravity = platformerPlayerComponentContainer.PlatformerPlayerPhysicsConfig.GravityRate;
+        CurrentGravity = platformerPlayerComponentContainer.PhysicsConfigSO.GravityRate;
         gravityCoroutine = null;
     }
 

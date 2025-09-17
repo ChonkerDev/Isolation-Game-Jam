@@ -3,6 +3,7 @@
         Air,
         Ground,
         Dash,
-        Dead
+        Dead,
+        WallSlide
     }
 }

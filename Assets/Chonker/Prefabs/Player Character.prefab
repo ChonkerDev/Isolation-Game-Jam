@@ -53,7 +53,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1607210085988122848}
-  - component: {fileID: 1485519117752594021}
   - component: {fileID: 2426743076922943853}
   - component: {fileID: 7872168042462595445}
   m_Layer: 7
@@ -78,35 +77,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7330843755178028847}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1485519117752594021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 921784700567882673}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f95ae2643864fae99a4b80f7a6799cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxMovementSpeed: 10
-  GroundAcceleration: 350
-  GroundDeceleration: 350
-  GravityRate: 20
-  AirInputAcceleration: 200
-  JumpPower: 10
-  HighJumpGravityRate: 15
-  CoyoteTime: 0.1
-  JumpInputBufferTimeInSeconds: 0.1
-  DashAccelerationTime: 0.1
-  DashConstantSpeedTime: 0.5
-  DashDecelerationTime: 0.1
-  DashTopSpeed: 5
-  DirectionInputBufferInSeconds: 0.05
-  AllowOmniDirectionalDash: 0
-  CeilingPassthroughMargin: 0.1
-  slipperySurfaceCoefficient: 2
 --- !u!114 &2426743076922943853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,8 +93,9 @@ MonoBehaviour:
   omniDrirectionDashUnlocked: 0
   NumDashesAvailable: 0
   DebugInifiniteDashes: 0
-  CurrentSurfaceAccelerationCoefficient: 0
-  CurrentMoveablePlatformPositionDiff: {x: 0, y: 0}
+  CurrentSurfaceType: 0
+  wallSlideAbilityUnlocked: 0
+  wallGripAbilityUnlocked: 0
 --- !u!114 &7872168042462595445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,7 +138,7 @@ Transform:
   m_GameObject: {fileID: 1007631168745840315}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.418, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -345,6 +316,7 @@ Transform:
   - {fileID: 3197389274777847549}
   - {fileID: 2104824341127367610}
   - {fileID: 3069794680086371384}
+  - {fileID: 4943312731221388534}
   m_Father: {fileID: 7330843755178028847}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &760683023249991060
@@ -456,6 +428,50 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.85, y: 0.86}
   m_EdgeRadius: 0
+--- !u!1 &3824940615467663733
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4943312731221388534}
+  - component: {fileID: 7800970333298411643}
+  m_Layer: 0
+  m_Name: Moveable PlatformCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4943312731221388534
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3824940615467663733}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5742639599248979022}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7800970333298411643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3824940615467663733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d28a1cdb2c290e4dae7bd6c49cbdca9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4047896977512683131
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,13 +526,14 @@ MonoBehaviour:
   InputMovementWrapper: {fileID: 3120598619610840914}
   PlatformerPlayerCamera: {fileID: 7821553933006651606}
   PlatformerCharacterController: {fileID: 760683023249991060}
-  PlatformerPlayerPhysicsConfig: {fileID: 1485519117752594021}
   PlatformerPlayerState: {fileID: 2426743076922943853}
   PlatformerPlayerForceFieldDetector: {fileID: 3978537597150283144}
   platformerPlayerAnimationManager: {fileID: 4192751119666487108}
   PlatformerPlayerAnimationConfig: {fileID: 7872168042462595445}
   PlatformerSurfaceCheck: {fileID: 8382213552327552876}
   PlatformerPlayerDeathBoxDetector: {fileID: 5842036199576588963}
+  PlatformerPlayerMoveablePlatformCheck: {fileID: 7800970333298411643}
+  PhysicsConfigSO: {fileID: 11400000, guid: 11c9678ea17689448b3cc7776f6f4b12, type: 2}
 --- !u!61 &5701460806950717758
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -688,6 +705,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _camera: {fileID: 4705551967658226042}
   playerFollowCamera: {fileID: 7936499689988338662}
+--- !u!1 &5113522333908061964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3444843827320607143}
+  - component: {fileID: 7721596086358694268}
+  m_Layer: 0
+  m_Name: Wall Slide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3444843827320607143
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5113522333908061964}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1540042198129302869}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7721596086358694268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5113522333908061964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba61dff799e3aba4192ff402983b3241, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5139939173717599564
 GameObject:
   m_ObjectHideFlags: 0
@@ -912,7 +973,7 @@ Transform:
   m_GameObject: {fileID: 7008198771313790721}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.3613, y: 0.4063697, z: -5.445715}
+  m_LocalPosition: {x: 0, y: 0, z: -8.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1254,6 +1315,7 @@ Transform:
   - {fileID: 5226691696767500045}
   - {fileID: 7315413925322718061}
   - {fileID: 8708929910242727893}
+  - {fileID: 3444843827320607143}
   m_Father: {fileID: 5742639599248979022}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8641151326395970413

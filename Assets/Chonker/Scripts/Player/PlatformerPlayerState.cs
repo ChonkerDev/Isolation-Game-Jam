@@ -1,10 +1,13 @@
 ﻿using System;
+using Chonker.Scripts.Player.Collider_Checks;
 using UnityEngine;
 
 namespace Chonker.Scripts.Player {
     public class PlatformerPlayerState : MonoBehaviour {
 
-        private PlatformerPlayerPhysicsConfig PlatformerPlayerPhysicsConfig;
+        private PlatformerPlayerPhysicsConfigSO PlatformerPlayerPhysicsConfig => PlatformerPlayerComponentContainer.PhysicsConfigSO;
+        private PlatformerPlayerComponentContainer PlatformerPlayerComponentContainer;
+        private PlatformerPlayerMoveablePlatformCheck PlatformerPlayerMoveablePlatformCheck  => PlatformerPlayerComponentContainer.PlatformerPlayerMoveablePlatformCheck;
         public bool DoubleJumpUnlocked;
         public int MaxNumberOfJumps => DoubleJumpUnlocked ? 2 : 1;
         public int MaxNumberOfDashes => 1;
@@ -14,11 +17,27 @@ namespace Chonker.Scripts.Player {
 
         public bool DebugInifiniteDashes;
 
-        public float CurrentSurfaceAccelerationCoefficient;
-        public Vector2 CurrentMoveablePlatformPositionDiff;
+        public SurfaceType CurrentSurfaceType;
+
+        [SerializeField] private bool wallSlideAbilityUnlocked;
+        [SerializeField] private bool wallGripAbilityUnlocked;
+        public float CurrentSurfaceAccelerationCoefficient {
+            get {
+                switch (CurrentSurfaceType) {
+                    case SurfaceType.None:
+                        return 1;
+                    case SurfaceType.Ice:
+                        return PlatformerPlayerPhysicsConfig.SlipperySurfaceCoefficient;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        public Vector2 CurrentMoveablePlatformPositionDiff => PlatformerPlayerMoveablePlatformCheck.CurrentMovablePlatformPositionDiff;
 
         private void Awake() {
-            PlatformerPlayerPhysicsConfig = GetComponent<PlatformerPlayerPhysicsConfig>();
+            PlatformerPlayerComponentContainer = GetComponentInParent<PlatformerPlayerComponentContainer>();
         }
 
         private void Start() {
@@ -51,5 +70,13 @@ namespace Chonker.Scripts.Player {
         public bool AllowedToOmniDirectionalDash() {
             return omniDrirectionDashUnlocked && PlatformerPlayerPhysicsConfig.AllowOmniDirectionalDash;
         }
+
+        public bool WallSlideAbilityUnlocked() {
+            return wallSlideAbilityUnlocked && PlatformerPlayerPhysicsConfig.AllowWallSlide;
+        }
+
+        public bool WallGripAbilityUnlocked() {
+            return wallGripAbilityUnlocked && PlatformerPlayerPhysicsConfig.AllowWallGripAbility;
+        } 
     }
 }

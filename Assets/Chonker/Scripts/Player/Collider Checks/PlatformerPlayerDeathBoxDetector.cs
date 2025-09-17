@@ -16,7 +16,6 @@ public class PlatformerPlayerDeathBoxDetector : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.layer != KillBoxLayerIndex) return;
-        _collider2D.enabled = false;
         platformerPlayerComponentContainer.PlatformerCharacterController.KillPlayer();
     }
     

@@ -50,6 +50,10 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
             Mathf.MoveTowardsAngle(currentLookRotation, targetRotation, rotationSpeed * Time.deltaTime);
         _spriteAnchor.localEulerAngles = new Vector3(0, 0, lookRotation);
     }
+    
+    public void SetSpriteAnchorScale(float xScale, float yScale) {
+        _spriteAnchor.localScale = new Vector3(xScale, yScale, 1f);
+    }
 
     private void CrossFadeAnimator(string stateName) {
         if (LastAnimatorState == stateName) {
@@ -88,6 +92,11 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
 
     public void CrossFadeToAir(AirStates airState) {
         string stateName = "Base Layer.Air." + airState;
+        CrossFadeAnimator(stateName);
+    }
+
+    public void CrossFadeToWallSlide() {
+        string stateName = "Base Layer.Wall Slide.Wall Slide";
         CrossFadeAnimator(stateName);
     }
 

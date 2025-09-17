@@ -58,6 +58,10 @@ namespace Chonker.Scripts.Player.States {
             if (currentVelocity.x < 0) {
                 setLookDirection(false);
             }
+
+            if (CheckForWallSlide()) {
+                return;
+            }
         }
 
         public override void OnEnter(PlatformerPlayerMovementStateId prevState) {
