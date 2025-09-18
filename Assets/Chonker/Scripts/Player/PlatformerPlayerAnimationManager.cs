@@ -112,12 +112,6 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
     public void CrossFadeDash(DashState DashState) {
         DashState dashStateReplaced = DashState;
         switch (DashState) {
-            case DashState.Start:
-                if (platformerPlayerAnimationConfig.SkipDashStartAnimation) {
-                    dashStateReplaced = DashState.Loop;
-                }
-
-                break;
             case DashState.End:
                 if (platformerPlayerAnimationConfig.SkipDashStopAnimation) {
                     return;
@@ -156,7 +150,8 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
 
     public enum DashState {
         Start,
-        Loop,
+        HorizontalLoop,
+        VerticalLoop,
         End
     }
 }

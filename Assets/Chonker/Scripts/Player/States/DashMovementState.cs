@@ -69,18 +69,8 @@ namespace Chonker.Scripts.Player.States {
                 direction = Vector2.right * (int)PlatformerPlayerAnimationManager.FacingDirection;
             }
 
-            float lookAngle;
-            if (PlatformerPlayerAnimationManager.FacingDirection == FacingDirection.Right) {
-                lookAngle = -Vector2.SignedAngle(
-                    direction,
-                    Vector2.right);
-            }
-            else {
-                lookAngle = -Vector2.SignedAngle(
-                    direction,
-                    Vector2.left);
-            }
             direction.Normalize();
+            float lookAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
             PlatformerPlayerAnimationManager.setTargetRotation(lookAngle);
             StartCoroutine(ProcessAcceleration());
         }
@@ -96,7 +86,13 @@ namespace Chonker.Scripts.Player.States {
             }
 
             currentVelocity = direction * dashSpeed;
-            PlatformerPlayerAnimationManager.CrossFadeDash(PlatformerPlayerAnimationManager.DashState.Loop);
+            float xAt45Degrees = .7f;
+            if (Mathf.Abs(currentVelocity.normalized.x) < xAt45Degrees) {
+                PlatformerPlayerAnimationManager.CrossFadeDash(PlatformerPlayerAnimationManager.DashState.HorizontalLoop);
+            }
+            else {
+                PlatformerPlayerAnimationManager.CrossFadeDash(PlatformerPlayerAnimationManager.DashState.VerticalLoop);
+            }
             yield return new WaitForSeconds(PlatformerPlayerPhysicsConfig.DashConstantSpeedTime);
             float decelerationTime = PlatformerPlayerPhysicsConfig.DashDecelerationTime;
             float decelerationTimer = 0;
