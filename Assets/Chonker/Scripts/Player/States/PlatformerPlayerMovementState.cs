@@ -67,9 +67,12 @@ namespace Chonker.Scripts.Player.States {
             return false;
         }
         
-        protected RaycastHit2D ProbeForWall(float additionalDistance = 0) {
+        protected RaycastHit2D ProbeForWall(float additionalDistance = 0, bool backwards = false) {
             Vector2 direction = PlatformerPlayerAnimationManager.FacingRight ? Vector2.right : Vector2.left;
-            float distance = characterController.RbVelocity.x * Time.fixedDeltaTime + characterController.BoxSize.x + additionalDistance;
+            if (backwards) {
+                direction *= -1;
+            }
+            float distance = Mathf.Abs(characterController.RbVelocity.x) * Time.fixedDeltaTime + characterController.BoxSize.x + additionalDistance;
             Debug.DrawRay(characterController.transform.position, direction * distance, Color.red);
             return Physics2D.Raycast(characterController.transform.position,
                 direction, distance,ObstacleLayerMask
