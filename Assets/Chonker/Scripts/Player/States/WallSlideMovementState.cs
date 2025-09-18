@@ -17,15 +17,6 @@ public class WallSlideMovementState : PlatformerPlayerMovementState {
         characterController.TeleportX(targetX);
         PlatformerPlayerAnimationManager.FacingRight = !PlatformerPlayerAnimationManager.FacingRight;
         PlatformerPlayerAnimationManager.CrossFadeToWallSlide();
-        //TODO; remove below once update sprites
-        float xScale;
-        if (PlatformerPlayerAnimationManager.FacingRight) {
-            xScale = -1;
-        }
-        else {
-            xScale = 1;
-        }
-        PlatformerPlayerAnimationManager.SetSpriteAnchorScale(xScale, 1);
     }
 
     public override void OnExit(PlatformerPlayerMovementStateId newState) {
@@ -51,6 +42,12 @@ public class WallSlideMovementState : PlatformerPlayerMovementState {
         currentVelocity.x = 0;
         if (characterController.probeGround(-currentVelocity.y * Time.fixedDeltaTime, .95f).transform) {
             parentManager.UpdateState(PlatformerPlayerMovementStateId.Ground);
+            return;
+        }
+        RaycastHit2D hit = ProbeForWall(1, true);
+
+        if (!hit.transform) {
+            parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
             return;
         }
 
