@@ -56,6 +56,8 @@ public class PlatformerCharacterController : MonoBehaviour {
         CurrentGroundHit = probeGround(distanceCheck);
         platformerPlayerMovementStateManager.GetCurrentState().OnFixedUpdate(ref currentVelocity);
         currentVelocity += platformerPlayerComponentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce;
+        currentVelocity = Vector2.ClampMagnitude(currentVelocity,
+            platformerPlayerComponentContainer.PhysicsConfigSO.GlobalTerminalVelocity);
         rigidbody2D.linearVelocity = currentVelocity;
 
         //rigidbody2D.MovePosition(rigidbody2D.position + );
@@ -65,8 +67,12 @@ public class PlatformerCharacterController : MonoBehaviour {
     public RaycastHit2D probeGround(float distance, float probeBoxScale = 1) {
         Vector2 position = transform.position;
         position += _boxCollider2D.offset;
+        Vector2 currentPlatformDiff = platformerPlayerComponentContainer.PlatformerPlayerState.CurrentMoveablePlatformPositionDiff;
+        Vector2 direction = Vector2.down;
+        
+        float finalDistance = distance + Mathf.Abs(currentPlatformDiff.y * 2);
         Debug.DrawRay(position, Vector3.down * distance, Color.brown);
-        return Physics2D.BoxCast(position, _boxCollider2D.size * probeBoxScale, 0, Vector2.down, distance,
+        return Physics2D.BoxCast(position, _boxCollider2D.size * probeBoxScale, 0, direction, finalDistance,
             ObstacleMask);
     }
 
@@ -127,7 +133,13 @@ public class PlatformerCharacterController : MonoBehaviour {
     public void TeleportX(float x) {
         Vector2 position = rigidbody2D.position;
         position.x = x;
-        rigidbody2D.position = position;
+        rigidbody2D.MovePosition(position);
+    }
+
+    public void TeleportY(float y) {
+        Vector2 position = rigidbody2D.position;
+        position.y = y;
+        rigidbody2D.MovePosition(position);
     }
 
 

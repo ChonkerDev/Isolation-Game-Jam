@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ForceField : MonoBehaviour {
     private LayerMask playerLayerMask;
-    [SerializeField, Range(0, 4)] private float forceMagnitude;
+    [SerializeField, Range(0, 20)] private float forceMagnitude;
     [SerializeField] private float TimeOnInSeconds;
     [SerializeField, Tooltip("If you only want On, set this to 0")] private float TimeOffInSeconds = 0;
     private Collider2D playerDetectionCollider;

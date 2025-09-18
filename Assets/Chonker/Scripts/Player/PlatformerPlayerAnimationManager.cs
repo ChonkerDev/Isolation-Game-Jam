@@ -17,13 +17,22 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
     private PlatformerPlayerAnimationConfig platformerPlayerAnimationConfig =>
         componentContainer.PlatformerPlayerAnimationConfig;
 
-    private bool _facingRight;
+    private FacingDirection _facingDirection;
 
-    public bool FacingRight {
-        get => _facingRight;
+    public FacingDirection FacingDirection {
+        get => _facingDirection;
         set {
-            _facingRight = value;
-            _spriteRenderer.flipX = !_facingRight;
+            _facingDirection = value;
+            _spriteRenderer.flipX = _facingDirection == FacingDirection.Left;
+        }
+    }
+
+    public void FlipFacingDirection() {
+        if (FacingDirection == FacingDirection.Right) {
+            FacingDirection =  FacingDirection.Left;
+        } else if (FacingDirection == FacingDirection.Left) {
+            FacingDirection =  FacingDirection.Right;
+
         }
     }
 
@@ -32,7 +41,7 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
     }
 
     private void Start() {
-        FacingRight = _initialFacingRight;
+        FacingDirection = FacingDirection.Right;
     }
 
     private void Update() {

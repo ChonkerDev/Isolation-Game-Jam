@@ -1,24 +1,29 @@
+using Chonker.Scripts.Player;
 using Chonker.Scripts.Player.States;
 using UnityEngine;
 
 public class WallSlideMovementState : PlatformerPlayerMovementState {
     public override PlatformerPlayerMovementStateId StateId => PlatformerPlayerMovementStateId.WallSlide;
-
+    private int numTimesTouchedSameSide;
+    private FacingDirection TouchedRightSideLastTime = FacingDirection.None;
     public override void OnEnter(PlatformerPlayerMovementStateId prevState) {
+        TouchedRightSideLastTime = PlatformerPlayerAnimationManager.FacingDirection;
         RaycastHit2D hit = ProbeForWall(1);
         if (!hit.transform) {
             Debug.LogError("If entering the wall slide state, there should Always be a wall in the facing direction");
         }
-
-        float offset = PlatformerPlayerAnimationManager.FacingRight
-            ? -characterController.BoxSize.x
-            : characterController.BoxSize.x;
+        float offset = -characterController.BoxSize.x * (int) PlatformerPlayerAnimationManager.FacingDirection;
         float targetX = hit.point.x + offset / 2;
         characterController.TeleportX(targetX);
-        PlatformerPlayerAnimationManager.FacingRight = !PlatformerPlayerAnimationManager.FacingRight;
+        PlatformerPlayerAnimationManager.FlipFacingDirection();
         PlatformerPlayerAnimationManager.CrossFadeToWallSlide();
+        
+        PlatformerPlayerState.ResetNumDashes();
     }
 
+    public void ClearLastTouchedSide() {
+        TouchedRightSideLastTime = FacingDirection.None;
+    }
     public override void OnExit(PlatformerPlayerMovementStateId newState) {
         inputMovementWrapper.jumpInputManager.ClearJumpInput();
         PlatformerPlayerAnimationManager.SetSpriteAnchorScale(1, 1);
@@ -32,8 +37,8 @@ public class WallSlideMovementState : PlatformerPlayerMovementState {
     public override void OnFixedUpdate(ref Vector2 currentVelocity) {
         float gravityRate = -PlatformerPlayerPhysicsConfig.WallSlideGravityRate;
         float horizontalInput = inputMovementWrapper.ReadHorizontalMovementInput();
-        bool wallGripRequested = horizontalInput < 0 && PlatformerPlayerAnimationManager.FacingRight ||
-                                 horizontalInput < 0 && !PlatformerPlayerAnimationManager.FacingRight;
+        bool wallGripRequested = horizontalInput < 0 && PlatformerPlayerAnimationManager.FacingDirection == FacingDirection.Right ||
+                                 horizontalInput > 0 && PlatformerPlayerAnimationManager.FacingDirection ==  FacingDirection.Left;
         if (wallGripRequested && PlatformerPlayerState.WallGripAbilityUnlocked()) {
             gravityRate *= PlatformerPlayerPhysicsConfig.WallGripGravityMultiplier;
         }
@@ -54,7 +59,7 @@ public class WallSlideMovementState : PlatformerPlayerMovementState {
         if (inputMovementWrapper.jumpInputManager.ConsumeJumpInput()) {
             currentVelocity.y = PlatformerPlayerPhysicsConfig.WallSlideVerticalJumpPower;
             currentVelocity.x = PlatformerPlayerPhysicsConfig.WallSlideHorizontalJumpPower;
-            currentVelocity.x *= PlatformerPlayerAnimationManager.FacingRight ? 1 : -1;
+            currentVelocity.x *= (int) PlatformerPlayerAnimationManager.FacingDirection ;
             parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
         }
     }

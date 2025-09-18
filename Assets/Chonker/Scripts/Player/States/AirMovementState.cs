@@ -11,8 +11,10 @@ namespace Chonker.Scripts.Player.States {
         }
 
         public override void OnUpdate() {
-            inputMovementWrapper.jumpInputManager.CheckForJumpInput();
-            if (PlatformerPlayerState.AllowedToDash() && inputMovementWrapper.WasDashPressedThisFrame()) {
+            if (!componentContainer.PlatformerPlayerForceFieldDetector.IsForceFieldPresent()) {
+                inputMovementWrapper.jumpInputManager.CheckForJumpInput();
+            }
+            if (AllowedToDash() && inputMovementWrapper.WasDashPressedThisFrame()) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Dash);
             }
             if (characterController.RbVelocity.y < midAnimationVelThreshold) {
@@ -30,7 +32,7 @@ namespace Chonker.Scripts.Player.States {
             if (applyCoyoteTimeJump) {
                 ApplyJump(ref currentVelocity);
                 applyCoyoteTimeJump = false;
-            } else if (PlatformerPlayerState.NumJumpsAvailable > 0 &&
+            } else if (AllowedToJump() && PlatformerPlayerState.NumJumpsAvailable > 0 &&
                        inputMovementWrapper.jumpInputManager.ConsumeJumpInput()) {
                 ApplyJump(ref currentVelocity);
                 PlatformerPlayerState.DecrementNumJumps();
@@ -48,9 +50,7 @@ namespace Chonker.Scripts.Player.States {
             if (characterController.Grounded) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Ground);
             }
-
-            currentVelocity += componentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce;
-
+            
             if (currentVelocity.x > 0) {
                 setLookDirection(true);
             }
@@ -80,7 +80,7 @@ namespace Chonker.Scripts.Player.States {
         private IEnumerator CheckForCoyoteTimeJump() {
             float coyoteTimeTimer = PlatformerPlayerPhysicsConfig.CoyoteTime;
             while (coyoteTimeTimer > 0) {
-                if (inputMovementWrapper.jumpInputManager.ConsumeJumpInput()) {
+                if (AllowedToJump() && inputMovementWrapper.jumpInputManager.ConsumeJumpInput()) {
                     applyCoyoteTimeJump = true;
                     break;
                 }

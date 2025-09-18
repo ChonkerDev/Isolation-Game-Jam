@@ -19,8 +19,9 @@ namespace Chonker.Scripts.Player.States {
         }
 
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
-            if (inputMovementWrapper.jumpInputManager.ConsumeJumpInput() &&
-                PlatformerPlayerState.NumJumpsAvailable > 0) {
+            if (AllowedToJump() &&
+                PlatformerPlayerState.NumJumpsAvailable > 0 &&
+                inputMovementWrapper.jumpInputManager.ConsumeJumpInput()) {
                 ApplyJump(ref currentVelocity);
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
                 return;
@@ -53,11 +54,16 @@ namespace Chonker.Scripts.Player.States {
                 setLookDirection(false);
             }
 
-            float requestedVelocityBeforeForceField = desiredVelocity;
             currentVelocity.x = desiredVelocity;
-            currentVelocity +=
-                componentContainer.PlatformerPlayerState.CurrentMoveablePlatformPositionDiff /
+            float groundY = characterController.CurrentGroundHit.point.y;
+            float currentY = characterController.MiddleOfBox.y;
+            float yDelta = groundY - currentY;
+            float yVelocity = yDelta / Time.fixedDeltaTime;
+            currentVelocity.y = yVelocity;
+            currentVelocity.x +=
+                componentContainer.PlatformerPlayerState.CurrentMoveablePlatformPositionDiff.x /
                 Time.fixedDeltaTime;
+            float requestedVelocityBeforeForceField = desiredVelocity;
             bool isStationary = requestedVelocityBeforeForceField == 0 || currentMovementInput == 0 ||
                                 characterController.RbVelocity.x == 0;
             //Debug.Log($"{requestedVelocityBeforeForceField.x == 0} | {currentMovementInput == 0} | {characterController.RbVelocity.x == 0}");

@@ -12,6 +12,10 @@ public class PlatformerPlayerForceFieldDetector : MonoBehaviour {
         forceFieldLayer = LayerMask.NameToLayer("Force Field");
     }
 
+    public bool IsForceFieldPresent() {
+        return CurrentForceFieldForce.sqrMagnitude > .1f;
+    }
+
     private void OnTriggerEnter2D(Collider2D other) {
         if (forceFieldLayer == other.gameObject.layer) {
             CurrentForceFieldForce += other.gameObject.GetComponent<ForceField>().Force;

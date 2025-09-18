@@ -68,14 +68,14 @@ namespace Chonker.Scripts.Player.States {
             }
 
             if (direction.magnitude < .1f) {
-                direction = PlatformerPlayerAnimationManager.FacingRight ? Vector2.right : Vector2.left;
+                direction = Vector2.right * (int)PlatformerPlayerAnimationManager.FacingDirection;
             }
             else if (!PlatformerPlayerState.AllowedToOmniDirectionalDash()) {
-                direction = PlatformerPlayerAnimationManager.FacingRight ? Vector2.right : Vector2.left;
+                direction = Vector2.right * (int)PlatformerPlayerAnimationManager.FacingDirection;
             }
 
             float lookAngle;
-            if (PlatformerPlayerAnimationManager.FacingRight) {
+            if (PlatformerPlayerAnimationManager.FacingDirection == FacingDirection.Right) {
                 lookAngle = -Vector2.SignedAngle(
                     direction,
                     Vector2.right);

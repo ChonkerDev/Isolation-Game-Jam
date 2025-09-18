@@ -47,13 +47,14 @@ namespace Chonker.Scripts.Player.States {
         }
 
         protected void setLookDirection(bool facingRight) {
-            PlatformerPlayerAnimationManager.FacingRight = facingRight;
+            PlatformerPlayerAnimationManager.FacingDirection = facingRight ? FacingDirection.Right : FacingDirection.Left;
         }
 
         protected bool CheckForWallSlide() {
             if (!PlatformerPlayerState.WallSlideAbilityUnlocked()) return false;
+            if(!componentContainer.PlatformerPlayerForceFieldDetector.IsForceFieldPresent()) return false;
             bool doesVelocityMatchFacingDirection =
-                PlatformerPlayerAnimationManager.FacingRight == characterController.RbVelocity.x > 0;
+                (Mathf.Sign((int) PlatformerPlayerAnimationManager.FacingDirection) == Mathf.Sign(characterController.RbVelocity.x));
             bool isDistanceFromGroundValid =
                 !characterController.probeGround(PlatformerPlayerPhysicsConfig.MaxDistanceFromGroundToPreventWallSlide)
                     .transform;
@@ -68,7 +69,10 @@ namespace Chonker.Scripts.Player.States {
         }
         
         protected RaycastHit2D ProbeForWall(float additionalDistance = 0, bool backwards = false) {
-            Vector2 direction = PlatformerPlayerAnimationManager.FacingRight ? Vector2.right : Vector2.left;
+            Vector2 direction = Vector2.right;
+            if (PlatformerPlayerAnimationManager.FacingDirection == FacingDirection.Left) {
+                direction = Vector2.left;
+            }
             if (backwards) {
                 direction *= -1;
             }
@@ -77,6 +81,14 @@ namespace Chonker.Scripts.Player.States {
             return Physics2D.Raycast(characterController.transform.position,
                 direction, distance,ObstacleLayerMask
             );
+        }
+
+        protected bool AllowedToJump() {
+            return !componentContainer.PlatformerPlayerForceFieldDetector.IsForceFieldPresent();
+        }
+        
+        protected bool AllowedToDash() {
+            return PlatformerPlayerState.AllowedToDash();
         }
         
 

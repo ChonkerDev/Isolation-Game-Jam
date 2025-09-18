@@ -33,7 +33,8 @@ public class PlatformerPlayerPhysicsConfigSO : ScriptableObject {
     [Range(0, 1)] public float WallGripGravityMultiplier = .5f;
 
 
-    [Header("Other")] public float CeilingPassthroughMargin = .1f;
-
+    [Header("Other")] 
+    public float CeilingPassthroughMargin = .1f;
     public float SlipperySurfaceCoefficient = 2;
+    public float GlobalTerminalVelocity = 20;
 }

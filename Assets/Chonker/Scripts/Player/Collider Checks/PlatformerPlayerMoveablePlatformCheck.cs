@@ -22,7 +22,6 @@ public class PlatformerPlayerMoveablePlatformCheck : MonoBehaviour {
             if(!LeftMoveablePlatform && RightMoveablePlatform) return RightMoveablePlatform.CurrentPositionDifference;
             
             return (LeftMoveablePlatform.CurrentPositionDifference + RightMoveablePlatform.CurrentPositionDifference) / 2;
-
         }
     }
     float checkWidth => platformerCharacterController.BoxSize.x / 2;
@@ -30,7 +29,7 @@ public class PlatformerPlayerMoveablePlatformCheck : MonoBehaviour {
     float leftCenterX => platformerCharacterController.MiddleOfBox.x - checkWidth / 2;
     float rightCenterX => platformerCharacterController.MiddleOfBox.x + checkWidth / 2;
     float centerY => platformerCharacterController.BottomOfBoxY;
-    private Vector2 checkSize => new Vector2(checkWidth, checkHeight);
+    private Vector2 checkSize => new Vector2(checkWidth, checkHeight + CurrentMovablePlatformPositionDiff.y) ;
     private Vector2 leftCheckCenter => new Vector2(leftCenterX, centerY);
     private Vector2 rightCheckCenter => new Vector2(rightCenterX, centerY);
 
