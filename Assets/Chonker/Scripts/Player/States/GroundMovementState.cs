@@ -26,6 +26,11 @@ namespace Chonker.Scripts.Player.States {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
                 return;
             }
+            
+            if (!characterController.Grounded || componentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce.y > 0) { //TODO: this is probably buggy
+                parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
+                return;
+            }
 
             float currentMovementInput = componentContainer.InputMovementWrapper.ReadHorizontalMovementInput();
             float targetSpeed = currentMovementInput * PlatformerPlayerPhysicsConfig.MaxMovementSpeed;
@@ -42,9 +47,7 @@ namespace Chonker.Scripts.Player.States {
             desiredVelocity += movement * Time.fixedDeltaTime;
             desiredVelocity = Mathf.Clamp(desiredVelocity, -PlatformerPlayerPhysicsConfig.MaxMovementSpeed,
                 PlatformerPlayerPhysicsConfig.MaxMovementSpeed);
-            if (!characterController.Grounded) {
-                parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
-            }
+
 
             if (targetSpeed > 0) {
                 setLookDirection(true);

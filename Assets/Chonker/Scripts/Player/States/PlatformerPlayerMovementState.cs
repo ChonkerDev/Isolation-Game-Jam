@@ -52,7 +52,7 @@ namespace Chonker.Scripts.Player.States {
 
         protected bool CheckForWallSlide() {
             if (!PlatformerPlayerState.WallSlideAbilityUnlocked()) return false;
-            if(!componentContainer.PlatformerPlayerForceFieldDetector.IsForceFieldPresent()) return false;
+            if(componentContainer.PlatformerPlayerForceFieldDetector.IsForceFieldPresent()) return false;
             bool doesVelocityMatchFacingDirection =
                 (Mathf.Sign((int) PlatformerPlayerAnimationManager.FacingDirection) == Mathf.Sign(characterController.RbVelocity.x));
             bool isDistanceFromGroundValid =
@@ -78,9 +78,10 @@ namespace Chonker.Scripts.Player.States {
             }
             float distance = Mathf.Abs(characterController.RbVelocity.x) * Time.fixedDeltaTime + characterController.BoxSize.x + additionalDistance;
             Debug.DrawRay(characterController.transform.position, direction * distance, Color.red);
-            return Physics2D.Raycast(characterController.transform.position,
+            RaycastHit2D hit = Physics2D.Raycast(characterController.transform.position,
                 direction, distance,ObstacleLayerMask
             );
+            return hit;
         }
 
         protected bool AllowedToJump() {
