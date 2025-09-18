@@ -58,11 +58,6 @@ namespace Chonker.Scripts.Player.States {
                 }
                 direction = new Vector2(inputMovementWrapper.ReadHorizontalMovementInput(),
                     inputMovementWrapper.ReadVerticalMovementInput());
-                if (direction.magnitude > .1f) {
-                    direction = direction.normalized;
-                    setLookDirection(direction.x > 0);
-                    break;
-                }
 
                 yield return null;
             }
@@ -85,6 +80,7 @@ namespace Chonker.Scripts.Player.States {
                     direction,
                     Vector2.left);
             }
+            direction.Normalize();
             PlatformerPlayerAnimationManager.setTargetRotation(lookAngle);
             StartCoroutine(ProcessAcceleration());
         }

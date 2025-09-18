@@ -54,7 +54,6 @@ namespace Chonker.Scripts.Player.States {
             bool isDistanceFromGroundValid =
                 !characterController.probeGround(PlatformerPlayerPhysicsConfig.MaxDistanceFromGroundToPreventWallSlide)
                     .transform;
-            Debug.Log(isDistanceFromGroundValid);
             if (!doesInputMatchFacingDirection || !isDistanceFromGroundValid) return false;
             RaycastHit2D hit = ProbeForWall();
             if (hit.transform) {
@@ -85,7 +84,7 @@ namespace Chonker.Scripts.Player.States {
         }
 
         protected bool AllowedToJump() {
-            return !componentContainer.PlatformerPlayerForceFieldDetector.IsForceFieldPresent();
+            return !componentContainer.PlatformerPlayerForceFieldDetector.IsForceFieldPresent() && PlatformerPlayerState.NumJumpsAvailable > 0;
         }
 
         protected bool AllowedToDash() {

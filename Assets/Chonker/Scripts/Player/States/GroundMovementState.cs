@@ -31,7 +31,6 @@ namespace Chonker.Scripts.Player.States {
 
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
             if (AllowedToJump() &&
-                PlatformerPlayerState.NumJumpsAvailable > 0 &&
                 inputMovementWrapper.jumpInputManager.ConsumeJumpInput()) {
                 ApplyJump(ref currentVelocity, componentContainer.PlatformerPlayerState.CurrentMoveablePlatformPositionDiff / Time.fixedDeltaTime);
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
@@ -40,7 +39,7 @@ namespace Chonker.Scripts.Player.States {
 
             if (!characterController.Grounded ||
                 componentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce.y > 0) {
-                //TODO: this is probably buggy
+                currentVelocity.y = 0;
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
                 return;
             }

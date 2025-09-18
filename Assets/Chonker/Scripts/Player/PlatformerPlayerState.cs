@@ -64,7 +64,7 @@ namespace Chonker.Scripts.Player {
 
         public void DecrementNumberOfDashes() {
             NumDashesAvailable--;
-            NumDashesAvailable = Mathf.Max(0, NumJumpsAvailable);
+            NumDashesAvailable = Mathf.Max(0, NumDashesAvailable);
         }
 
         public bool AllowedToDash() {
