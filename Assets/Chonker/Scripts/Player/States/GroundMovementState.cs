@@ -5,6 +5,9 @@ namespace Chonker.Scripts.Player.States {
     public class GroundMovementState : PlatformerPlayerMovementState {
         private PlayerGroundStateAnimationController groundStateAnimationController;
         private float desiredVelocity;
+        private float footStepFrequencyInSeconds;
+        private float footStepTimer;
+        private bool isStationary;
 
         public override void Initialize() {
             base.Initialize();
@@ -16,18 +19,28 @@ namespace Chonker.Scripts.Player.States {
             if (PlatformerPlayerState.AllowedToDash() && inputMovementWrapper.WasDashPressedThisFrame()) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Dash);
             }
+
+            if (!isStationary) {
+                footStepTimer += Time.deltaTime;
+            }
+            if (footStepTimer > footStepFrequencyInSeconds) {
+                footStepTimer = 0;
+                PlayerAudioManager.PlayOneShotFootStep();
+            }
         }
 
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
             if (AllowedToJump() &&
                 PlatformerPlayerState.NumJumpsAvailable > 0 &&
                 inputMovementWrapper.jumpInputManager.ConsumeJumpInput()) {
-                ApplyJump(ref currentVelocity);
+                ApplyJump(ref currentVelocity, componentContainer.PlatformerPlayerState.CurrentMoveablePlatformPositionDiff / Time.fixedDeltaTime);
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
                 return;
             }
-            
-            if (!characterController.Grounded || componentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce.y > 0) { //TODO: this is probably buggy
+
+            if (!characterController.Grounded ||
+                componentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce.y > 0) {
+                //TODO: this is probably buggy
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
                 return;
             }
@@ -67,7 +80,7 @@ namespace Chonker.Scripts.Player.States {
                 componentContainer.PlatformerPlayerState.CurrentMoveablePlatformPositionDiff.x /
                 Time.fixedDeltaTime;
             float requestedVelocityBeforeForceField = desiredVelocity;
-            bool isStationary = requestedVelocityBeforeForceField == 0 || currentMovementInput == 0 ||
+            isStationary = requestedVelocityBeforeForceField == 0 || currentMovementInput == 0 ||
                                 characterController.RbVelocity.x == 0;
             //Debug.Log($"{requestedVelocityBeforeForceField.x == 0} | {currentMovementInput == 0} | {characterController.RbVelocity.x == 0}");
             groundStateAnimationController.ProcessAnimations(isStationary);
@@ -79,6 +92,7 @@ namespace Chonker.Scripts.Player.States {
             PlatformerPlayerAnimationManager.setTargetRotation(0);
             groundStateAnimationController.OnGroundStateEnter(prevState);
             desiredVelocity = characterController.RbVelocity.x;
+            footStepTimer = 0;
         }
 
         public override void OnExit(PlatformerPlayerMovementStateId newState) {
