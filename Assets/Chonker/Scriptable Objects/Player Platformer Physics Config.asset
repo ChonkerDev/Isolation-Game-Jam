@@ -12,28 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5b9028fd0ecfb43ac7bcce8f8e4668, type: 3}
   m_Name: Player Platformer Physics Config
   m_EditorClassIdentifier: 
-  MaxMovementSpeed: 5.56
-  GroundAcceleration: 350
-  GroundDeceleration: 530
+  MaxMovementSpeed: 7.24
+  GroundAcceleration: 250.2
+  GroundDeceleration: 748.1
   GravityRate: 41.5
   AirInputAcceleration: 883
   JumpPower: 8.5
   HighJumpGravityRate: 15.6
-  CoyoteTime: 0.09
+  CoyoteTime: 0.11
   JumpInputBufferTimeInSeconds: 0.1
   DashAccelerationTime: 0.008
-  DashConstantSpeedTime: 0.1
+  DashConstantSpeedTime: 0.15
   DashDecelerationTime: 0
   DashTopSpeed: 14
   DirectionInputBufferInSeconds: 0.05
   AllowOmniDirectionalDash: 0
   AllowWallSlide: 1
   WallSlideGravityRate: 107.7
-  MaxDistanceFromGroundToPreventWallSlide: 1.35
-  WallSlideVerticalJumpPower: 10
-  WallSlideHorizontalJumpPower: 10
+  MaxDistanceFromGroundToPreventWallSlide: 2
+  WallSlideVerticalJumpPower: 13.2
+  WallSlideHorizontalJumpPower: 15
   AllowWallGripAbility: 1
   WallGripGravityMultiplier: 0.5
   CeilingPassthroughMargin: 0.1
-  SlipperySurfaceCoefficient: 0.1
-  GlobalTerminalVelocity: 42
+  SlipperySurfaceCoefficient: 0.2
+  GlobalTerminalVelocity: 20
