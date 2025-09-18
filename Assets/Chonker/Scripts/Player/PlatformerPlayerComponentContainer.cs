@@ -18,6 +18,7 @@ namespace Chonker.Scripts.Player {
         public PlatformerPlayerDeathBoxDetector PlatformerPlayerDeathBoxDetector;
         public PlatformerPlayerMoveablePlatformCheck PlatformerPlayerMoveablePlatformCheck;
         public PlatformerPlayerMovementStateManager PlatformerPlayerMovementStateManager;
+        public PlayerAudioManager PlayerAudioManager;
 
         [Header("Config")]
         public PlatformerPlayerPhysicsConfigSO PhysicsConfigSO;

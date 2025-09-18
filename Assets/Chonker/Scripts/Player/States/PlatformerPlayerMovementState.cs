@@ -21,6 +21,8 @@ namespace Chonker.Scripts.Player.States {
         protected PlatformerPlayerAnimationConfig PlatformerPlayerAnimationConfig =>
             componentContainer.PlatformerPlayerAnimationConfig;
 
+        protected PlayerAudioManager PlayerAudioManager => componentContainer.PlayerAudioManager;
+
         protected PlatformerPlayerState PlatformerPlayerState => componentContainer.PlatformerPlayerState;
 
         protected LayerMask ObstacleLayerMask;
@@ -31,30 +33,23 @@ namespace Chonker.Scripts.Player.States {
             ObstacleLayerMask = LayerMask.GetMask("Obstacle");
         }
 
-        protected void ApplyJump(ref Vector2 velocity, bool overrideVerticalVelocity = false,
-            bool overrideHorizontalVelocity = false) {
+        protected void ApplyJump(ref Vector2 velocity, Vector2 additiveVelocity = default) {
             characterController.ApplyHighJumpGravityForDuration();
-            if (overrideVerticalVelocity && velocity.y > 0) {
-                velocity.y = PlatformerPlayerPhysicsConfig.JumpPower;
-            }
-            else {
-                velocity.y += PlatformerPlayerPhysicsConfig.JumpPower;
-            }
-
-            if (overrideHorizontalVelocity) {
-                velocity.x = 0;
-            }
+            velocity.y = PlatformerPlayerPhysicsConfig.JumpPower;
+            velocity += additiveVelocity;
         }
 
         protected void setLookDirection(bool facingRight) {
-            PlatformerPlayerAnimationManager.FacingDirection = facingRight ? FacingDirection.Right : FacingDirection.Left;
+            PlatformerPlayerAnimationManager.FacingDirection =
+                facingRight ? FacingDirection.Right : FacingDirection.Left;
         }
 
         protected bool CheckForWallSlide() {
             if (!PlatformerPlayerState.WallSlideAbilityUnlocked()) return false;
-            if(componentContainer.PlatformerPlayerForceFieldDetector.IsForceFieldPresent()) return false;
+            if (componentContainer.PlatformerPlayerForceFieldDetector.IsForceFieldPresent()) return false;
             bool doesVelocityMatchFacingDirection =
-                (Mathf.Sign((int) PlatformerPlayerAnimationManager.FacingDirection) == Mathf.Sign(characterController.RbVelocity.x));
+                (Mathf.Sign((int)PlatformerPlayerAnimationManager.FacingDirection) ==
+                 Mathf.Sign(characterController.RbVelocity.x));
             bool isDistanceFromGroundValid =
                 !characterController.probeGround(PlatformerPlayerPhysicsConfig.MaxDistanceFromGroundToPreventWallSlide)
                     .transform;
@@ -65,21 +60,25 @@ namespace Chonker.Scripts.Player.States {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.WallSlide);
                 return true;
             }
+
             return false;
         }
-        
+
         protected RaycastHit2D ProbeForWall(float additionalDistance = 0, bool backwards = false) {
             Vector2 direction = Vector2.right;
             if (PlatformerPlayerAnimationManager.FacingDirection == FacingDirection.Left) {
                 direction = Vector2.left;
             }
+
             if (backwards) {
                 direction *= -1;
             }
-            float distance = Mathf.Abs(characterController.RbVelocity.x) * Time.fixedDeltaTime + characterController.BoxSize.x + additionalDistance;
+
+            float distance = Mathf.Abs(characterController.RbVelocity.x) * Time.fixedDeltaTime +
+                             characterController.BoxSize.x + additionalDistance;
             Debug.DrawRay(characterController.transform.position, direction * distance, Color.red);
             RaycastHit2D hit = Physics2D.Raycast(characterController.transform.position,
-                direction, distance,ObstacleLayerMask
+                direction, distance, ObstacleLayerMask
             );
             return hit;
         }
@@ -87,11 +86,11 @@ namespace Chonker.Scripts.Player.States {
         protected bool AllowedToJump() {
             return !componentContainer.PlatformerPlayerForceFieldDetector.IsForceFieldPresent();
         }
-        
+
         protected bool AllowedToDash() {
             return PlatformerPlayerState.AllowedToDash();
         }
-        
+
 
         public abstract void OnUpdate();
         public abstract void OnFixedUpdate(ref Vector2 currentVelocity);
