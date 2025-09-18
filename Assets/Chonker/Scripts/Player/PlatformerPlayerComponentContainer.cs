@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using Chonker.Scripts.Game_Management;
+using Chonker.Scripts.Player.States;
+using UnityEngine;
 
 namespace Chonker.Scripts.Player {
     public class PlatformerPlayerComponentContainer : MonoBehaviour {
@@ -13,7 +17,24 @@ namespace Chonker.Scripts.Player {
         public PlatformerSurfaceCheck PlatformerSurfaceCheck;
         public PlatformerPlayerDeathBoxDetector PlatformerPlayerDeathBoxDetector;
         public PlatformerPlayerMoveablePlatformCheck PlatformerPlayerMoveablePlatformCheck;
+        public PlatformerPlayerMovementStateManager PlatformerPlayerMovementStateManager;
+
         [Header("Config")]
         public PlatformerPlayerPhysicsConfigSO PhysicsConfigSO;
+
+        private void Awake() {
+            LevelManager.PlayerInstance = this;
+        }
+
+        public void ResetCharacter(Vector2 position) {
+            RaycastHit2D hit = Physics2D.Raycast(position, Vector2.down, 10, LayerMask.GetMask("Obstacle"));
+            if (hit.transform) {
+                position = hit.point;
+                position.y += PlatformerCharacterController.BoxSize.y / 2;
+            }
+            PlatformerCharacterController.Teleport(position);
+            PlatformerPlayerMovementStateManager.UpdateState(PlatformerPlayerMovementStateId.Ground);
+
+        }
     }
 }

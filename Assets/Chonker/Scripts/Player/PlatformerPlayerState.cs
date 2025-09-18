@@ -34,6 +34,10 @@ namespace Chonker.Scripts.Player {
             }
         }
 
+        private FacingDirection lastFacingDirectionAfterWallSlide;
+
+        public FacingDirection LastFacingDirectionAfterWallSlide => lastFacingDirectionAfterWallSlide;
+
         public Vector2 CurrentMoveablePlatformPositionDiff => PlatformerPlayerMoveablePlatformCheck.CurrentMovablePlatformPositionDiff;
 
         private void Awake() {
@@ -77,6 +81,14 @@ namespace Chonker.Scripts.Player {
 
         public bool WallGripAbilityUnlocked() {
             return wallGripAbilityUnlocked && PlatformerPlayerPhysicsConfig.AllowWallGripAbility;
-        } 
+        }
+
+        public void SetLastWallSlideSide(FacingDirection direction) {
+            lastFacingDirectionAfterWallSlide = direction;
+        }
+        
+        public void ClearLastTouchedWallSlideSide() {
+            lastFacingDirectionAfterWallSlide = FacingDirection.None;
+        }
     }
 }

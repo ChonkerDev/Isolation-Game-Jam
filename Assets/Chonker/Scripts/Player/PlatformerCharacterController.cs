@@ -16,9 +16,7 @@ public class PlatformerCharacterController : MonoBehaviour {
     
     [SerializeField] private bool ReportGroundedState;
     private LayerMask ObstacleMask;
-
-    private PlatformerPlayerMovementStateManager platformerPlayerMovementStateManager;
-
+    
     public float CurrentGravity { get; private set; }
     public Vector2 RbVelocity => rigidbody2D.linearVelocity;
     private Coroutine gravityCoroutine;
@@ -33,11 +31,11 @@ public class PlatformerCharacterController : MonoBehaviour {
     public float RightBoxEdgeX => _boxCollider2D.transform.position.x + _boxCollider2D.size.x / 2;
     public Vector2 BoxSize => _boxCollider2D.size;
 
-    public PlatformerPlayerMovementStateId CurrentMovementStateId => platformerPlayerMovementStateManager.CurrentState;
+    public PlatformerPlayerMovementStateId CurrentMovementStateId => platformerPlayerComponentContainer.PlatformerPlayerMovementStateManager.CurrentState;
 
     private void Awake() {
         rigidbody2D = GetComponentInParent<Rigidbody2D>();
-        platformerPlayerMovementStateManager = GetComponentInChildren<PlatformerPlayerMovementStateManager>();
+        platformerPlayerComponentContainer.PlatformerPlayerMovementStateManager = GetComponentInChildren<PlatformerPlayerMovementStateManager>();
     }
 
     private void Start() {
@@ -46,7 +44,7 @@ public class PlatformerCharacterController : MonoBehaviour {
     }
 
     private void Update() {
-        platformerPlayerMovementStateManager.GetCurrentState().OnUpdate();
+        platformerPlayerComponentContainer.PlatformerPlayerMovementStateManager.GetCurrentState().OnUpdate();
     }
 
     private void FixedUpdate() {
@@ -54,7 +52,7 @@ public class PlatformerCharacterController : MonoBehaviour {
         float probeBuffer = .1f;
         float distanceCheck = -rigidbody2D.linearVelocity.y * Time.fixedDeltaTime + probeBuffer;
         CurrentGroundHit = probeGround(distanceCheck);
-        platformerPlayerMovementStateManager.GetCurrentState().OnFixedUpdate(ref currentVelocity);
+        platformerPlayerComponentContainer.PlatformerPlayerMovementStateManager.GetCurrentState().OnFixedUpdate(ref currentVelocity);
         currentVelocity += platformerPlayerComponentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce;
         currentVelocity = Vector2.ClampMagnitude(currentVelocity,
             platformerPlayerComponentContainer.PhysicsConfigSO.GlobalTerminalVelocity);
@@ -142,6 +140,17 @@ public class PlatformerCharacterController : MonoBehaviour {
         rigidbody2D.MovePosition(position);
     }
 
+    public void Teleport(Vector2 position) {
+        StartCoroutine(PerformTeleport(position));
+    }
+
+    private IEnumerator PerformTeleport(Vector2 position) {
+        _boxCollider2D.enabled = false;
+        rigidbody2D.MovePosition(position);
+        yield return new WaitForFixedUpdate();
+        _boxCollider2D.enabled = true;
+    }
+
 
     public RaycastHit2D ProbeForWallHit(Vector2 direction, float distance) {
         Vector2 position = transform.position;
@@ -181,7 +190,7 @@ public class PlatformerCharacterController : MonoBehaviour {
     }
 
     public void KillPlayer() {
-        platformerPlayerMovementStateManager.UpdateState(PlatformerPlayerMovementStateId.Dead);
+        platformerPlayerComponentContainer.PlatformerPlayerMovementStateManager.UpdateState(PlatformerPlayerMovementStateId.Dead);
     }
 
     private void OnValidate() {

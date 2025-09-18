@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
+using Chonker.Scripts.Game_Management;
 using UnityEngine;
 
-public class MoveablePlatform : MonoBehaviour {
+public class MoveablePlatform : LevelResettable {
     private Vector2 nextPosition;
 
     private int currentTargetIndex;
@@ -19,13 +20,7 @@ public class MoveablePlatform : MonoBehaviour {
     }
 
     private void Start() {
-        transform.position = targetPoints[0].transform.position;
-        nextPosition = targetPoints[0].transform.position;
-
-        lastFixedPos = nextPosition;
-        currentFixedPos = nextPosition;
-
-        StartCoroutine(MoveToTargets());
+        Reset();
     }
 
     private void FixedUpdate() {
@@ -64,5 +59,15 @@ public class MoveablePlatform : MonoBehaviour {
             if (currentTargetIndex >= targetPoints.Length)
                 currentTargetIndex = 0;
         }
+    }
+
+    public override void Reset() {
+        StopAllCoroutines();
+        transform.position = targetPoints[0].transform.position;
+        nextPosition = targetPoints[0].transform.position;
+
+        lastFixedPos = nextPosition;
+        currentFixedPos = nextPosition;
+        StartCoroutine(MoveToTargets());
     }
 }

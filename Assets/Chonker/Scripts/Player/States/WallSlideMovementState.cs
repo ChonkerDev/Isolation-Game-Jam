@@ -5,9 +5,8 @@ using UnityEngine;
 public class WallSlideMovementState : PlatformerPlayerMovementState {
     public override PlatformerPlayerMovementStateId StateId => PlatformerPlayerMovementStateId.WallSlide;
     private int numTimesTouchedSameSide;
-    private FacingDirection TouchedRightSideLastTime = FacingDirection.None;
     public override void OnEnter(PlatformerPlayerMovementStateId prevState) {
-        TouchedRightSideLastTime = PlatformerPlayerAnimationManager.FacingDirection;
+        PlatformerPlayerState.SetLastWallSlideSide(PlatformerPlayerAnimationManager.FacingDirection);
         RaycastHit2D hit = ProbeForWall(1);
         if (!hit.transform) {
             Debug.LogError("If entering the wall slide state, there should Always be a wall in the facing direction");
@@ -21,9 +20,7 @@ public class WallSlideMovementState : PlatformerPlayerMovementState {
         PlatformerPlayerState.ResetNumDashes();
     }
 
-    public void ClearLastTouchedSide() {
-        TouchedRightSideLastTime = FacingDirection.None;
-    }
+
     public override void OnExit(PlatformerPlayerMovementStateId newState) {
         inputMovementWrapper.jumpInputManager.ClearJumpInput();
         PlatformerPlayerAnimationManager.SetSpriteAnchorScale(1, 1);

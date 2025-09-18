@@ -1,9 +1,10 @@
 using System;
+using Chonker.Scripts.Game_Management;
 using UnityEngine;
 
-public class TimedPlatform : MonoBehaviour {
+public class TimedPlatform : LevelResettable {
     [SerializeField] private float _timeInSecondsToDisappear = 1;
-
+private Vector2 originalPosition;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     private BoxCollider2D _boxCollider;
     private float timer;
@@ -15,6 +16,7 @@ public class TimedPlatform : MonoBehaviour {
         PlayerLayerMask = LayerMask.GetMask("Player");
         positionCheck = transform.position;
         _boxCollider = GetComponent<BoxCollider2D>();
+        originalPosition = transform.position;
     }
 
     private void FixedUpdate() {
@@ -27,10 +29,18 @@ public class TimedPlatform : MonoBehaviour {
         Debug.DrawRay(position + Vector2.up * size.y / 2, Vector3.right * size.x / 2, Color.red);
         if (collider) {
             timer += Time.deltaTime;
-            if (timer > _timeInSecondsToDisappear) {
-                _spriteRenderer.enabled = false;
-                _boxCollider.enabled = false;
-            }
         }
+        
+        if (timer > _timeInSecondsToDisappear) {
+            _spriteRenderer.enabled = false;
+            _boxCollider.enabled = false;
+        }
+    }
+
+    public override void Reset() {
+        transform.position = originalPosition;
+        timer = 0;
+        _spriteRenderer.enabled = true;
+        _boxCollider.enabled = true;
     }
 }

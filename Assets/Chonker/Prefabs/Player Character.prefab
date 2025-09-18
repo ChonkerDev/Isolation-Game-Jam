@@ -336,6 +336,7 @@ MonoBehaviour:
   _boxColliderHeight: 0.86
   platformerPlayerComponentContainer: {fileID: 6565458024754381535}
   ReportGroundedState: 0
+  PlatformerPlayerMovementStateManager: {fileID: 0}
 --- !u!1 &3701870462149898835
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,6 +534,7 @@ MonoBehaviour:
   PlatformerSurfaceCheck: {fileID: 8382213552327552876}
   PlatformerPlayerDeathBoxDetector: {fileID: 5842036199576588963}
   PlatformerPlayerMoveablePlatformCheck: {fileID: 7800970333298411643}
+  PlatformerPlayerMovementStateManager: {fileID: 8641151326395970413}
   PhysicsConfigSO: {fileID: 11400000, guid: 11c9678ea17689448b3cc7776f6f4b12, type: 2}
 --- !u!61 &5701460806950717758
 BoxCollider2D:
