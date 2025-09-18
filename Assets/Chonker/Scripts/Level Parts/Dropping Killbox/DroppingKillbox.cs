@@ -8,13 +8,16 @@ public class DroppingKillbox : LevelResettable {
     private Vector2 originalPosition;
     private DroppingKillboxPlayerDetector playerDetector;
     private float boxHalfHeight;
-private SpriteRenderer spriteRenderer;
+    private BoxCollider2D killboxCollider;
+
+    private SpriteRenderer spriteRenderer;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
         originalPosition = transform.position;
         playerDetector = GetComponentInChildren<DroppingKillboxPlayerDetector>();
-        BoxCollider2D collider = GetComponent<BoxCollider2D>();
-        boxHalfHeight = collider.size.y;
+        killboxCollider = GetComponent<BoxCollider2D>();
+        boxHalfHeight = killboxCollider.size.y;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -31,6 +34,7 @@ private SpriteRenderer spriteRenderer;
                 explode();
                 break;
             }
+
             fallTimer -= Time.deltaTime;
             currentVelocity -= _fallRate * Time.deltaTime;
             transform.position -= Vector3.down * currentVelocity;
@@ -40,6 +44,7 @@ private SpriteRenderer spriteRenderer;
 
     private void explode() {
         spriteRenderer.enabled = false;
+        killboxCollider.enabled = false;
     }
 
     public override void Reset() {
@@ -47,5 +52,6 @@ private SpriteRenderer spriteRenderer;
         transform.position = originalPosition;
         playerDetector.gameObject.SetActive(true);
         spriteRenderer.enabled = true;
+        killboxCollider.enabled = true;
     }
 }
