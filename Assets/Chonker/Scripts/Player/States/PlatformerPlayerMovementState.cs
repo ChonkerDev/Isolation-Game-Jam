@@ -45,16 +45,17 @@ namespace Chonker.Scripts.Player.States {
         }
 
         protected bool CheckForWallSlide() {
-            if (!PlatformerPlayerState.WallSlideAbilityUnlocked()) return false;
+            if (!AllowedToWallSlide()) return false;
             if (componentContainer.PlatformerPlayerForceFieldDetector.IsForceFieldPresent()) return false;
-            bool doesVelocityMatchFacingDirection =
-                (Mathf.Sign((int)PlatformerPlayerAnimationManager.FacingDirection) ==
-                 Mathf.Sign(characterController.RbVelocity.x));
+            float horizontalMovementInput = inputMovementWrapper.ReadHorizontalMovementInput();
+            bool doesInputMatchFacingDirection =
+                Mathf.Sign((int)PlatformerPlayerAnimationManager.FacingDirection) ==
+                 Mathf.Sign(horizontalMovementInput) && horizontalMovementInput != 0;
             bool isDistanceFromGroundValid =
                 !characterController.probeGround(PlatformerPlayerPhysicsConfig.MaxDistanceFromGroundToPreventWallSlide)
                     .transform;
-            if (!doesVelocityMatchFacingDirection ||
-                inputMovementWrapper.ReadHorizontalMovementInput() == 0 || !isDistanceFromGroundValid) return false;
+            Debug.Log(isDistanceFromGroundValid);
+            if (!doesInputMatchFacingDirection || !isDistanceFromGroundValid) return false;
             RaycastHit2D hit = ProbeForWall();
             if (hit.transform) {
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.WallSlide);
@@ -89,6 +90,10 @@ namespace Chonker.Scripts.Player.States {
 
         protected bool AllowedToDash() {
             return PlatformerPlayerState.AllowedToDash();
+        }
+
+        protected bool AllowedToWallSlide() {
+           return PlatformerPlayerState.AllowedToWallSlide() && PlatformerPlayerState.LastFacingDirectionAfterWallSlide !=  PlatformerPlayerAnimationManager.FacingDirection; 
         }
 
 

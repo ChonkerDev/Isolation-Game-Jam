@@ -93,6 +93,7 @@ namespace Chonker.Scripts.Player.States {
             groundStateAnimationController.OnGroundStateEnter(prevState);
             desiredVelocity = characterController.RbVelocity.x;
             footStepTimer = 0;
+            PlatformerPlayerState.ResetLastTouchedWallSlideSide();
         }
 
         public override void OnExit(PlatformerPlayerMovementStateId newState) {

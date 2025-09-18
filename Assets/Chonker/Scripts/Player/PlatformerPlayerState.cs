@@ -75,19 +75,19 @@ namespace Chonker.Scripts.Player {
             return omniDrirectionDashUnlocked && PlatformerPlayerPhysicsConfig.AllowOmniDirectionalDash;
         }
 
-        public bool WallSlideAbilityUnlocked() {
-            return wallSlideAbilityUnlocked && PlatformerPlayerPhysicsConfig.AllowWallSlide;
-        }
-
         public bool WallGripAbilityUnlocked() {
             return wallGripAbilityUnlocked && PlatformerPlayerPhysicsConfig.AllowWallGripAbility;
+        }
+
+        public bool AllowedToWallSlide() {
+            return wallSlideAbilityUnlocked && PlatformerPlayerPhysicsConfig.AllowWallSlide;
         }
 
         public void SetLastWallSlideSide(FacingDirection direction) {
             lastFacingDirectionAfterWallSlide = direction;
         }
         
-        public void ClearLastTouchedWallSlideSide() {
+        public void ResetLastTouchedWallSlideSide() {
             lastFacingDirectionAfterWallSlide = FacingDirection.None;
         }
     }

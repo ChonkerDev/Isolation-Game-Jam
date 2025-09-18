@@ -26,7 +26,7 @@ MonoBehaviour:
   DashDecelerationTime: 0
   DashTopSpeed: 14
   DirectionInputBufferInSeconds: 0.05
-  AllowOmniDirectionalDash: 0
+  AllowOmniDirectionalDash: 1
   AllowWallSlide: 1
   WallSlideGravityRate: 107.7
   MaxDistanceFromGroundToPreventWallSlide: 2
