@@ -331,10 +331,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e917d43f170f9f4e9dda7e81c50be35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _boxCollider2D: {fileID: 5701460806950717758}
-  _boxColliderWidth: 0.85
-  _boxColliderHeight: 0.86
-  platformerPlayerComponentContainer: {fileID: 6565458024754381535}
+  _boxCollider2D: {fileID: 0}
+  _boxColliderWidth: 0.3
+  _boxColliderHeight: 0.96
+  platformerPlayerComponentContainer: {fileID: 0}
   ReportGroundedState: 0
 --- !u!1 &3701870462149898835
 GameObject:

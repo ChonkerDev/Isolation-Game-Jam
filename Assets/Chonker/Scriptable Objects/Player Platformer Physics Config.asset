@@ -22,7 +22,7 @@ MonoBehaviour:
   CoyoteTime: 0.11
   JumpInputBufferTimeInSeconds: 0.1
   DashAccelerationTime: 0.008
-  DashConstantSpeedTime: 0.15
+  DashConstantSpeedTime: 0.165
   DashDecelerationTime: 0
   DashTopSpeed: 14
   DirectionInputBufferInSeconds: 0.05
