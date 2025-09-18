@@ -36,3 +36,4 @@ MonoBehaviour:
   WallGripGravityMultiplier: 0.5
   CeilingPassthroughMargin: 0.1
   SlipperySurfaceCoefficient: 0.1
+  GlobalTerminalVelocity: 42
