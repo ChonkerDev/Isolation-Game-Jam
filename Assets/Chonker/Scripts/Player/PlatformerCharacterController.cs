@@ -214,7 +214,7 @@ public class PlatformerCharacterController : MonoBehaviour {
 
     private void OnValidate() {
         if (!platformerPlayerComponentContainer) {
-            platformerPlayerComponentContainer = GetComponentInParent<PlatformerPlayerComponentContainer>();
+            platformerPlayerComponentContainer = transform.parent.GetComponent<PlatformerPlayerComponentContainer>();
         }
         if (!_boxCollider2D) {
             _boxCollider2D = platformerPlayerComponentContainer.GetComponent<BoxCollider2D>();
