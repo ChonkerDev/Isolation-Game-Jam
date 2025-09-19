@@ -156,7 +156,8 @@ public class PlatformerCharacterController : MonoBehaviour {
         Vector2 position = transform.position;
         position += _boxCollider2D.offset;
         Debug.DrawRay(position, direction * distance, Color.red);
-        RaycastHit2D hit = Physics2D.BoxCast(position, _boxCollider2D.size, 0,
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        RaycastHit2D hit = Physics2D.BoxCast(position, _boxCollider2D.size, angle,
             direction, distance,
             ObstacleMask);
         return hit;
