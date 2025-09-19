@@ -362,6 +362,45 @@ AnimatorController:
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
+  - serializedVersion: 5
+    m_Name: Without Upgrade
+    m_StateMachine: {fileID: 6912205801218052765}
+    m_Mask: {fileID: 0}
+    m_Motions:
+    - serializedVersion: 2
+      m_State: {fileID: 6884383129263094338}
+      m_Motion: {fileID: 7400000, guid: affb0f20194ccbe43a9a54f1ae7ca326, type: 2}
+    - serializedVersion: 2
+      m_State: {fileID: -8191978617013502383}
+      m_Motion: {fileID: 7400000, guid: dcea6814bec1558418343caf4089e771, type: 2}
+    - serializedVersion: 2
+      m_State: {fileID: 2980365002743340450}
+      m_Motion: {fileID: 7400000, guid: 57e67039c3e44c745849873c5e7a7363, type: 2}
+    - serializedVersion: 2
+      m_State: {fileID: 3404299438875612938}
+      m_Motion: {fileID: 7400000, guid: 2fbece9af317b3a448913822e9d2ca4d, type: 2}
+    - serializedVersion: 2
+      m_State: {fileID: 931169850422620020}
+      m_Motion: {fileID: 7400000, guid: 57e67039c3e44c745849873c5e7a7363, type: 2}
+    - serializedVersion: 2
+      m_State: {fileID: -5843526395702029477}
+      m_Motion: {fileID: 7400000, guid: c3b5db255eaedbd43aca586ff8ba7528, type: 2}
+    - serializedVersion: 2
+      m_State: {fileID: -64187471620223252}
+      m_Motion: {fileID: 7400000, guid: 5f408c73ea44ffa40a4ecc7682db6434, type: 2}
+    - serializedVersion: 2
+      m_State: {fileID: -2551970174033574010}
+      m_Motion: {fileID: 7400000, guid: 62491debba30b104b8cd6b1fdfdd1e91, type: 2}
+    - serializedVersion: 2
+      m_State: {fileID: -5643384718879934904}
+      m_Motion: {fileID: 7400000, guid: 011fbdee153d1d34ba035c809be4801b, type: 2}
+    m_Behaviours: []
+    m_BlendingMode: 0
+    m_SyncedLayerIndex: 0
+    m_DefaultWeight: 1
+    m_IKPass: 0
+    m_SyncedLayerAffectsTiming: 0
+    m_Controller: {fileID: 9100000}
 --- !u!1101 &661237081509231097
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -554,6 +593,25 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1107 &6912205801218052765
+AnimatorStateMachine:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Without Upgrade
+  m_ChildStates: []
+  m_ChildStateMachines: []
+  m_AnyStateTransitions: []
+  m_EntryTransitions: []
+  m_StateMachineTransitions: {}
+  m_StateMachineBehaviours: []
+  m_AnyStatePosition: {x: 50, y: 20, z: 0}
+  m_EntryPosition: {x: 50, y: 120, z: 0}
+  m_ExitPosition: {x: 800, y: 120, z: 0}
+  m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
+  m_DefaultState: {fileID: 0}
 --- !u!1102 &7471798558561000787
 AnimatorState:
   serializedVersion: 6

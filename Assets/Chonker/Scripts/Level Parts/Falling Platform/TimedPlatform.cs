@@ -15,9 +15,10 @@ public class TimedPlatform : LevelResettable {
     [HideInInspector] public bool isInactive = false;
     private float InactiveTimer;
     public bool DetectedPlayer = false;
+    private Animator animator;
 
     private void Awake() {
-        
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Start() {
@@ -36,6 +37,8 @@ public class TimedPlatform : LevelResettable {
             _boxCollider.enabled = false;
             isInactive = true;
         }
+        
+        animator.SetFloat("Break Block Stage", Timer / _timeInSecondsToDisappear);
 
         if (isInactive) {
             DetectedPlayer = false;
