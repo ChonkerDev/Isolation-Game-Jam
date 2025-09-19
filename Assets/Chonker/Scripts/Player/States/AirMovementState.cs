@@ -74,9 +74,6 @@ namespace Chonker.Scripts.Player.States {
                 StartCoroutine(CheckForCoyoteTimeJump());
             }
             characterController.setTargetRotation(0);
-            if (characterController.RbVelocity.y < -20) {
-                Debug.Log("Start Vel " + characterController.RbVelocity );
-            }
         }
 
         public override void OnExit(PlatformerPlayerMovementStateId newState) {

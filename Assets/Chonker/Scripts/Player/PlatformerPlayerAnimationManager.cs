@@ -128,6 +128,10 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
         return _animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Ground." + GroundState);
     }
 
+    public void setPlayerNotUpgradeLayerActive(bool isPlayerNotUpgraded) {
+        _animator.SetLayerWeight(1, isPlayerNotUpgraded ? 1 : 0);
+    }
+
 
     public enum GroundStates {
         Idle,
