@@ -1,4 +1,6 @@
-﻿using Chonker.Runtime.Core.StateMachine;
+﻿using System.Collections;
+using Chonker.Runtime.Core.StateMachine;
+using Chonker.Scripts.Game_Management;
 using UnityEngine;
 
 namespace Chonker.Scripts.Player.States {
@@ -7,6 +9,7 @@ namespace Chonker.Scripts.Player.States {
 
         public override void OnEnter(PlatformerPlayerMovementStateId prevState) {
             PlatformerPlayerAnimationManager.CrossFadeToDead();
+            StartCoroutine(DelayReset());
         }
 
         public override void OnExit(PlatformerPlayerMovementStateId newState) {
@@ -26,6 +29,11 @@ namespace Chonker.Scripts.Player.States {
             float movement = accelRate * speedDif * Time.fixedDeltaTime;
 
             currentVelocity.x += movement * Time.fixedDeltaTime;
+        }
+
+        private IEnumerator DelayReset() {
+            yield return new WaitForSeconds(0.5f);
+            LevelManager.instance.ResetLevel();
         }
     }
 }
