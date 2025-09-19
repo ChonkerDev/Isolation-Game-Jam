@@ -29,6 +29,9 @@ namespace Chonker.Scripts.Player.States {
 
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
             currentVelocity.y -= characterController.CurrentGravity * Time.fixedDeltaTime;
+            if (characterController.RbVelocity.y < -20) {
+                Debug.Log("Update Vel " + characterController.RbVelocity );
+            }
             if (applyCoyoteTimeJump) {
                 ApplyJump(ref currentVelocity);
                 applyCoyoteTimeJump = false;
@@ -71,6 +74,9 @@ namespace Chonker.Scripts.Player.States {
                 StartCoroutine(CheckForCoyoteTimeJump());
             }
             PlatformerPlayerAnimationManager.setTargetRotation(0);
+            if (characterController.RbVelocity.y < -20) {
+                Debug.Log("Start Vel " + characterController.RbVelocity );
+            }
         }
 
         public override void OnExit(PlatformerPlayerMovementStateId newState) {
