@@ -49,6 +49,7 @@ public class DroppingKillbox : LevelResettable {
 
     public override void Reset() {
         StopAllCoroutines();
+        currentVelocity = 0;
         transform.position = originalPosition;
         playerDetector.gameObject.SetActive(true);
         spriteRenderer.enabled = true;
