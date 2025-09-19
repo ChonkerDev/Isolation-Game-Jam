@@ -48,11 +48,6 @@ public class PlatformerPlayerAnimationManager : MonoBehaviour {
         rotateSprite();
     }
 
-    public void setTargetRotation(float rotation, int rotationSpeed = 100000000) {
-        targetRotation = rotation;
-        this.rotationSpeed = rotationSpeed;
-    }
-
     private void rotateSprite() {
         float currentLookRotation = transform.localEulerAngles.z;
         float lookRotation =

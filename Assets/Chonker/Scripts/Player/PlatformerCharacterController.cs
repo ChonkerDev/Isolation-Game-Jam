@@ -16,6 +16,7 @@ public class PlatformerCharacterController : MonoBehaviour {
     
     [SerializeField] private bool ReportGroundedState;
     private LayerMask ObstacleMask;
+    private LayerMask BreakableWallMask;
     
     public float CurrentGravity { get; private set; }
     public Vector2 RbVelocity => rigidbody2D.linearVelocity;
@@ -40,6 +41,7 @@ public class PlatformerCharacterController : MonoBehaviour {
 
     private void Start() {
         ObstacleMask = LayerMask.GetMask("Obstacle");
+        BreakableWallMask = LayerMask.GetMask("Breakable Wall");
         CurrentGravity = platformerPlayerComponentContainer.PhysicsConfigSO.GravityRate;
     }
 
@@ -143,6 +145,10 @@ public class PlatformerCharacterController : MonoBehaviour {
     public void Teleport(Vector2 position) {
         StartCoroutine(PerformTeleport(position));
     }
+    
+    public void setTargetRotation(float rotation) {
+        rigidbody2D.SetRotation(Quaternion.Euler(0, 0, rotation));
+    }
 
     private IEnumerator PerformTeleport(Vector2 position) {
         _boxCollider2D.enabled = false;
@@ -156,11 +162,24 @@ public class PlatformerCharacterController : MonoBehaviour {
         Vector2 position = transform.position;
         position += _boxCollider2D.offset;
         Debug.DrawRay(position, direction * distance, Color.red);
-        RaycastHit2D hit = Physics2D.BoxCast(position, _boxCollider2D.size, 0,
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        RaycastHit2D hit = Physics2D.BoxCast(position, _boxCollider2D.size, angle,
             direction, distance,
             ObstacleMask);
         return hit;
     }
+    
+    public RaycastHit2D ProbeForBreakableWall(Vector2 direction, float distance) {
+        Vector2 position = transform.position;
+        position += _boxCollider2D.offset;
+        Debug.DrawRay(position, direction * distance, Color.red);
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        RaycastHit2D hit = Physics2D.BoxCast(position, _boxCollider2D.size, angle,
+            direction, distance,
+            BreakableWallMask);
+        return hit;
+    }
+    
 
     public void ApplyHighJumpGravityForDuration() {
         if (gravityCoroutine != null) {

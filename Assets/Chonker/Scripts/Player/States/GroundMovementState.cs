@@ -88,7 +88,7 @@ namespace Chonker.Scripts.Player.States {
         public override void OnEnter(PlatformerPlayerMovementStateId prevState) {
             PlatformerPlayerState.ResetNumJumps();
             PlatformerPlayerState.ResetNumDashes();
-            PlatformerPlayerAnimationManager.setTargetRotation(0);
+            characterController.setTargetRotation(0);
             groundStateAnimationController.OnGroundStateEnter(prevState);
             desiredVelocity = characterController.RbVelocity.x;
             footStepTimer = 0;

@@ -49,7 +49,7 @@ namespace Chonker.Scripts.Player.States {
             float timer = PlatformerPlayerPhysicsConfig.DirectionInputBufferInSeconds;
             while (timer > 0) {
                 timer -= Time.deltaTime;
-                PlatformerPlayerAnimationManager.setTargetRotation(0);
+                characterController.setTargetRotation(0);
                 if (characterController.RbVelocity.x > 0) {
                     setLookDirection(true);
                 }
@@ -71,7 +71,7 @@ namespace Chonker.Scripts.Player.States {
 
             direction.Normalize();
             float lookAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
-            PlatformerPlayerAnimationManager.setTargetRotation(lookAngle);
+            characterController.setTargetRotation(lookAngle);
             StartCoroutine(ProcessAcceleration());
         }
 
@@ -107,11 +107,7 @@ namespace Chonker.Scripts.Player.States {
         }
 
         private void CheckForWallBreak() {
-            Vector2 directionCheck = currentVelocity.normalized * characterController.BoxSize / 2 + currentVelocity * Time.fixedDeltaTime;
-            Vector2 position = characterController.MiddleOfBox;
-            Debug.DrawRay(position, direction, Color.blue );
-            RaycastHit2D raycastHit2D = Physics2D.Raycast(characterController.MiddleOfBox, directionCheck,
-                directionCheck.magnitude, breakableWallLayerMask);
+            RaycastHit2D raycastHit2D = characterController.ProbeForBreakableWall(currentVelocity.normalized, currentVelocity.magnitude * Time.fixedDeltaTime);
             if (raycastHit2D.transform) {
                 if (raycastHit2D.collider.gameObject.TryGetComponent(out BreakableWall bw)) {
                     bw.BreakWall();

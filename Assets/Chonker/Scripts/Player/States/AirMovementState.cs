@@ -73,7 +73,7 @@ namespace Chonker.Scripts.Player.States {
                 PlatformerPlayerState.DecrementNumJumps();
                 StartCoroutine(CheckForCoyoteTimeJump());
             }
-            PlatformerPlayerAnimationManager.setTargetRotation(0);
+            characterController.setTargetRotation(0);
             if (characterController.RbVelocity.y < -20) {
                 Debug.Log("Start Vel " + characterController.RbVelocity );
             }
