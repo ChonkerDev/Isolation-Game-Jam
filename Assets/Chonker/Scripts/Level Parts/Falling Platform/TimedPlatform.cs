@@ -2,6 +2,7 @@ using System;
 using Chonker.Scripts.Game_Management;
 using Chonker.Scripts.Level_Parts.Falling_Platform;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TimedPlatform : LevelResettable {
     [SerializeField] private float _timeInSecondsToDisappear = 1;
@@ -16,6 +17,7 @@ public class TimedPlatform : LevelResettable {
     private float InactiveTimer;
     public bool DetectedPlayer = false;
     private Animator animator;
+    [SerializeField] private UnityEvent _onPlatformBroken; 
 
     private void Awake() {
         animator = GetComponentInChildren<Animator>();
@@ -49,6 +51,7 @@ public class TimedPlatform : LevelResettable {
                 _spriteRenderer.enabled = true;
                 _boxCollider.enabled = true;
                 isInactive = false;
+                _onPlatformBroken.Invoke();
             }
         }
     }

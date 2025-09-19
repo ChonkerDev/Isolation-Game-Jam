@@ -1,6 +1,7 @@
 using System.Collections;
 using Chonker.Scripts.Game_Management;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DroppingKillbox : LevelResettable {
     [SerializeField] private float _fallRate;
@@ -11,6 +12,8 @@ public class DroppingKillbox : LevelResettable {
     private BoxCollider2D killboxCollider;
 
     private SpriteRenderer spriteRenderer;
+
+    [SerializeField] private UnityEvent OnHitGround;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
@@ -45,6 +48,7 @@ public class DroppingKillbox : LevelResettable {
     private void explode() {
         spriteRenderer.enabled = false;
         killboxCollider.enabled = false;
+        OnHitGround.Invoke();
     }
 
     public override void Reset() {

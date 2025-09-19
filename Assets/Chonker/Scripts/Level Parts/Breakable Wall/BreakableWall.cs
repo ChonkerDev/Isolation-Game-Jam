@@ -1,15 +1,18 @@
 using Chonker.Scripts.Game_Management;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BreakableWall : LevelResettable {
     [SerializeField] private BoxCollider2D obstacleCollider2D;
     [SerializeField] private BoxCollider2D breakCheckCollider2D;
     [SerializeField] private SpriteRenderer WallNotBroken;
     [SerializeField] private float _height;
+    [SerializeField] private UnityEvent _onWallbreak;
     public void BreakWall() {
         WallNotBroken.enabled = false;
         obstacleCollider2D.enabled = false;
         breakCheckCollider2D.enabled = false;
+        _onWallbreak.Invoke();
     }
 
     public override void Reset() {

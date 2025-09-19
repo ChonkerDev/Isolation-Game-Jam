@@ -1,6 +1,7 @@
 using System;
 using Chonker.Scripts.Game_Management;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
 
 public class LevelCheckpoint : MonoBehaviour
@@ -8,6 +9,7 @@ public class LevelCheckpoint : MonoBehaviour
     private bool checkPointTriggered = false;
     private Animator animator;
     private Light2D light2D;
+    [SerializeField] private UnityEvent _onCheckpointTriggered;
     private void Awake() {
         animator = GetComponentInChildren<Animator>();
         light2D = GetComponentInChildren<Light2D>();
@@ -26,6 +28,7 @@ public class LevelCheckpoint : MonoBehaviour
     }
 
     private void triggerCheckPoint() {
+        _onCheckpointTriggered.Invoke();
         animator.SetBool("On", true);
         light2D.enabled = true;
         checkPointTriggered = true;
