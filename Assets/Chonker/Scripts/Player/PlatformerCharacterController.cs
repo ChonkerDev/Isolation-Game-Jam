@@ -16,6 +16,7 @@ public class PlatformerCharacterController : MonoBehaviour {
     
     [SerializeField] private bool ReportGroundedState;
     private LayerMask ObstacleMask;
+    private LayerMask BreakableWallMask;
     
     public float CurrentGravity { get; private set; }
     public Vector2 RbVelocity => rigidbody2D.linearVelocity;
@@ -40,6 +41,7 @@ public class PlatformerCharacterController : MonoBehaviour {
 
     private void Start() {
         ObstacleMask = LayerMask.GetMask("Obstacle");
+        BreakableWallMask = LayerMask.GetMask("Breakable Wall");
         CurrentGravity = platformerPlayerComponentContainer.PhysicsConfigSO.GravityRate;
     }
 
@@ -162,6 +164,18 @@ public class PlatformerCharacterController : MonoBehaviour {
             ObstacleMask);
         return hit;
     }
+    
+    public RaycastHit2D ProbeForBreakableWall(Vector2 direction, float distance) {
+        Vector2 position = transform.position;
+        position += _boxCollider2D.offset;
+        Debug.DrawRay(position, direction * distance, Color.red);
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        RaycastHit2D hit = Physics2D.BoxCast(position, _boxCollider2D.size, angle,
+            direction, distance,
+            BreakableWallMask);
+        return hit;
+    }
+    
 
     public void ApplyHighJumpGravityForDuration() {
         if (gravityCoroutine != null) {

@@ -26,7 +26,7 @@ namespace Chonker.Scripts.Player.States {
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
             Vector2 targetVelocity = this.currentVelocity;
             RaycastHit2D wallhit = characterController.ProbeForWallHit(targetVelocity.normalized,
-                targetVelocity.magnitude * Time.fixedDeltaTime * 2);
+                targetVelocity.magnitude * Time.fixedDeltaTime);
             if (wallhit.transform) {
                 currentVelocity = Vector3.ProjectOnPlane(targetVelocity, wallhit.normal);
             }
@@ -107,11 +107,7 @@ namespace Chonker.Scripts.Player.States {
         }
 
         private void CheckForWallBreak() {
-            Vector2 directionCheck = currentVelocity.normalized * characterController.BoxSize / 2 + currentVelocity * Time.fixedDeltaTime;
-            Vector2 position = characterController.MiddleOfBox;
-            Debug.DrawRay(position, direction, Color.blue );
-            RaycastHit2D raycastHit2D = Physics2D.Raycast(characterController.MiddleOfBox, directionCheck,
-                directionCheck.magnitude, breakableWallLayerMask);
+            RaycastHit2D raycastHit2D = characterController.ProbeForBreakableWall(currentVelocity.normalized, currentVelocity.magnitude * Time.fixedDeltaTime);
             if (raycastHit2D.transform) {
                 if (raycastHit2D.collider.gameObject.TryGetComponent(out BreakableWall bw)) {
                     bw.BreakWall();
