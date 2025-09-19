@@ -145,6 +145,10 @@ public class PlatformerCharacterController : MonoBehaviour {
     public void Teleport(Vector2 position) {
         StartCoroutine(PerformTeleport(position));
     }
+    
+    public void setTargetRotation(float rotation) {
+        rigidbody2D.SetRotation(Quaternion.Euler(0, 0, rotation));
+    }
 
     private IEnumerator PerformTeleport(Vector2 position) {
         _boxCollider2D.enabled = false;

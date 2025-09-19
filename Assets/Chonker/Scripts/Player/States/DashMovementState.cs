@@ -49,7 +49,7 @@ namespace Chonker.Scripts.Player.States {
             float timer = PlatformerPlayerPhysicsConfig.DirectionInputBufferInSeconds;
             while (timer > 0) {
                 timer -= Time.deltaTime;
-                PlatformerPlayerAnimationManager.setTargetRotation(0);
+                characterController.setTargetRotation(0);
                 if (characterController.RbVelocity.x > 0) {
                     setLookDirection(true);
                 }
@@ -71,7 +71,7 @@ namespace Chonker.Scripts.Player.States {
 
             direction.Normalize();
             float lookAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
-            PlatformerPlayerAnimationManager.setTargetRotation(lookAngle);
+            characterController.setTargetRotation(lookAngle);
             StartCoroutine(ProcessAcceleration());
         }
 
