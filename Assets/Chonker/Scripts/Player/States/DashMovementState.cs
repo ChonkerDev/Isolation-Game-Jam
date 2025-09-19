@@ -26,7 +26,7 @@ namespace Chonker.Scripts.Player.States {
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
             Vector2 targetVelocity = this.currentVelocity;
             RaycastHit2D wallhit = characterController.ProbeForWallHit(targetVelocity.normalized,
-                targetVelocity.magnitude * Time.fixedDeltaTime);
+                targetVelocity.magnitude * Time.fixedDeltaTime * 2);
             if (wallhit.transform) {
                 currentVelocity = Vector3.ProjectOnPlane(targetVelocity, wallhit.normal);
             }
