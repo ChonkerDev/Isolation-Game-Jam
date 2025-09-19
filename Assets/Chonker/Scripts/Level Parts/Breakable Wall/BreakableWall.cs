@@ -2,9 +2,10 @@ using Chonker.Scripts.Game_Management;
 using UnityEngine;
 
 public class BreakableWall : LevelResettable {
-    [SerializeField] private Collider2D obstacleCollider2D;
-    [SerializeField] private Collider2D breakCheckCollider2D;
+    [SerializeField] private BoxCollider2D obstacleCollider2D;
+    [SerializeField] private BoxCollider2D breakCheckCollider2D;
     [SerializeField] private SpriteRenderer WallNotBroken;
+    [SerializeField] private float _height;
     public void BreakWall() {
         WallNotBroken.enabled = false;
         obstacleCollider2D.enabled = false;
@@ -16,4 +17,13 @@ public class BreakableWall : LevelResettable {
         obstacleCollider2D.enabled = true;
         breakCheckCollider2D.enabled = true;
     }
+
+    void OnValidate() {
+        base.OnValidate();
+        WallNotBroken.size = new Vector2(1, _height);
+        obstacleCollider2D.size = new Vector2(.58f, _height);
+        breakCheckCollider2D.size = new Vector2(breakCheckCollider2D.size.x, _height);
+
+    }
+    
 }

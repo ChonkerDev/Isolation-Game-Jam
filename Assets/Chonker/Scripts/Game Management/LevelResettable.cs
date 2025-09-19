@@ -7,7 +7,7 @@ namespace Chonker.Scripts.Game_Management {
         [SerializeField] private bool DebugReset;
         public abstract void Reset();
 
-        private void OnValidate() {
+        protected void OnValidate() {
             if (DebugReset) {
                 DebugReset = false;
                 Reset();

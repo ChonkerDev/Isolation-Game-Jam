@@ -90,11 +90,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DoubleJumpUnlocked: 0
-  omniDrirectionDashUnlocked: 0
+  omniDrirectionDashUnlocked: 1
   NumDashesAvailable: 0
   DebugInifiniteDashes: 0
   CurrentSurfaceType: 0
-  wallSlideAbilityUnlocked: 0
+  wallSlideAbilityUnlocked: 1
   wallGripAbilityUnlocked: 0
 --- !u!114 &7872168042462595445
 MonoBehaviour:
@@ -236,7 +236,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.85, y: 0.86}
+  m_Size: {x: 0.3, y: 0.96}
   m_EdgeRadius: 0
 --- !u!1 &2626671059187748631
 GameObject:
@@ -331,10 +331,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e917d43f170f9f4e9dda7e81c50be35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _boxCollider2D: {fileID: 0}
+  _boxCollider2D: {fileID: 5701460806950717758}
   _boxColliderWidth: 0.3
   _boxColliderHeight: 0.96
-  platformerPlayerComponentContainer: {fileID: 0}
+  platformerPlayerComponentContainer: {fileID: 6565458024754381535}
   ReportGroundedState: 0
 --- !u!1 &3701870462149898835
 GameObject:
@@ -426,7 +426,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.85, y: 0.86}
+  m_Size: {x: 0.3, y: 0.96}
   m_EdgeRadius: 0
 --- !u!1 &3824940615467663733
 GameObject:
@@ -581,7 +581,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.85, y: 0.86}
+  m_Size: {x: 0.3, y: 0.96}
   m_EdgeRadius: 0
 --- !u!50 &4700044343721272431
 Rigidbody2D:
@@ -606,7 +606,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
@@ -1316,7 +1316,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
