@@ -10,11 +10,17 @@ namespace Chonker.Scripts.Player {
         
         private void Awake() {
             IA_Player = new IA_Player();
-            IA_Player.Enable();
             platformerPlayerComponentContainer = GetComponentInParent<PlatformerPlayerComponentContainer>();
             jumpInputManager = GetComponentInChildren<JumpInputManager>();
             jumpInputManager.Initialize(IA_Player, platformerPlayerComponentContainer);
+        }
 
+        private void OnEnable() {
+            IA_Player.Enable();
+        }
+
+        private void OnDisable() {
+            IA_Player.Disable();
         }
 
         public float ReadHorizontalMovementInput() {

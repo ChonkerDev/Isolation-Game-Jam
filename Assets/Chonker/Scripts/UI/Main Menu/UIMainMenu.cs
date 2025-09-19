@@ -26,6 +26,9 @@ public class UIMainMenu : NavigationUIMenu {
             ClearCurrentInteractable();
             _selectionConfirmedSoundSource.Play();
             _whiteFadeSoundSource.Play();
+            PersistantDataManager.instance.SetLevelCollectedAllFlowers(SceneManagerWrapper.CurrentSceneId, false);
+            PersistantDataManager.instance.SetLevelCollectedAllFlowers(SceneManagerWrapper.CurrentSceneId, false);
+
             ScreenFader.instance.FadeOut(Color.white, 2, () => SceneManagerWrapper.LoadScene(SceneManagerWrapper.SceneId.Level1),
                 EaseType.EaseOutQuad);
         });
