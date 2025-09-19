@@ -21,6 +21,16 @@ namespace Chonker.Scripts.Player {
 
         [SerializeField] private bool wallSlideAbilityUnlocked;
         [SerializeField] private bool wallGripAbilityUnlocked;
+
+        private bool isPlayerUpgraded;
+
+        public bool IsPlayerUpgraded {
+            get => isPlayerUpgraded;
+            set {
+                isPlayerUpgraded = value;
+                PlatformerPlayerComponentContainer.platformerPlayerAnimationManager.setPlayerNotUpgradeLayerActive(!isPlayerUpgraded);
+            }
+        }
         public float CurrentSurfaceAccelerationCoefficient {
             get {
                 switch (CurrentSurfaceType) {
