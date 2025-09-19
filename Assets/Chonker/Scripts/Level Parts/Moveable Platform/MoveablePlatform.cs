@@ -14,9 +14,13 @@ public class MoveablePlatform : LevelResettable {
     // For interpolation:
     private Vector2 lastFixedPos;
     private Vector2 currentFixedPos;
+    
+    private Rigidbody2D rigidbody2D;
+    public Vector2 Vel;
 
     private void Awake() {
         targetPoints = GetComponentsInChildren<MoveablePlatformTargetPoint>();
+        rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     private void Start() {
@@ -27,15 +31,8 @@ public class MoveablePlatform : LevelResettable {
         lastFixedPos = currentFixedPos;
         currentFixedPos = nextPosition;
         CurrentPositionDifference = currentFixedPos - lastFixedPos;
-    }
-
-    private void LateUpdate() {
-        float t = (Time.time - Time.fixedTime) / Time.fixedDeltaTime;
-        t = Mathf.Clamp01(t);
-
-        Vector2 interpolatedPos = Vector2.Lerp(lastFixedPos, currentFixedPos, t);
-
-        transform.position = interpolatedPos;
+        rigidbody2D.MovePosition(rigidbody2D.position + CurrentPositionDifference);
+        Vel = CurrentPositionDifference / Time.fixedDeltaTime;
     }
 
     private IEnumerator MoveToTargets() {

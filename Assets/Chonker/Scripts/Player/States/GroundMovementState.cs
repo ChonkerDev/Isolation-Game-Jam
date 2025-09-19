@@ -37,6 +37,7 @@ namespace Chonker.Scripts.Player.States {
                 return;
             }
 
+            // TODO: there should be a better solution than this
             if (!characterController.Grounded ||
                 componentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce.y > 0) {
                 currentVelocity.y = 0;

@@ -14,6 +14,7 @@ public class TimedPlatform : LevelResettable {
     [SerializeField] private float timeToReturn;
     [HideInInspector] public bool isInactive = false;
     private float InactiveTimer;
+    public bool DetectedPlayer = false;
 
     private void Awake() {
         
@@ -25,13 +26,19 @@ public class TimedPlatform : LevelResettable {
     }
 
     private void FixedUpdate() {
+        if (DetectedPlayer) {
+            Timer += Time.fixedDeltaTime;
+        }
         if (Timer > _timeInSecondsToDisappear && !isInactive) {
+            Timer = 0;
+            DetectedPlayer = false;
             _spriteRenderer.enabled = false;
             _boxCollider.enabled = false;
             isInactive = true;
         }
 
         if (isInactive) {
+            DetectedPlayer = false;
             InactiveTimer += Time.deltaTime;
             if (InactiveTimer > timeToReturn) {
                 Timer = 0;
@@ -44,6 +51,7 @@ public class TimedPlatform : LevelResettable {
     }
 
     public override void Reset() {
+        DetectedPlayer = false;
         transform.position = originalPosition;
         Timer = 0;
         InactiveTimer = 0;
