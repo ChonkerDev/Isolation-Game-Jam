@@ -12,6 +12,7 @@ namespace Chonker.Scripts.Player.States {
             PlatformerPlayerState.DecrementNumberOfDashes();
             StartCoroutine(DelaySetDirection());
             breakableWallLayerMask = LayerMask.GetMask("Breakable Wall");
+            componentContainer.PlayerAudioManager.PlayDash();
         }
 
         public override void OnExit(PlatformerPlayerMovementStateId newState) {

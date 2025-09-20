@@ -5,7 +5,7 @@ namespace Chonker.Scripts.Player.States {
     public class GroundMovementState : PlatformerPlayerMovementState {
         private PlayerGroundStateAnimationController groundStateAnimationController;
         private float desiredVelocity;
-        private float footStepFrequencyInSeconds;
+        [SerializeField] private float footStepFrequencyInSeconds;
         private float footStepTimer;
         private bool isStationary;
 

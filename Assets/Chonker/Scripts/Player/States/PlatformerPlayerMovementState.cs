@@ -92,7 +92,7 @@ namespace Chonker.Scripts.Player.States {
         }
 
         protected bool AllowedToWallSlide() {
-           return PlatformerPlayerState.AllowedToWallSlide() && PlatformerPlayerState.LastFacingDirectionAfterWallSlide !=  PlatformerPlayerAnimationManager.FacingDirection; 
+           return PlatformerPlayerState.AllowedToWallSlide() && (PlatformerPlayerState.LastFacingDirectionAfterWallSlide !=  PlatformerPlayerAnimationManager.FacingDirection || PlatformerPlayerPhysicsConfig.AllowSameSideWallSlide); 
         }
 
 

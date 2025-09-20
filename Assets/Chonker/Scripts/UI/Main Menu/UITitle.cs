@@ -13,7 +13,6 @@ public class UITitle : NavigationUIMenu {
         Time.timeScale = 1;
         float fadeInTime = 2;
         ScreenFader.instance.FadeIn(Color.white, 2);
-        yield return new WaitForSeconds(2);
         while (true) {
             if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame) {
                 break;

@@ -22,19 +22,20 @@ public class PlatformerPlayerPhysicsConfigSO : ScriptableObject {
     [Range(0, .2f)] public float DirectionInputBufferInSeconds = .05f;
     public bool AllowOmniDirectionalDash;
 
-    [Header("Wall Slide")] 
-    public bool AllowWallSlide;
+    [Header("Wall Slide")] public bool AllowWallSlide;
+    public bool AllowSameSideWallSlide = false;
     public float WallSlideGravityRate = 10;
     public float MaxDistanceFromGroundToPreventWallSlide;
     public float WallSlideVerticalJumpPower = 10;
     public float WallSlideHorizontalJumpPower = 10;
-    [Tooltip("Hold opposite of facing direction to slow down descent")]
-    [Space]public bool AllowWallGripAbility;
+
+    [Tooltip("Hold opposite of facing direction to slow down descent")] [Space]
+    public bool AllowWallGripAbility;
+
     [Range(0, 1)] public float WallGripGravityMultiplier = .5f;
 
 
-    [Header("Other")] 
-    public float CeilingPassthroughMargin = .1f;
+    [Header("Other")] public float CeilingPassthroughMargin = .1f;
     public float SlipperySurfaceCoefficient = 2;
     public float GlobalTerminalVelocity = 20;
 }

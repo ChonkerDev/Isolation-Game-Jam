@@ -18,12 +18,14 @@ public class WallSlideMovementState : PlatformerPlayerMovementState {
         PlatformerPlayerAnimationManager.CrossFadeToWallSlide();
         
         PlatformerPlayerState.ResetNumDashes();
+        PlayerAudioManager.PlayWallSlideLoop();
     }
 
 
     public override void OnExit(PlatformerPlayerMovementStateId newState) {
         inputMovementWrapper.jumpInputManager.ClearJumpInput();
         PlatformerPlayerAnimationManager.SetSpriteAnchorScale(1, 1);
+        PlayerAudioManager.StopLoop();
 
     }
 
