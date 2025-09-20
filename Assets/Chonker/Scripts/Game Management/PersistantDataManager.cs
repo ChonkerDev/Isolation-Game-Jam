@@ -49,14 +49,17 @@ namespace Chonker.Scripts.Game_Management {
 
         public void StoreMasterVol(float val) {
             PlayerPrefs.SetFloat(MASTER_AUDIO, val);
+            PersistData();
         }
 
         public void StoreMusicVol(float val) {
             PlayerPrefs.SetFloat(MUSIC_AUDIO, val);
+            PersistData();
         }
 
         public void StoreSFXVol(float val) {
             PlayerPrefs.SetFloat(SFX_AUDIO, val);
+            PersistData();
         }
 
         public float GetMasterVol() {
@@ -78,6 +81,7 @@ namespace Chonker.Scripts.Game_Management {
 
         public void SetLevelCollectedAllFlowers(SceneManagerWrapper.SceneId sceneId, bool collectedAll) {
             PlayerPrefs.SetInt(sceneId + COLLECTED_FLOWERS_SUFFIX, collectedAll ? 1 : 0);
+            PersistData();
         }
 
         public bool GetCollectedAllFlowers() {
@@ -87,6 +91,11 @@ namespace Chonker.Scripts.Game_Management {
                 PlayerPrefs.GetInt(SceneManagerWrapper.SceneId.Level2 + COLLECTED_FLOWERS_SUFFIX) == 1;
             Debug.Log("Levels Collected: " + level1Collected + " |  " + level2Collected);
             return level1Collected && level2Collected;
+        }
+
+        public void DebugSetCollectedAllFlowers(bool collectedAll) {
+            SetLevelCollectedAllFlowers(SceneManagerWrapper.SceneId.Level1, collectedAll);
+            SetLevelCollectedAllFlowers(SceneManagerWrapper.SceneId.Level2, collectedAll);
         }
 
         public SceneManagerWrapper.SceneId GetCampaignProgress() {

@@ -35,13 +35,14 @@ namespace Chonker.Scripts.Game_Management {
             flowers = FindObjectsByType<CollectableFlower>(FindObjectsSortMode.None);
             PersistantDataManager.instance.SetLevelCollectedAllFlowers(SceneManagerWrapper.CurrentSceneId, false);
             _collectedAllFlowersText.gameObject.SetActive(false);
-            ScreenFader.instance.FadeIn(Color.white, 2);
             PersistantDataManager.instance.SetCampaignProgress(SceneManagerWrapper.CurrentSceneId);
             PlayerInstance.PlatformerPlayerState.LockOmniDash();
             yield return null;
             if (!SkipPlayPositionSetOnStart) {
                 ResetLevel();
             }
+            yield return new WaitForSeconds(1f);
+            ScreenFader.instance.FadeIn(Color.white, 2);
         }
 
         public void ResetLevel() {
