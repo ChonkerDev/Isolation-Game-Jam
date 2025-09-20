@@ -34,6 +34,8 @@ namespace Chonker.Scripts.Player {
                 position.y += PlatformerCharacterController.BoxSize.y / 2;
             }
             PlatformerCharacterController.Teleport(position);
+            GroundMovementState groundState =
+                (GroundMovementState) PlatformerPlayerMovementStateManager.GetState(PlatformerPlayerMovementStateId.Ground);
             PlatformerPlayerMovementStateManager.UpdateState(PlatformerPlayerMovementStateId.Ground);
 
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using Chonker.Core;
 using Chonker.Scripts.Player;
@@ -14,6 +15,7 @@ namespace Chonker.Scripts.Game_Management {
         public LevelCheckpoint CurrentCheckPoint;
 
         [SerializeField] private bool DebugReset;
+        [SerializeField] private bool SkipPlayPositionSetOnStart;
 
         private CollectableFlower[] flowers;
 
@@ -28,7 +30,7 @@ namespace Chonker.Scripts.Game_Management {
             instance = this;
         }
 
-        private void Start() {
+        private IEnumerator Start() {
             resettableLevelParts = FindObjectsByType<LevelResettable>(FindObjectsSortMode.None).ToArray();
             flowers = FindObjectsByType<CollectableFlower>(FindObjectsSortMode.None);
             PersistantDataManager.instance.SetLevelCollectedAllFlowers(SceneManagerWrapper.CurrentSceneId, false);
@@ -36,6 +38,10 @@ namespace Chonker.Scripts.Game_Management {
             ScreenFader.instance.FadeIn(Color.white, 2);
             PersistantDataManager.instance.SetCampaignProgress(SceneManagerWrapper.CurrentSceneId);
             PlayerInstance.PlatformerPlayerState.LockOmniDash();
+            yield return null;
+            if (!SkipPlayPositionSetOnStart) {
+                ResetLevel();
+            }
         }
 
         public void ResetLevel() {

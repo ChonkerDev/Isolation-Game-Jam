@@ -13,11 +13,11 @@ public class PlatformerCharacterController : MonoBehaviour {
     private Vector2 currentVelocity;
     public RaycastHit2D CurrentGroundHit { get; private set; }
     public bool Grounded => CurrentGroundHit.transform != null;
-    
+
     [SerializeField] private bool ReportGroundedState;
     private LayerMask ObstacleMask;
     private LayerMask BreakableWallMask;
-    
+
     public float CurrentGravity { get; private set; }
     public Vector2 RbVelocity => rigidbody2D.linearVelocity;
     private Coroutine gravityCoroutine;
@@ -26,17 +26,27 @@ public class PlatformerCharacterController : MonoBehaviour {
 
     public float BottomOfBoxY =>
         _boxCollider2D.transform.position.y - _boxCollider2D.size.y / 2 + _boxCollider2D.offset.y;
+
     public float MiddleOfBoxY => _boxCollider2D.transform.position.y + _boxCollider2D.offset.y;
-    public Vector2 MiddleOfBox => new Vector2(_boxCollider2D.transform.position.x, _boxCollider2D.transform.position.y ) + _boxCollider2D.offset;
+
+    public Vector2 MiddleOfBox =>
+        new Vector2(_boxCollider2D.transform.position.x, _boxCollider2D.transform.position.y) + _boxCollider2D.offset;
+
     public float LeftBoxEdgeX => _boxCollider2D.transform.position.x - _boxCollider2D.size.x / 2;
     public float RightBoxEdgeX => _boxCollider2D.transform.position.x + _boxCollider2D.size.x / 2;
     public Vector2 BoxSize => _boxCollider2D.size;
 
-    public PlatformerPlayerMovementStateId CurrentMovementStateId => platformerPlayerComponentContainer.PlatformerPlayerMovementStateManager.CurrentState;
+    public PlatformerPlayerMovementStateId CurrentMovementStateId =>
+        platformerPlayerComponentContainer.PlatformerPlayerMovementStateManager.CurrentState;
+
+    private bool teleportThisFrame;
+    private Vector2 teleportLocation;
+
 
     private void Awake() {
         rigidbody2D = GetComponentInParent<Rigidbody2D>();
-        platformerPlayerComponentContainer.PlatformerPlayerMovementStateManager = GetComponentInChildren<PlatformerPlayerMovementStateManager>();
+        platformerPlayerComponentContainer.PlatformerPlayerMovementStateManager =
+            GetComponentInChildren<PlatformerPlayerMovementStateManager>();
     }
 
     private void Start() {
@@ -50,11 +60,16 @@ public class PlatformerCharacterController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
+        if (teleportThisFrame) {
+            teleportThisFrame = false;
+            rigidbody2D.position = teleportLocation;
+        }
         Vector2 currentVelocity = rigidbody2D.linearVelocity;
         float probeBuffer = .1f;
         float distanceCheck = -rigidbody2D.linearVelocity.y * Time.fixedDeltaTime + probeBuffer;
         CurrentGroundHit = probeGround(distanceCheck);
-        platformerPlayerComponentContainer.PlatformerPlayerMovementStateManager.GetCurrentState().OnFixedUpdate(ref currentVelocity);
+        platformerPlayerComponentContainer.PlatformerPlayerMovementStateManager.GetCurrentState()
+            .OnFixedUpdate(ref currentVelocity);
         currentVelocity += platformerPlayerComponentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce;
         currentVelocity = Vector2.ClampMagnitude(currentVelocity,
             platformerPlayerComponentContainer.PhysicsConfigSO.GlobalTerminalVelocity);
@@ -67,9 +82,10 @@ public class PlatformerCharacterController : MonoBehaviour {
     public RaycastHit2D probeGround(float distance, float probeBoxScale = 1) {
         Vector2 position = transform.position;
         position += _boxCollider2D.offset;
-        Vector2 currentPlatformDiff = platformerPlayerComponentContainer.PlatformerPlayerState.CurrentMoveablePlatformPositionDiff;
+        Vector2 currentPlatformDiff =
+            platformerPlayerComponentContainer.PlatformerPlayerState.CurrentMoveablePlatformPositionDiff;
         Vector2 direction = Vector2.down;
-        
+
         float finalDistance = distance + Mathf.Abs(currentPlatformDiff.y * 2);
         Debug.DrawRay(position, Vector3.down * distance, Color.brown);
         return Physics2D.BoxCast(position, _boxCollider2D.size * probeBoxScale, 0, direction, finalDistance,
@@ -112,10 +128,12 @@ public class PlatformerCharacterController : MonoBehaviour {
             if (leftHitWithMargin.transform) {
                 return;
             }
+
             Vector2 newPosition = rigidbody2D.position;
             newPosition.x += margin;
             rigidbody2D.MovePosition(newPosition);
         }
+
         RaycastHit2D rightHit =
             Physics2D.Raycast(rightPosition, Vector2.up, totalDistance, ObstacleMask);
         if (rightHit.transform) {
@@ -124,6 +142,7 @@ public class PlatformerCharacterController : MonoBehaviour {
             if (rightHitWithMargin.transform) {
                 return;
             }
+
             Vector2 newPosition = rigidbody2D.position;
             newPosition.x -= margin;
             rigidbody2D.MovePosition(newPosition);
@@ -143,20 +162,13 @@ public class PlatformerCharacterController : MonoBehaviour {
     }
 
     public void Teleport(Vector2 position) {
-        StartCoroutine(PerformTeleport(position));
+        teleportThisFrame = true;
+        teleportLocation = position;
     }
-    
+
     public void setTargetRotation(float rotation) {
         rigidbody2D.SetRotation(Quaternion.Euler(0, 0, rotation));
     }
-
-    private IEnumerator PerformTeleport(Vector2 position) {
-        _boxCollider2D.enabled = false;
-        rigidbody2D.MovePosition(position);
-        yield return new WaitForFixedUpdate();
-        _boxCollider2D.enabled = true;
-    }
-
 
     public RaycastHit2D ProbeForWallHit(Vector2 direction, float distance) {
         Vector2 position = transform.position;
@@ -168,7 +180,7 @@ public class PlatformerCharacterController : MonoBehaviour {
             ObstacleMask);
         return hit;
     }
-    
+
     public RaycastHit2D ProbeForBreakableWall(Vector2 direction, float distance) {
         Vector2 position = transform.position;
         position += _boxCollider2D.offset;
@@ -179,7 +191,7 @@ public class PlatformerCharacterController : MonoBehaviour {
             BreakableWallMask);
         return hit;
     }
-    
+
 
     public void ApplyHighJumpGravityForDuration() {
         if (gravityCoroutine != null) {
@@ -209,19 +221,21 @@ public class PlatformerCharacterController : MonoBehaviour {
     }
 
     public void KillPlayer() {
-        platformerPlayerComponentContainer.PlatformerPlayerMovementStateManager.UpdateState(PlatformerPlayerMovementStateId.Dead);
+        platformerPlayerComponentContainer.PlatformerPlayerMovementStateManager.UpdateState(
+            PlatformerPlayerMovementStateId.Dead);
     }
 
     private void OnValidate() {
         if (!platformerPlayerComponentContainer) {
             platformerPlayerComponentContainer = transform.parent.GetComponent<PlatformerPlayerComponentContainer>();
         }
+
         if (!_boxCollider2D) {
             _boxCollider2D = platformerPlayerComponentContainer.GetComponent<BoxCollider2D>();
         }
-        
+
         _boxCollider2D.size = new Vector2(_boxColliderWidth, _boxColliderHeight);
-        
+
         platformerPlayerComponentContainer.PlatformerPlayerDeathBoxDetector.UpdateBoxCollider(_boxCollider2D.size);
         platformerPlayerComponentContainer.PlatformerPlayerForceFieldDetector.UpdateBoxCollider(_boxCollider2D.size);
     }

@@ -1,4 +1,5 @@
-﻿using Unity.Mathematics.Geometry;
+﻿using System.Collections;
+using Unity.Mathematics.Geometry;
 using UnityEngine;
 
 namespace Chonker.Scripts.Player.States {
@@ -23,6 +24,7 @@ namespace Chonker.Scripts.Player.States {
             if (!isStationary) {
                 footStepTimer += Time.deltaTime;
             }
+
             if (footStepTimer > footStepFrequencyInSeconds) {
                 footStepTimer = 0;
                 PlayerAudioManager.PlayOneShotFootStep();
@@ -30,15 +32,17 @@ namespace Chonker.Scripts.Player.States {
         }
 
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
+
             if (AllowedToJump() &&
                 inputMovementWrapper.jumpInputManager.ConsumeJumpInput()) {
-                ApplyJump(ref currentVelocity, componentContainer.PlatformerPlayerState.CurrentMoveablePlatformPositionDiff / Time.fixedDeltaTime);
+                ApplyJump(ref currentVelocity,
+                    componentContainer.PlatformerPlayerState.CurrentMoveablePlatformPositionDiff / Time.fixedDeltaTime);
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
                 return;
             }
 
             // TODO: there should be a better solution than this
-            if (!characterController.Grounded ||
+            if ((!characterController.Grounded) ||
                 componentContainer.PlatformerPlayerForceFieldDetector.CurrentForceFieldForce.y > 0) {
                 currentVelocity.y = 0;
                 parentManager.UpdateState(PlatformerPlayerMovementStateId.Air);
@@ -81,7 +85,7 @@ namespace Chonker.Scripts.Player.States {
                 Time.fixedDeltaTime;
             float requestedVelocityBeforeForceField = desiredVelocity;
             isStationary = requestedVelocityBeforeForceField == 0 || currentMovementInput == 0 ||
-                                characterController.RbVelocity.x == 0;
+                           characterController.RbVelocity.x == 0;
             //Debug.Log($"{requestedVelocityBeforeForceField.x == 0} | {currentMovementInput == 0} | {characterController.RbVelocity.x == 0}");
             groundStateAnimationController.ProcessAnimations(isStationary);
         }
@@ -94,7 +98,10 @@ namespace Chonker.Scripts.Player.States {
             desiredVelocity = characterController.RbVelocity.x;
             footStepTimer = 0;
             PlatformerPlayerState.ResetLastTouchedWallSlideSide();
-            PlayerAudioManager.PlayOneShotFootStep();
+            float velocityThresholdToPlayLandSound = -2f;
+            if (characterController.RbVelocity.y < velocityThresholdToPlayLandSound) {
+                PlayerAudioManager.PlayOneShotFootStep();
+            }
         }
 
         public override void OnExit(PlatformerPlayerMovementStateId newState) {
