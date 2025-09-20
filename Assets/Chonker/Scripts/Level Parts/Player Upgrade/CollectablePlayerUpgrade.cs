@@ -13,12 +13,15 @@ public class CollectablePlayerUpgrade : MonoBehaviour
     [SerializeField] private float frequency;
     [SerializeField] private Collider2D _collider2D;
     [SerializeField] private TextMeshPro _textMeshPro;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private AudioSource _audioSource;
     private float startY;
 
     private void Start()
     {
         startY = transform.position.y;
         _textMeshPro.gameObject.SetActive(false);
+        
     }
 
     private void Update()
@@ -34,11 +37,15 @@ public class CollectablePlayerUpgrade : MonoBehaviour
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) return;
         _collider2D.enabled = false;
         LevelManager.PlayerInstance.PlatformerPlayerState.UnlockOmniDash();
+        LevelManager.PlayerInstance.platformerPlayerAnimationManager.setPlayerNotUpgradeLayerActive(false);
+        _textMeshPro.gameObject.SetActive(true);
+        _spriteRenderer.enabled = false;
+        _audioSource.Play();
         StartCoroutine(delayTextMeshDisable());
     }
 
     private IEnumerator delayTextMeshDisable() {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(5);
         _textMeshPro.gameObject.SetActive(false);
     }
 }

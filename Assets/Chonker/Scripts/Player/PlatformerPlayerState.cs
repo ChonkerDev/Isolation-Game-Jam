@@ -99,10 +99,12 @@ namespace Chonker.Scripts.Player {
 
         public void UnlockOmniDash() {
             omniDrirectionDashUnlocked = true;
+            IsPlayerUpgraded = true;
         }
 
         public void LockOmniDash() {
             omniDrirectionDashUnlocked = false;
+            IsPlayerUpgraded = false;
         }
         
         public void ResetLastTouchedWallSlideSide() {
