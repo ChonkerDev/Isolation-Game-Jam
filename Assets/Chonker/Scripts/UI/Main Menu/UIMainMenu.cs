@@ -44,6 +44,16 @@ public class UIMainMenu : NavigationUIMenu {
             _selectionConfirmedSoundSource.Play();
             _optionsMenu.Activate();
         });
+
+        if (PersistantDataManager.instance.GetCampaignProgress() == SceneManagerWrapper.SceneId.Level1) {
+            _continueButton.interactable = false;
+            Navigation newGameNav = _newGameButton.navigation;
+            newGameNav.selectOnDown = _settingsButton;
+            _newGameButton.navigation = newGameNav;
+            Navigation settingsNav = _settingsButton.navigation;
+            settingsNav.selectOnUp = _newGameButton;
+            _settingsButton.navigation = settingsNav;
+        }
     }
 
     private void OnCurrentSelectionChangedEvent(GameObject prev, GameObject current) {
