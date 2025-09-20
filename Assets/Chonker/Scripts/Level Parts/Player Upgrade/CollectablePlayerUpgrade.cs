@@ -5,6 +5,7 @@ using Chonker.Scripts.Game_Management;
 using Chonker.Scripts.Player;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class CollectablePlayerUpgrade : MonoBehaviour {
 
@@ -14,13 +15,14 @@ public class CollectablePlayerUpgrade : MonoBehaviour {
     [SerializeField] private TextMeshPro _textMeshPro;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private AudioSource _audioSource;
+    private Light2D _light2D;
     private float startY;
 
     private void Start()
     {
         startY = transform.position.y;
         _textMeshPro.gameObject.SetActive(false);
-        
+        _light2D = GetComponent<Light2D>();
     }
 
     private void Update()
@@ -40,6 +42,7 @@ public class CollectablePlayerUpgrade : MonoBehaviour {
         _textMeshPro.gameObject.SetActive(true);
         _spriteRenderer.enabled = false;
         _audioSource.Play();
+        _light2D.enabled = false;
         StartCoroutine(delayTextMeshDisable());
     }
 
