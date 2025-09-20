@@ -6,6 +6,7 @@ namespace Chonker.Scripts.Player.States {
         private Vector2 direction;
         private Vector2 currentVelocity;
         private LayerMask breakableWallLayerMask;
+        private bool preparingVelocity;
 
         public override void OnEnter(PlatformerPlayerMovementStateId previousState) {
             currentVelocity = Vector2.zero;
@@ -25,6 +26,10 @@ namespace Chonker.Scripts.Player.States {
         }
 
         public override void OnFixedUpdate(ref Vector2 currentVelocity) {
+            if (preparingVelocity) {
+                currentVelocity = Vector2.zero;
+                return;
+            }
             Vector2 targetVelocity = this.currentVelocity;
             RaycastHit2D wallhit = characterController.ProbeForWallHit(targetVelocity.normalized,
                 targetVelocity.magnitude * Time.fixedDeltaTime);
@@ -47,22 +52,27 @@ namespace Chonker.Scripts.Player.States {
         }
 
         private IEnumerator DelaySetDirection() {
+            preparingVelocity = true;
             float timer = PlatformerPlayerPhysicsConfig.DirectionInputBufferInSeconds;
             while (timer > 0) {
                 timer -= Time.deltaTime;
                 characterController.setTargetRotation(0);
-                if (characterController.RbVelocity.x > 0) {
-                    setLookDirection(true);
+                if (Mathf.Abs(characterController.RbVelocity.sqrMagnitude) > .1f) {
+                    if (characterController.RbVelocity.x > 0) {
+                        setLookDirection(true);
+                    }
+                    else if (characterController.RbVelocity.x < 0) {
+                        setLookDirection(false);
+                    }
                 }
-                else if (characterController.RbVelocity.x < 0) {
-                    setLookDirection(false);
-                }
+
                 direction = new Vector2(inputMovementWrapper.ReadHorizontalMovementInput(),
                     inputMovementWrapper.ReadVerticalMovementInput());
 
                 yield return null;
             }
 
+            preparingVelocity = false;
             if (direction.magnitude < .1f) {
                 direction = Vector2.right * (int)PlatformerPlayerAnimationManager.FacingDirection;
             }
