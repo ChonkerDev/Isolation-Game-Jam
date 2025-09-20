@@ -263,3 +263,6 @@ MonoBehaviour:
   breakCheckCollider2D: {fileID: 6719406128320463878}
   WallNotBroken: {fileID: 3579370511779312745}
   _height: 4
+  _onWallbreak:
+    m_PersistentCalls:
+      m_Calls: []
