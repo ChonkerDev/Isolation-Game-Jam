@@ -96,6 +96,14 @@ namespace Chonker.Scripts.Player {
         public void SetLastWallSlideSide(FacingDirection direction) {
             lastFacingDirectionAfterWallSlide = direction;
         }
+
+        public void UnlockOmniDash() {
+            omniDrirectionDashUnlocked = true;
+        }
+
+        public void LockOmniDash() {
+            omniDrirectionDashUnlocked = false;
+        }
         
         public void ResetLastTouchedWallSlideSide() {
             lastFacingDirectionAfterWallSlide = FacingDirection.None;

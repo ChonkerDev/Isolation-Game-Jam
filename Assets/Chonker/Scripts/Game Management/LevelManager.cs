@@ -35,6 +35,7 @@ namespace Chonker.Scripts.Game_Management {
             _collectedAllFlowersText.gameObject.SetActive(false);
             ScreenFader.instance.FadeIn(Color.white, 2);
             PersistantDataManager.instance.SetCampaignProgress(SceneManagerWrapper.CurrentSceneId);
+            PlayerInstance.PlatformerPlayerState.LockOmniDash();
         }
 
         public void ResetLevel() {

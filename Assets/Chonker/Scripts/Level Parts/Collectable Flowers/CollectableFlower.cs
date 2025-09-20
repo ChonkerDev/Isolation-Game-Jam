@@ -9,6 +9,7 @@ public class CollectableFlower : MonoBehaviour {
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private UnityEvent _onCollected;
     private void OnTriggerEnter2D(Collider2D other) {
+        if (other.gameObject.layer != LayerMask.GetMask("Player")) return;
         collectFlower();
     }
 
