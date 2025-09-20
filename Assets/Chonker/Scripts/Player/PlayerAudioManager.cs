@@ -7,6 +7,7 @@ public class PlayerAudioManager : MonoBehaviour
     [SerializeField] private AudioClip FootStepClip;
     [SerializeField] private AudioClip DashClip;
     [SerializeField] private AudioSource WallSlideAudioSource;
+    [SerializeField] private AudioSource DeathAudioSource;
     private void Awake() {
         audioSource = GetComponent<AudioSource>();
     }
@@ -21,6 +22,10 @@ public class PlayerAudioManager : MonoBehaviour
 
     public void PlayWallSlideLoop() {
         WallSlideAudioSource.Play();
+    }
+
+    public void PlayDeath() {
+        DeathAudioSource.Play();
     }
 
     public void StopLoop() {

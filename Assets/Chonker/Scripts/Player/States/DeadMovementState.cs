@@ -9,6 +9,7 @@ namespace Chonker.Scripts.Player.States {
 
         public override void OnEnter(PlatformerPlayerMovementStateId prevState) {
             PlatformerPlayerAnimationManager.CrossFadeToDead();
+            PlayerAudioManager.PlayDeath();
             StartCoroutine(DelayReset());
         }
 
