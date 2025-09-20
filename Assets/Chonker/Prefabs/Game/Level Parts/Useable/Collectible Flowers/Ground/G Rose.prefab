@@ -58,12 +58,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4336350523090330655, guid: e94395282e2ee2945ab952ae63d79fc4, type: 3}
       propertyPath: m_Name
-      value: Collectible Flower (8) Variant
+      value: G Rose
       objectReference: {fileID: 0}
     - target: {fileID: 6847654780021354400, guid: e94395282e2ee2945ab952ae63d79fc4, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 599a06d901d675742ab4e1458a93997e, type: 3}
+    - target: {fileID: 6847654780021354400, guid: e94395282e2ee2945ab952ae63d79fc4, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
