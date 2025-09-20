@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
 
-public class CollectableFlower : MonoBehaviour {
+public class CollectableFlower : LevelResettable {
 
     [SerializeField] private bool _transformBobEnabled = false;
     [SerializeField] private float amplitude = .2f;
@@ -15,6 +15,7 @@ public class CollectableFlower : MonoBehaviour {
     private AudioSource _audioSource;
     private Light2D _light2D;
     private float startY;
+    private bool collected;
 
     private void Start() {
         _audioSource = GetComponentInChildren<AudioSource>();
@@ -38,15 +39,32 @@ public class CollectableFlower : MonoBehaviour {
     }
 
     private void collectFlower() {
-        LevelManager.instance.NumCollectedFlowers++;
+        if (!collected) {
+            LevelManager.instance.NumCollectedFlowers++;
+        }
         _onCollected.Invoke();
         _obstacleCollider2D.enabled = false;
         _spriteRenderer.enabled = false;
+
          int numFlowrsCollected = LevelManager.instance.NumCollectedFlowers;
         int totalNumFlowers = LevelManager.instance.TotalFlowerCount;
         float alpha = (float) numFlowrsCollected / totalNumFlowers;
         _audioSource.pitch = Mathf.Lerp(1, 2, alpha);
         _audioSource.Play();
         _light2D.gameObject.SetActive(false);
+        collected = true;
+    }
+
+    public override void Reset() {
+        if (!collected) {
+            return;
+        }
+        //_light2D.gameObject.SetActive(true);
+        _obstacleCollider2D.enabled = true;
+        _spriteRenderer.enabled = true;
+        Color color = Color.white;
+        color.a = .6f;
+        _spriteRenderer.color = color;
+
     }
 }
