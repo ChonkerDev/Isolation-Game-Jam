@@ -17,7 +17,6 @@ public class BreakableWall : LevelResettable {
         breakCheckCollider2D.enabled = false;
         _onWallbreak.Invoke();
         _breakAudioSource.Play();
-
     }
 
     public override void Reset() {
