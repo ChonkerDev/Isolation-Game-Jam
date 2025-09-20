@@ -6,11 +6,10 @@ using Chonker.Scripts.Player;
 using TMPro;
 using UnityEngine;
 
-public class CollectablePlayerUpgrade : MonoBehaviour
-{
-    
-    [SerializeField] private float amplitude;
-    [SerializeField] private float frequency;
+public class CollectablePlayerUpgrade : MonoBehaviour {
+
+    [SerializeField] private float amplitude = .2f;
+    [SerializeField] private float frequency = 1;
     [SerializeField] private Collider2D _collider2D;
     [SerializeField] private TextMeshPro _textMeshPro;
     [SerializeField] private SpriteRenderer _spriteRenderer;
