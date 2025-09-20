@@ -62,7 +62,7 @@ public class CollectableFlower : LevelResettable {
         //_light2D.gameObject.SetActive(true);
         _obstacleCollider2D.enabled = true;
         _spriteRenderer.enabled = true;
-        Color color = Color.white;
+        Color color = Color.black;
         color.a = .6f;
         _spriteRenderer.color = color;
 
