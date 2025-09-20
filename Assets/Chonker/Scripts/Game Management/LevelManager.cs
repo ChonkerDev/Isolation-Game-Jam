@@ -41,6 +41,7 @@ namespace Chonker.Scripts.Game_Management {
             if (!SkipPlayPositionSetOnStart) {
                 ResetLevel();
             }
+            ScreenFader.instance.FadeOut(Color.white, 0);
             yield return new WaitForSeconds(1f);
             ScreenFader.instance.FadeIn(Color.white, 2);
         }
