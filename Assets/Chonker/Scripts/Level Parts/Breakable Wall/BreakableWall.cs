@@ -11,17 +11,13 @@ public class BreakableWall : LevelResettable {
     [SerializeField] private UnityEvent _onWallbreak;
     [SerializeField] private AudioSource _breakAudioSource;
 
-    private void Start() {
-        _breakAudioSource.Play();
-        _breakAudioSource.Pause();
-    }
-
     public void BreakWall() {
         WallNotBroken.enabled = false;
         obstacleCollider2D.enabled = false;
         breakCheckCollider2D.enabled = false;
         _onWallbreak.Invoke();
-        _breakAudioSource.UnPause();
+        _breakAudioSource.Play();
+
     }
 
     public override void Reset() {
