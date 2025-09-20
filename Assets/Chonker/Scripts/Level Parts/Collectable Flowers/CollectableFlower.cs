@@ -47,6 +47,6 @@ public class CollectableFlower : MonoBehaviour {
         float alpha = (float) numFlowrsCollected / totalNumFlowers;
         _audioSource.pitch = Mathf.Lerp(1, 2, alpha);
         _audioSource.Play();
-        _light2D.gameObject.SetActive(true);
+        _light2D.gameObject.SetActive(false);
     }
 }
