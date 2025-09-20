@@ -1440,7 +1440,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 57950696056507724, guid: e1313c3bedd40c14f985b3860a9847c8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.08
+      value: 0.303
+      objectReference: {fileID: 0}
+    - target: {fileID: 57950696056507724, guid: e1313c3bedd40c14f985b3860a9847c8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.025
       objectReference: {fileID: 0}
     - target: {fileID: 3331428351127692529, guid: e1313c3bedd40c14f985b3860a9847c8, type: 3}
       propertyPath: m_FlipX
@@ -1448,7 +1452,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5406226588785560548, guid: e1313c3bedd40c14f985b3860a9847c8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 118.02103
+      value: 117.794
       objectReference: {fileID: 0}
     - target: {fileID: 5406226588785560548, guid: e1313c3bedd40c14f985b3860a9847c8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1637,7 +1641,7 @@ GameObject:
   m_Component:
   - component: {fileID: 367100966}
   m_Layer: 0
-  m_Name: Flowers
+  m_Name: Collectible Flowers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2821,11 +2825,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1789559868112931472, guid: 2b14eca2eb73f334abf590f5b61ac8ee, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.19
+      value: 0.267
       objectReference: {fileID: 0}
     - target: {fileID: 1789559868112931472, guid: 2b14eca2eb73f334abf590f5b61ac8ee, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.07
+      value: -0.036
       objectReference: {fileID: 0}
     - target: {fileID: 3901162369151427373, guid: 2b14eca2eb73f334abf590f5b61ac8ee, type: 3}
       propertyPath: m_FlipX
@@ -2833,11 +2837,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5989484719007337528, guid: 2b14eca2eb73f334abf590f5b61ac8ee, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.0802803
+      value: -1.173
       objectReference: {fileID: 0}
     - target: {fileID: 5989484719007337528, guid: 2b14eca2eb73f334abf590f5b61ac8ee, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1843433
+      value: 1.088
       objectReference: {fileID: 0}
     - target: {fileID: 5989484719007337528, guid: 2b14eca2eb73f334abf590f5b61ac8ee, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6030,11 +6034,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7330843755178028847, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 65.8
+      value: -65.7
       objectReference: {fileID: 0}
     - target: {fileID: 7330843755178028847, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.6
+      value: -27.5
       objectReference: {fileID: 0}
     - target: {fileID: 7330843755178028847, guid: cf5e5d99769824146882ec8103935897, type: 3}
       propertyPath: m_LocalPosition.z
