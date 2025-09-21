@@ -14,7 +14,7 @@ public class AudioSourceFader : MonoBehaviour
         StartCoroutine(FadeOutI(fadeTime));
     }
 
-    public IEnumerator FadeOutI(float fadeTime) {
+    private IEnumerator FadeOutI(float fadeTime) {
         float timer = 0;
         while (timer > 0) {
             timer -= Time.deltaTime/fadeTime;
