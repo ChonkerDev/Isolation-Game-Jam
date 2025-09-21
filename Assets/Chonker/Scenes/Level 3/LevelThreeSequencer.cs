@@ -23,7 +23,7 @@ public class LevelThreeSequencer : MonoBehaviour {
         //textAllFlowersCollected = new Color(233 / 255f, 127 / 255f, 212 / 255f);
         //textNotAllFlowersCollected = new Color(0 / 255f, 169 / 255f, 255 / 255f);
 
-        PersistantDataManager.instance.DebugSetCollectedAllFlowers(false);
+        //PersistantDataManager.instance.DebugSetCollectedAllFlowers(false);
         if (!PersistantDataManager.instance.GetCollectedAllFlowers()) {
             DeadWife.SetActive(false);
             NotallFlowersCollectedDirector.Play();
