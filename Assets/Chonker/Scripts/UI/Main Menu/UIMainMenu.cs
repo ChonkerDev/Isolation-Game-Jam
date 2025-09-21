@@ -32,20 +32,20 @@ public class UIMainMenu : NavigationUIMenu {
             ScreenFader.instance.FadeOut(Color.white, 2, () => SceneManagerWrapper.LoadScene(SceneManagerWrapper.SceneId.Level1),
                 EaseType.EaseOutQuad);
         });
-        _continueButton.onClick.AddListener(() => {
+        /*_continueButton.onClick.AddListener(() => {
             ClearCurrentInteractable();
             _selectionConfirmedSoundSource.Play();
             _whiteFadeSoundSource.Play();
             ScreenFader.instance.FadeOut(Color.white, 2,
                 () => SceneManagerWrapper.LoadScene(PersistantDataManager.instance.GetCampaignProgress()),
                 EaseType.EaseOutQuad);
-        });
+        });*/
         _settingsButton.onClick.AddListener(() => {
             _selectionConfirmedSoundSource.Play();
             _optionsMenu.Activate();
         });
 
-        if (PersistantDataManager.instance.GetCampaignProgress() == SceneManagerWrapper.SceneId.Level1) {
+        /*if (PersistantDataManager.instance.GetCampaignProgress() == SceneManagerWrapper.SceneId.Level1) {
             _continueButton.interactable = false;
             Navigation newGameNav = _newGameButton.navigation;
             newGameNav.selectOnDown = _settingsButton;
@@ -53,7 +53,7 @@ public class UIMainMenu : NavigationUIMenu {
             Navigation settingsNav = _settingsButton.navigation;
             settingsNav.selectOnUp = _newGameButton;
             _settingsButton.navigation = settingsNav;
-        }
+        }*/
     }
 
     private void OnCurrentSelectionChangedEvent(GameObject prev, GameObject current) {

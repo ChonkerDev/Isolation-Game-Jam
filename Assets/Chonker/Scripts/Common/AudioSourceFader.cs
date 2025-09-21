@@ -7,6 +7,7 @@ public class AudioSourceFader : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private float _fadeTime;
     private bool faded;
+    
     private void OnTriggerEnter2D(Collider2D other) {
         if (faded) return;
         if (other.gameObject.layer != LayerMask.NameToLayer("Player")) return;
