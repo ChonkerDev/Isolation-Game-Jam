@@ -4,6 +4,7 @@ using Chonker.Core.Tween;
 using Chonker.Scripts.Game_Management;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class LevelThreeSequencer : MonoBehaviour {
     [SerializeField] private TextMeshPro thanksForPlayerText;
@@ -14,6 +15,8 @@ public class LevelThreeSequencer : MonoBehaviour {
 
     [SerializeField] private Color textAllFlowersCollected;
     [SerializeField] private Color textNotAllFlowersCollected;
+    [SerializeField] private PlayableDirector allFlowersCollectedDirector;
+    [SerializeField] private PlayableDirector NotallFlowersCollectedDirector;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     IEnumerator Start() {
@@ -23,6 +26,10 @@ public class LevelThreeSequencer : MonoBehaviour {
         PersistantDataManager.instance.DebugSetCollectedAllFlowers(false);
         if (!PersistantDataManager.instance.GetCollectedAllFlowers()) {
             DeadWife.SetActive(false);
+            NotallFlowersCollectedDirector.Play();
+        }
+        else {
+            allFlowersCollectedDirector.Play();
         }
 
         thanksForPlayerText.gameObject.SetActive(false);
