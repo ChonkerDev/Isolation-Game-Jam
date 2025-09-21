@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class AudioSourceFader : MonoBehaviour
 {
-    AudioSource audioSource;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private float _fadeTime;
+    private bool faded;
+    private void OnTriggerEnter2D(Collider2D other) {
+        if (faded) return;
+        if (other.gameObject.layer != LayerMask.NameToLayer("Player")) return;
+        faded = true;
+        StartCoroutine(FadeOutI(_fadeTime));
 
-    private void Awake() {
-        audioSource = GetComponent<AudioSource>();
     }
-
-    public void FadeOut(float fadeTime) {
-        StartCoroutine(FadeOutI(fadeTime));
-    }
-
+    
     private IEnumerator FadeOutI(float fadeTime) {
         float timer = 0;
         while (timer > 0) {
