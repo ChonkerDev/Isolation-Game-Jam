@@ -11,14 +11,20 @@ public class LevelThreeSequencer : MonoBehaviour {
     [SerializeField] private GameObject DeadWife;
 
     [SerializeField] private GameObject LotsOfFlowers;
+
+    [SerializeField] private Color textAllFlowersCollected;
+    [SerializeField] private Color textNotAllFlowersCollected;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    IEnumerator Start()
-    {
+    IEnumerator Start() {
+        //textAllFlowersCollected = new Color(233 / 255f, 127 / 255f, 212 / 255f);
+        //textNotAllFlowersCollected = new Color(0 / 255f, 169 / 255f, 255 / 255f);
+
         PersistantDataManager.instance.DebugSetCollectedAllFlowers(false);
         if (!PersistantDataManager.instance.GetCollectedAllFlowers()) {
             DeadWife.SetActive(false);
         }
-        
+
         thanksForPlayerText.gameObject.SetActive(false);
         ScreenFader.instance.FadeOut(Color.white, 0, null, EaseType.EaseOutQuad);
         yield return new WaitForSeconds(1f);
@@ -27,12 +33,12 @@ public class LevelThreeSequencer : MonoBehaviour {
 
     public void ActivateText() {
         thanksForPlayerText.gameObject.SetActive(true);
-
-        StartCoroutine(TweenCoroutines.RunTaperRealTime(1, f => {
-            thanksForPlayerText.color = Color.Lerp(Color.clear, Color.white, f);
-        }, () => {
-            thanksForPlayerText.color = Color.white;
-        }, EaseType.EaseInOutQuad));
+        Color targetColor = PersistantDataManager.instance.GetCollectedAllFlowers()
+            ? textAllFlowersCollected
+            : textNotAllFlowersCollected;
+        StartCoroutine(TweenCoroutines.RunTaperRealTime(1,
+            f => { thanksForPlayerText.color = Color.Lerp(Color.clear, targetColor, f); },
+            () => { thanksForPlayerText.color = targetColor; }, EaseType.EaseInOutQuad));
     }
 
     public void ActivateLotsOfFlowers() {
@@ -40,6 +46,7 @@ public class LevelThreeSequencer : MonoBehaviour {
     }
 
     public void ExitScene() {
-        ScreenFader.instance.FadeOut(Color.white, 3,() => SceneManagerWrapper.LoadScene(SceneManagerWrapper.SceneId.MainMenu), EaseType.EaseOutQuad);
+        ScreenFader.instance.FadeOut(Color.white, 3,
+            () => SceneManagerWrapper.LoadScene(SceneManagerWrapper.SceneId.MainMenu), EaseType.EaseOutQuad);
     }
 }
