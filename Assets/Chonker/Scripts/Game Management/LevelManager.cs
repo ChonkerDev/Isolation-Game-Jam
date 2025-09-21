@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using Chonker.Core;
 using Chonker.Scripts.Player;
+using TMPEffects.Components;
 using TMPro;
 using UnityEngine;
 
@@ -18,13 +19,15 @@ namespace Chonker.Scripts.Game_Management {
         [SerializeField] private bool SkipPlayPositionSetOnStart;
 
         private CollectableFlower[] flowers;
-
-        public int NumCollectedFlowers;
+        
+        public int NumCollectedFlowers { get; private set; }
         public int TotalFlowerCount => flowers.Length;
 
         [SerializeField] private TextMeshProUGUI _collectedAllFlowersText;
         [SerializeField] private AudioSource _collectedAllFlowersAudioSource;
         [SerializeField] private AudioSource _finishedLevelAudioSource;
+        
+        [SerializeField] private TMPAnimator _flowerCounterText;
 
         private void Awake() {
             instance = this;
@@ -41,6 +44,8 @@ namespace Chonker.Scripts.Game_Management {
             if (!SkipPlayPositionSetOnStart) {
                 ResetLevel();
             }
+
+            _flowerCounterText.SetText($"{NumCollectedFlowers}/{TotalFlowerCount}");
             ScreenFader.instance.FadeOut(Color.white, 0);
             yield return new WaitForSeconds(1f);
             ScreenFader.instance.FadeIn(Color.white, 2);
@@ -72,6 +77,12 @@ namespace Chonker.Scripts.Game_Management {
                     SceneManagerWrapper.LoadScene(SceneManagerWrapper.SceneId.Level3);
                 }
             }, EaseType.EaseOutQuad);
+        }
+
+        public void IncrementNumCollectedFlowers() {
+            NumCollectedFlowers += 1;
+            string counter = $"{NumCollectedFlowers}/{TotalFlowerCount}";
+            _flowerCounterText.SetText(counter);
         }
 
         private void OnValidate() {

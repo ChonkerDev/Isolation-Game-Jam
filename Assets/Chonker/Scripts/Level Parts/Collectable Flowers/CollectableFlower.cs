@@ -40,7 +40,7 @@ public class CollectableFlower : LevelResettable {
 
     private void collectFlower() {
         if (!collected) {
-            LevelManager.instance.NumCollectedFlowers++;
+            LevelManager.instance.IncrementNumCollectedFlowers();
         }
         _onCollected.Invoke();
         _obstacleCollider2D.enabled = false;
